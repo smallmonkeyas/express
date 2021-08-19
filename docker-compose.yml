@@ -1,0 +1,19 @@
+version: "3"
+services: 
+        nginx:
+                image: nginx:alpine
+                ports:
+                        - 8900:80
+                volumes:
+                        - /workspace/viewtest:/usr/share/nginx/view
+                        - /workspace/conf/nginx.conf:/etc/nginx/nginx.conf
+        php:
+                image: devilbox/php-fpm:5.3-work
+                volumes:
+                        - /workspace/viewtest:/var/www/view
+        mysql:
+                image: mysql:5.6
+                environment:
+                        - MYSQL_ROOT_PASSWORD=123456
+
+
