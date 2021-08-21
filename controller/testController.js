@@ -1,13 +1,5 @@
-/*
- * @Author: your name
- * @Date: 2021-08-11 02:24:36
- * @LastEditTime: 2021-08-14 02:30:31
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \SolidPollutionItem\tmp\controller\Untitled-1.js
- */
 const path = require("path");
-const wxm = require("wxmnode");
+// const wxm = require("wxmnode");
 const moment = require("moment");
 
 var fs = require("fs");
@@ -18,24 +10,27 @@ const WebSocket = require("ws"); //模块引入
 //       fs.mkdirSync(filePath);
 //     }
 //   };
-  let mkDirsSync = function mkDirsSync(dirname) {
-    if (fs.existsSync(dirname)) {
-        return true;
-    } else {
-        if (mkDirsSync(path.dirname(dirname))) {
-            fs.mkdirSync(dirname);
-            return true;
-        }
+let mkDirsSync = function mkDirsSync(dirname) {
+  if (fs.existsSync(dirname)) {
+    return true;
+  } else {
+    if (mkDirsSync(path.dirname(dirname))) {
+      fs.mkdirSync(dirname);
+      return true;
     }
+  }
 };
-
-mkDirsSync("e:\\files\\program\\supOS\\SolidPollutionSource\\solidpollution\\SolidPollutionItem\\tmp\\data\\history\\2021-07-15T03_16_00Zto2021-07-18T10_55_27Z")
+const basicdir = path.resolve(
+  __dirname,
+  `../data/history/${moment().format("YYYY-MM-DD_HH_mm_ss")}`
+);
+console.log("basicdir: " + basicdir);
+mkDirsSync(basicdir);
 /**
  * @微信提示
  */
 
- function sendMessage(message) {
-  
+function sendMessage(message) {
   let name = "289768";
   let pwd = "79523";
   let txt1 = message;
@@ -50,18 +45,15 @@ mkDirsSync("e:\\files\\program\\supOS\\SolidPollutionSource\\solidpollution\\Sol
     console.log("ret:", ret);
   }, 1000);
 }
-sendMessage('是')
+// sendMessage('是')
 const beginTime = "2021-07-06 11:16:00",
   endTime = moment().format("YYYY-MM-DD HH:mm:ss");
 const basicPath = path.resolve(
   __dirname,
-  `../data/history/${moment(beginTime).format(
-    "YYYY-MM-DD_HH_mm_ss"
-  )}to${moment(endTime).format("YYYY-MM-DD_HH_mm_ss")}`
+  `../data/history/${moment(beginTime).format("YYYY-MM-DD_HH_mm_ss")}to${moment(
+    endTime
+  ).format("YYYY-MM-DD_HH_mm_ss")}`
 );
-let pathFileDir = path.resolve(
-  basicPath,
-`./shi`
-),
-hh;
-hh = pathFileDir
+let pathFileDir = path.resolve(basicPath, `./shi`),
+  hh;
+hh = pathFileDir;
