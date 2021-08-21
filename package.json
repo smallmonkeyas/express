@@ -4,6 +4,7 @@
   "private": true,
   "description": "",
   "main": "./bin/www",
+  "target": "./bin/www",
   "scripts": {
     "start": "hotnode ./bin/www"
   },
