@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-07-16 22:29:43
- * @LastEditTime: 2021-07-16 22:31:01
+ * @LastEditTime: 2021-08-22 13:18:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \SolidPollutionItem\tmp\fun1.js
@@ -10,6 +10,7 @@ function reduce(a,b){
     console.log("调用了fun1的reduce方法");
     console.log(a-b);
 }
+
 
 function add(a,b){
     console.log("调用了fun1的add方法");
