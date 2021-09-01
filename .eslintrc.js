@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 20:13:57
- * @LastEditTime: 2021-08-23 20:53:44
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-08-30 12:50:50
+ * @LastEditors: your name
  * @Description: In User Settings Edit
  * @FilePath: \express\.eslintrc.js
  */
@@ -52,7 +52,11 @@ const config = {
             2,
             {
                 words: false,
-                nonwords: false
+                nonwords: false,
+                overrides: {
+                    new: true,
+                    '++': true
+                }
             }
         ],
         'no-spaced-func': 2,

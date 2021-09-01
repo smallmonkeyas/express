@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 00:40:51
- * @LastEditTime: 2021-08-24 00:56:41
+ * @LastEditTime: 2021-08-25 14:37:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\ts\app.ts
@@ -10,19 +10,24 @@
 // a = 10;
 // interface ss {}
 interface Bird {
-    fly();
-    layEggs();
+    fly(): void;
+    layEggs(): void;
 }
 
 interface Fish {
-    swim();
-    layEggs();
+    swim(): void;
+    layEggs(): void;
 }
 
 function getSmallPet(): Fish | Bird {
     // ...
 }
-
+function isFish(pet: Fish | Bird): pet is Fish {
+    return (<Fish>pet).swim !== undefined;
+}
 let pet = getSmallPet();
-pet.layEggs(); // okay
-pet.swim(); // errors
+if (isFish(pet)) {
+    pet.swim();
+} else {
+    pet.fly();
+}

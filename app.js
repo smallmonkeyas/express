@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-07-16 20:51:01
- * @LastEditTime: 2021-08-13 16:04:35
+ * @LastEditTime: 2021-08-31 10:10:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \first-project\app.js
@@ -30,25 +30,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.get('/', (req, res) => {
-  res.send('<div>helloworld</div>')
-})
+    res.send('<div>helloworld</div>');
+});
 app.post('/', (req, res) => {
-  res.json('hello')
-})
+    res.json('hello');
+});
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(function (req, res, next) {
+    next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 module.exports = app;
