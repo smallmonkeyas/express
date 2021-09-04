@@ -2,7 +2,7 @@
 //     "compile-hero.disable-compile-files-on-did-save-code": true
 // }
 {
-    "compile-hero.disable-compile-files-on-did-save-code": true,
+    // "compile-hero.disable-compile-files-on-did-save-code": true,
     "files.eol": "\n",
     "editor.tabSize": 4,
     "editor.formatOnSave": true,
@@ -12,5 +12,7 @@
     "typescript.tsdk": "node_modules/typescript/lib",
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
-    }
+    },
+    "emmet.excludeLanguages": ["markdown", "typescript"],
+    "auto-close-tag.disableOnLanguage": ["typescript"]
 }

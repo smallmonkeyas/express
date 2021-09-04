@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:11:34
- * @LastEditTime: 2021-09-01 17:31:42
+ * @LastEditTime: 2021-09-02 19:25:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\dao\mongoose.config.ts
@@ -73,7 +73,7 @@ export class CMongoDB implements IMongDB {
         return await this.modelCollection.deleteMany(Object);
     }
     async update(filterObj: Object, newItem: Object): Promise<any> {
-        return await this.modelCollection.update(filterObj, newItem);
+        return await this.modelCollection.updateMany(filterObj, newItem);
     }
     // @query
     async select(

@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-31 10:00:24
- * @LastEditTime: 2021-09-01 14:45:23
+ * @LastEditTime: 2021-09-03 03:13:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\vendor.ts
@@ -23,7 +23,7 @@ export class CVendorData implements IVendorData {
         this.vendor = vendor;
     }
     // eslint-disable-next-line no-unused-vars
-    get() {
+    get(): Promise<any> {
         // let arguments = args;
         // const ip = this.ip;
         let paramsObj, url, router, params;
@@ -74,7 +74,7 @@ export class CVendorData implements IVendorData {
 
     // eslint-disable-next-line no-unused-vars
     // post(...args: any[]): Object {
-    post(): Object {
+    post(): Promise<any> {
         let paramsObj, url, router, params, data;
         url = this.vendor.netAddress;
         if (this.vendor.netPath) {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-07-24 21:50:12
- * @LastEditTime: 2021-08-31 20:12:30
+ * @LastEditTime: 2021-09-01 18:55:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \SolidPollutionItem\tmp\script\file.js
@@ -58,6 +58,7 @@ const rmfile = async function () {
         // eslint-disable-next-line no-use-before-define
         filesName = get(...arguments);
         let together = new Array(filesName.length).fill(null);
+        // eslint-disable-next-line space-unary-ops
         for (let i = 0; i < filesName.length; i++) {
             let fileName = filesName[i];
             together[i] = await rmFileSync(`${pathFileDir}\\${fileName}${type}`);

@@ -109,3 +109,6 @@ dist
 
 #engineer demo
 **/*demo
+
+#config
+**/**/config/user.config.ts
