@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:00:34
- * @LastEditTime: 2021-09-05 14:07:03
+ * @LastEditTime: 2021-09-05 20:41:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\properity.ts
@@ -129,10 +129,12 @@ export class CSupOSData implements ISupOSData {
         return new Promise(function (resolve, reject) {
             request(options, function (error: any, response: { body: string }) {
                 // let res: IVendorResponseConfig;
+                // if (error) {
+                //     throw new Error(error);
+                // }
                 if (error) {
-                    throw new Error(error);
+                    resolve(error);
                 }
-
                 let res = JSON.parse(response.body);
                 // if (res instanceof IVendorResponseConfig) {
                 // resolve(res);
@@ -408,30 +410,30 @@ const supOSEnvTest = async function () {
     let user = Container.get<User>("用户");
     await user.login();
     let supOSObjInstance = Container.get<CPlatformObject>("supOS平台对象属性设置类");
-    supOSObjInstance.properityInfo = {
-        objectName: "atest",
-        // propName: ""
-        objectDisplayName: "创建对象测试",
-        objectDescription: "测试描述",
-        propName: "Property_012",
-        propDisplayName: "ee",
-        propDescription: "t11描述",
-        primitiveType: "Double",
-        alarmProperityName: "Assd11",
-        alarmProperityDescription: "报警参数描述11"
-    };
     // supOSObjInstance.properityInfo = {
-    //     objectName: "aatest",
+    //     objectName: "atest",
     //     // propName: ""
     //     objectDisplayName: "创建对象测试",
     //     objectDescription: "测试描述",
-    //     propName: "t11",
-    //     propDisplayName: "t11名称",
+    //     propName: "alarmtestDisplayName",
+    //     propDisplayName: "ee",
     //     propDescription: "t11描述",
     //     primitiveType: "Double",
     //     alarmProperityName: "Assd11",
     //     alarmProperityDescription: "报警参数描述11"
     // };
+    supOSObjInstance.properityInfo = {
+        objectName: "aatest1",
+        // propName: ""
+        objectDisplayName: "创建对象测试",
+        objectDescription: "测试描述",
+        propName: "t111",
+        propDisplayName: "t111名称",
+        propDescription: "t111描述",
+        primitiveType: "Double"
+        // alarmProperityName: "assd11",
+        // alarmProperityDescription: "报警参数描述11"
+    };
     // supOSObjInstance.properityInfo = {
     //     alarmObjname: "aatest",
     //     // propName: ""
@@ -445,19 +447,31 @@ const supOSEnvTest = async function () {
     //     alarmProperityDescription: "报警描述"
     // };
     // eslint-disable-next-line space-unary-ops
-    let res = [];
+    let res: any = [];
     for (var i = 0; i < 10; i++) {
-        supOSObjInstance.propSetValue = 121 + i;
-        // return await supOSObjInstance.creatProperityExcludeAlarm();
+        supOSObjInstance.properityInfo = {
+            objectName: "aatest1",
+            // propName: ""
+            objectDisplayName: "创建对象测试",
+            objectDescription: "测试描述",
+            propName: "s" + i,
+            propDisplayName: "s" + i + "名称",
+            propDescription: "s" + i + "描述",
+            primitiveType: "Integer",
+            alarmProperityName: "assd" + i,
+            alarmProperityDescription: "报警参数描述" + i
+        };
+        supOSObjInstance.propSetValue = 700 + i;
+        //     // return await supOSObjInstance.creatProperityExcludeAlarm();
         // await supOSObjInstance.rmProperity();
-        // await supOSObjInstance.creatProperity();
+        // res.push(await supOSObjInstance.creatProperity());
         res.push(await supOSObjInstance.setPropertyValue());
     }
     return res;
 };
-supOSEnvTest().then((item) => {
-    console.log("item", item);
-});
+// supOSEnvTest().then((item) => {
+//     console.log("item", item);
+// });
 // async function supos(){
 
 // }

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 23:22:43
- * @LastEditTime: 2021-09-05 13:47:53
+ * @LastEditTime: 2021-09-05 17:36:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\supos.config\properity.config.ts
@@ -243,42 +243,42 @@ export const properityExcludeAlarmInfo = function (
     primitiveType: string
 ) {
     return {
-        name: `${propName}`,
-        primitiveType: `${primitiveType}`,
-        showName: `${propDisplayName}`,
-        bindingInfo: {},
-        description: `${propDescription}`,
-        readonly: false,
-        minute: false,
-        hour: false,
-        day: false,
-        month: false,
-        max: false,
-        min: false,
-        mean: false,
-        sum: false,
-        timestampType: 1,
-        structName: "",
-        objectTemplateName: "",
-        maxValue: 100,
-        minValue: 0,
-        defaultValue: {},
-        icon: "",
-        objName: `${objectName}`,
-        range: "public",
-        alerts: [],
-        override: false,
-        hasDafault: false,
-        statisticsInfo: {
-            offsetZone: -480,
-            intervalTime: { minute: false, hour: false, day: false, month: false },
-            aggrType: { mean: false, min: false, max: false, sum: false }
+        "name": `${propName}`,
+        "primitiveType": `${primitiveType}`,
+        "showName": `${propDisplayName}`,
+        "bindingInfo": {},
+        "description": `${propDescription}`,
+        "readonly": false,
+        "minute": false,
+        "hour": false,
+        "day": false,
+        "month": false,
+        "max": false,
+        "min": false,
+        "mean": false,
+        "sum": false,
+        "timestampType": 1,
+        "structName": "",
+        "objectTemplateName": "",
+        "maxValue": 100,
+        "minValue": 0,
+        "defaultValue": {},
+        "icon": "",
+        "objName": `${objectName}`,
+        "range": "public",
+        "alerts": [],
+        "override": false,
+        "hasDafault": false,
+        "statisticsInfo": {
+            "offsetZone": -480,
+            "intervalTime": { minute: false, hour: false, day: false, month: false },
+            "aggrType": { mean: false, min: false, max: false, sum: false }
         },
-        primitiveTypeDefinition: {
-            name: `${primitiveType}`,
-            description: `${primitiveType}`,
-            hasDefault: false,
-            property: { aspect: { maxValue: 100, minValue: 0 } }
+        "primitiveTypeDefinition": {
+            "name": `${primitiveType}`,
+            "description": `${primitiveType}`,
+            "hasDefault": false,
+            "property": { aspect: { maxValue: 100, minValue: 0 } }
         }
     };
 };

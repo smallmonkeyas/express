@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 22:28:47
- * @LastEditTime: 2021-09-05 13:10:03
+ * @LastEditTime: 2021-09-05 21:10:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\factory.config.ts
@@ -87,7 +87,7 @@ export const AlarmTypeDescConfig = [
 export const AlarmTypeConfig = [1, 3, 4, 6, 7, 9, 10, 11, 12];
 export const AlarmTypeDeprecated = [3, 4, 6, 7, 9, 10];
 export const AlarmObjnameConfig = [
-    "DataMiss",
+    "DataMissAlarm",
     "",
     "AbnormalRelevance",
     "DataConstant",

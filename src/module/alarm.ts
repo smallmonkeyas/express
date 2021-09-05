@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 08:28:45
- * @LastEditTime: 2021-09-05 14:46:48
+ * @LastEditTime: 2021-09-05 20:16:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\alarm.ts
@@ -18,10 +18,10 @@ import {
     // CreatProperityConfig
 } from "../config";
 import { CSupOSData, CPlatformObject } from "./supos";
-
+import { User } from "./user";
 //* supos工业操作系统平台上报警对象实例
 @Service("supOS平台报警实例与属性设置")
-class CPlatformAlarmObject extends CPlatformObject {
+export class CPlatformAlarmObject extends CPlatformObject {
     // @Inject("supOS数据接口")
     // plantInterface!: CSupOSData;
     alarmInfo!: IAlarmStruct;
@@ -115,7 +115,7 @@ interface IAlarmTask {
     exec(): void;
 }
 @Service("数据缺失设置报警任务")
-class CDataMissAlarmTask implements IAlarmTask {
+export class CDataMissAlarmTask implements IAlarmTask {
     alarmInfo!: IAlarmStruct;
     service!: string;
     @Inject("连续10分钟无数据或值为0")
@@ -141,7 +141,7 @@ class CDataMissAlarmTask implements IAlarmTask {
     }
 }
 @Service("均值异常设置报警任务")
-class CMeanAbnormalAlarmTask implements IAlarmTask {
+export class CMeanAbnormalAlarmTask implements IAlarmTask {
     alarmInfo!: IAlarmStruct;
     @Inject("日数据不等于小时数据汇总")
     meanAlarmHandler!: CMeanAlarm;
@@ -169,7 +169,7 @@ class CMeanAbnormalAlarmTask implements IAlarmTask {
     }
 }
 @Service("排放量异常设置报警任务")
-class CEmissionAbnormalAlarmTask implements IAlarmTask {
+export class CEmissionAbnormalAlarmTask implements IAlarmTask {
     alarmInfo!: IAlarmStruct;
     @Inject("排放量不等于浓度乘以流量")
     emissionAlarmHandler!: CEmissionAlarm;
@@ -197,7 +197,61 @@ class CEmissionAbnormalAlarmTask implements IAlarmTask {
         return await this.platformAlarmObject.setPropertyValue();
     }
 }
+@Service("报警更新任务类")
+export class CAlarmUpdateTask {
+    alarmTaskHandler!: IAlarmTask;
+    alarmInfo!: IAlarmStruct;
+    constructor(alarmTask: IAlarmTask) {
+        this.alarmTaskHandler = alarmTask;
+    }
+    async exec(): Promise<any> {
+        this.alarmTaskHandler.alarmInfo = this.alarmInfo;
+        return await this.alarmTaskHandler.exec();
+    }
+}
+//* CAlarmUpdateTask测试
+// async function exec(): Promise<any> {
+//     let user = Container.get<User>("用户");
+//     await user.login();
+//     let alarmUpdateTask = Container.get<CAlarmUpdateTask>("报警更新任务类");
+//     let emissionAbnormalAlarmTask =
+//         Container.get<CEmissionAbnormalAlarmTask>("排放量异常设置报警任务");
+//     alarmUpdateTask.alarmTaskHandle = emissionAbnormalAlarmTask;
+//     alarmUpdateTask.alarmInfo = {
+//         // _id: ObjectId("6132654c2bfecd7c5cf00e54"),
+//         includeParamName: ["HJ2005_01", "HJ2005_B02"],
+//         includeParamDisplayname: ["3#炉监测点-烟尘", "3#炉监测点-废气"],
+//         includeParamDescription: ["3#炉监测点-烟尘", "3#炉监测点-废气"],
+//         alarmConfigParam: ["PFLYC_YC_FQ_03"],
+//         alarmConfigParamValue: [10],
+//         objnameInclude: "GK_CZ_GD_GXHB",
+//         objnameDisplaynameInclude: "光大高新环保新能源（常州）有限公司",
+//         epcode: "3204110200006190",
+//         factoryType: "垃圾焚烧厂",
+//         alarmType: 12,
+//         alarmTypeDescription: "排放量异常",
+//         enableConfigparam: "PFLYC_YC_FQ_03_BZW",
+//         enableStatus: true,
+//         alarmObjname: "EmissionAlarm",
+//         alarmObjDisplayName: "排放量异常",
+//         alarmObjDescription: "排放量异常",
+//         alarmParamName: "GK_CZ_GD_GXHB__HJ2005_01__HJ2005_B02",
+//         alarmParamDisplayName:
+//             "光大高新环保新能源（常州）有限公司_涉及参 数_3#炉监测点-烟尘__3#炉监测点-废气",
+//         alarmParamDescription:
+//             "光大高新环保新能源（常州）有限公司_涉及参数_3#炉监测点-烟尘_3#炉监测点-废气_报警产生条件：排放量不等于浓度乘以流量（误差范围大于10%）",
+//         alarmProperityName: "A_12_xxx_HJ2005_01_HJ2005_B02",
+//         alarmProperityDisplayName: "配置参数_PFLYC_YC_FQ_03",
+//         alarmProperityDescription: "使能配置参数:PFLYC_YC_FQ_03_BZW,报警条件：为1则触发报警",
+//         id: 132
+//         // __v: 0
+//     };
+//     console.log(alarmUpdateTask);
+//     return alarmUpdateTask.exec();
+// }
+// exec().then(() => {});
 
+//*
 // @Service('单报警执行')
 // class CSingleAlarmTask {
 //     alarmInfo!: IAlarmStruct;

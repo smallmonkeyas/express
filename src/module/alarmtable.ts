@@ -3,7 +3,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-05 01:19:55
+ * @LastEditTime: 2021-09-05 21:26:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\ruletable.ts
@@ -54,7 +54,7 @@ Container.import([CFileOperate, CSingleRuleInfo, CRuleTable, User]);
 // interface IFactoryTable extends IDatabase {}
 // class CFactory {}
 @Service("报警配置表记录（行）生成任务")
-class AlarmTableRecordGenerateTask {
+export class AlarmTableRecordGenerateTask {
     @Inject("单规则信息")
     singleRule!: CSingleRuleInfo;
     ruleRecord!: IRuleStruct;
@@ -76,7 +76,7 @@ class AlarmTableRecordGenerateTask {
             enableConfigparam = this.singleRule.getFlagParam(),
             enableStatus = this.singleRule.getFlagParamValue(),
             alarmObjname = AlarmObjnameConfig[alarmType - 1],
-            alarmObjDisplayName = AlarmTypeDescConfig[alarmType - 1],
+            alarmObjDisplayName = `异常类型_${AlarmTypeDescConfig[alarmType - 1]}`,
             alarmObjDescription = AlarmTypeDescConfig[alarmType - 1],
             alarmParamName = `${objnameInclude}__${includeParamName.join("__")}`,
             alarmParamDisplayName = `${factoryName}_涉及参数_${includeParamDescription.join("__")}`,
@@ -158,30 +158,32 @@ class AlarmTableRecordGenerateTask {
 }
 
 @Service("报警配置库")
-class CAlarmTable extends CTable {}
+export class CAlarmTable extends CTable {}
 //* 报警配置表生成(生产者)
 @Service("报警配置表生成任务类")
-class CAlarmTableGenerateTask {
+export class CAlarmTableGenerateTask {
     // @Inject('单规则信息')
     // singleRule!: CSingleRuleInfo;
-    @Inject("规则库操作类")
-    ruleTableOperate!: CRuleTable;
+    // @Inject("规则库操作类")
+    // ruleTableOperate!: CRuleTable;
     // singleAlarm!: IAlarmStruct;
     // tableIndex: number = 1;
-    table: Array<object> = [];
+    ruletable!: Array<IRuleStruct>;
+    table: Array<IAlarmStruct> = [];
     @Inject("报警配置表记录（行）生成任务")
     tableRecordTask!: AlarmTableRecordGenerateTask;
     async getAlarmTable(): Promise<any> {
         // let ruleTableHandler = Container.get<CRuleTable>('规则库操作类');
-        this.ruleTableOperate.mongodb.conneConfig = ruletableConfig;
-        const resConnect = await this.ruleTableOperate.connect();
-        const ruletableBasic = await this.ruleTableOperate.update(
-            { ruleType: "恒值异常" },
-            { ruleType: "数据恒值" }
-        );
-        const ruletable = await this.ruleTableOperate.select(null, null);
-        const disconnectRes = await this.ruleTableOperate.disconnect();
-        console.log("disconnectRes", disconnectRes);
+        // this.ruleTableOperate.mongodb.conneConfig = ruletableConfig;
+        // const resConnect = await this.ruleTableOperate.connect();
+        // const ruletableBasic = await this.ruleTableOperate.update(
+        //     { ruleType: "恒值异常" },
+        //     { ruleType: "数据恒值" }
+        // );
+        // const ruletable = await this.ruleTableOperate.select(null, null);
+        // const disconnectRes = await this.ruleTableOperate.disconnect();
+        // console.log("disconnectRes", disconnectRes);
+        let ruletable = this.ruletable;
         if (Array.isArray(ruletable)) {
             let tableRecordIndex: number = 1;
             for (let ruleRecord of ruletable) {
@@ -317,6 +319,6 @@ const alarmTableTest = async function () {
     // console.log('alarmTableFun', alarmTableHandler.table);
 };
 
-alarmTableTest().then((item) => {
-    console.log(item);
-});
+// alarmTableTest().then((item) => {
+//     console.log(item);
+// });

@@ -1,16 +1,16 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:01:15
- * @LastEditTime: 2021-09-03 11:03:42
+ * @LastEditTime: 2021-09-05 21:50:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\data-anamaly.ts
  */
-import { moment } from '../../modulejs';
-import { vhConfig, trendConfig } from '../config';
-import { Container, Service, Inject } from 'typedi';
-import { CVendorData } from './vendor';
-import 'reflect-metadata';
+import { moment } from "../../modulejs";
+import { vhConfig, trendConfig } from "../config";
+import { Container, Service, Inject } from "typedi";
+import { CVendorData } from "./vendor";
+import "reflect-metadata";
 
 Container.import([CVendorData]);
 
@@ -22,9 +22,9 @@ interface IDataMissType {
 }
 
 //* 数据异常类
-@Service('连续10分钟无数据或值为0')
+@Service("连续10分钟无数据或值为0")
 export class CDataMiss {
-    @Inject('贴源数据接口')
+    @Inject("贴源数据接口")
     vendorApi!: CVendorData;
     netParam!: IDataMissType;
     includeParam!: string;
@@ -32,9 +32,9 @@ export class CDataMiss {
     configLimitValue!: number;
     setNetParam(): void {
         let beginTime = moment()
-                .subtract(this.configLimitValue, 'minutes')
-                .format('YYYY-MM-DD HH:mm:ss'),
-            endTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                .subtract(this.configLimitValue, "minutes")
+                .format("YYYY-MM-DD HH:mm:ss"),
+            endTime = moment().format("YYYY-MM-DD HH:mm:ss");
         this.netParam = {
             epcode: this.epcode,
             name: this.includeParam,
@@ -46,7 +46,7 @@ export class CDataMiss {
         // TODO:需要定期检测trend接口返回值的时间范围情况，之前有出现时间范围在设定的开始时间-结束时间以外情况
         this.vendorApi.vendor = trendConfig(this.netParam);
         const trendRes = await this.vendorApi.get();
-        if (trendRes.info.toLocaleLowerCase() === 'success') {
+        if (trendRes.info.toLocaleLowerCase() === "success") {
             return trendRes.data[0];
         } else {
             return false;
@@ -81,9 +81,9 @@ export class CDataMiss {
     }
 }
 // ?数据缺失异常测试
-let alarmHander = Container.get<CDataMiss>('连续10分钟无数据或值为0');
-alarmHander.includeParam = 'E111F1';
-alarmHander.epcode = '320482000003';
+let alarmHander = Container.get<CDataMiss>("连续10分钟无数据或值为0");
+alarmHander.includeParam = "E111F1";
+alarmHander.epcode = "320482000003";
 alarmHander.configLimitValue = 10;
 // console.log();
 alarmHander.getDataMissAlarm().then((item) => {
@@ -96,43 +96,43 @@ interface IDayMeanType {
     mode?: string;
     datamode?: string;
 }
-@Service('日数据不等于小时数据汇总')
+@Service("日数据不等于小时数据汇总")
 export class CMeanAlarm {
     netParam!: IDayMeanType;
     includeParam!: string; // 需写入
-    @Inject('贴源数据接口')
+    @Inject("贴源数据接口")
     vendorApi!: CVendorData;
     configLimitValue!: number;
     setNetParam(): void {
-        let beginTime = moment().subtract(1, 'days').format('YYYY-MM-DD HH:mm:ss'),
-            endTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        let beginTime = moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss"),
+            endTime = moment().format("YYYY-MM-DD HH:mm:ss");
         this.netParam = {
             name: this.includeParam,
             begintime: beginTime,
             endtime: endTime,
-            mode: 'day',
-            datamode: 'avg'
+            mode: "day",
+            datamode: "avg"
         };
     }
     async getDayMean(): Promise<any> {
-        this.netParam.mode = 'day';
+        this.netParam.mode = "day";
         // this.netParam.datamode = 'avg';
         this.vendorApi.vendor = vhConfig(this.netParam);
         let dayAvgRes = await this.vendorApi.get();
         let dayAvgData;
-        if (dayAvgRes.info.toLocaleLowerCase() === 'success') {
+        if (dayAvgRes.info.toLocaleLowerCase() === "success") {
             dayAvgData = dayAvgRes.data[0][0].value;
         }
 
         return dayAvgData;
     }
     async getHoursMean(): Promise<any> {
-        this.netParam.mode = 'hour';
+        this.netParam.mode = "hour";
         // this.netParam.datamode = 'avg';
         this.vendorApi.vendor = vhConfig(this.netParam);
         let hoursAvgRes = await this.vendorApi.get();
         let hoursAvgData, hoursAvgDataArr, sum;
-        if (hoursAvgRes.info.toLocaleLowerCase() === 'success') {
+        if (hoursAvgRes.info.toLocaleLowerCase() === "success") {
             hoursAvgDataArr = hoursAvgRes.data[0];
             sum = hoursAvgDataArr.reduce((acc: any, currAvgData: any) => {
                 return acc + currAvgData.value;
@@ -152,6 +152,10 @@ export class CMeanAlarm {
             this.configLimitValue > 1 ? this.configLimitValue / 100 : this.configLimitValue;
         console.log(dayAvgData, hoursAvgData);
         // return [dayAvgData, hoursAvgData];
+        if (dayAvgData === 0 || hoursAvgData === 0) {
+            // 若数据为0则产生报警
+            return 1;
+        }
         if (Math.abs(dayAvgData - hoursAvgData) / dayAvgData > LimitValuePercent) {
             return 1; //* 产生报警
         } else {
@@ -176,34 +180,34 @@ interface IEmissionType {
     mode?: string;
     datamode?: string;
 }
-@Service('排放量不等于浓度乘以流量')
+@Service("排放量不等于浓度乘以流量")
 export class CEmissionAlarm {
     netParam!: IEmissionType;
     includeEmissParam!: string; // 需写入 排放量\浓度为一个参数
     // includeConcenParam!: string; // 需写入
     includeFlowParam!: string; // 需写入 流量
-    @Inject('贴源数据接口')
+    @Inject("贴源数据接口")
     vendorApi!: CVendorData;
     configLimitValue!: number;
     setNetParam(): void {
-        let beginTime = moment().subtract(1, 'hours').format('YYYY-MM-DD HH:mm:ss'),
-            endTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        let beginTime = moment().subtract(1, "hours").format("YYYY-MM-DD HH:mm:ss"),
+            endTime = moment().format("YYYY-MM-DD HH:mm:ss");
         this.netParam = {
             name: this.includeEmissParam,
             begintime: beginTime,
             endtime: endTime,
-            mode: 'hour',
-            datamode: 'avg'
+            mode: "hour",
+            datamode: "avg"
         };
     }
     async getEmission(): Promise<any> {
         this.netParam.name = this.includeEmissParam;
         // this.netParam.mode = 'hour';
-        this.netParam.datamode = 'cou';
+        this.netParam.datamode = "cou";
         this.vendorApi.vendor = vhConfig(this.netParam);
         let EmissRes = await this.vendorApi.get();
         let EmissData;
-        if (EmissRes.info.toLocaleLowerCase() === 'success') {
+        if (EmissRes.info.toLocaleLowerCase() === "success") {
             EmissData = EmissRes.data[0][0].value;
         }
 
@@ -212,11 +216,11 @@ export class CEmissionAlarm {
     async getConcentration(): Promise<any> {
         this.netParam.name = this.includeEmissParam;
         // this.netParam.mode = 'hour';
-        this.netParam.datamode = 'avg';
+        this.netParam.datamode = "avg";
         this.vendorApi.vendor = vhConfig(this.netParam);
         let ConcentraRes = await this.vendorApi.get();
         let ConcentraData;
-        if (ConcentraRes.info.toLocaleLowerCase() === 'success') {
+        if (ConcentraRes.info.toLocaleLowerCase() === "success") {
             ConcentraData = ConcentraRes.data[0][0].value;
         }
 
@@ -225,11 +229,11 @@ export class CEmissionAlarm {
     async getFlow(): Promise<any> {
         this.netParam.name = this.includeFlowParam;
         // this.netParam.mode = 'hour';
-        this.netParam.datamode = 'cou';
+        this.netParam.datamode = "cou";
         this.vendorApi.vendor = vhConfig(this.netParam);
         let FlowRes = await this.vendorApi.get();
         let FlowData;
-        if (FlowRes.info.toLocaleLowerCase() === 'success') {
+        if (FlowRes.info.toLocaleLowerCase() === "success") {
             FlowData = FlowRes.data[0][0].value;
         }
         return FlowData;
@@ -245,6 +249,9 @@ export class CEmissionAlarm {
         // hoursAvgData = 4;
         // console.log(emissData, concentraData, flowData, concentraData * flowData * 1e-6);
         // return [dayAvgData, hoursAvgData];
+        if (EmissData === 0 || ConcentraData === 0 || FlowData === 0) {
+            return 1;
+        }
         if (Math.abs(EmissData - ConcentraData * FlowData * 1e-6) / EmissData > LimitValuePercent) {
             return 1; // 报警
         } else {
