@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-01 19:37:08
+ * @LastEditTime: 2021-09-05 01:34:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\factorytable.ts
@@ -20,7 +20,7 @@ import {
     IFile,
     IVendorConfig
 } from "../config";
-import { CTable } from "../dao/table";
+import { CTable } from "../dao";
 import { CVendorData, IVendorData } from "./vendor";
 import { request, system } from "../../modulejs";
 import { factoryCollectorTempleData } from "../respository/factory/collector";

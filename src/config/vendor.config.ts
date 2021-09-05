@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:17:14
- * @LastEditTime: 2021-09-03 09:39:15
+ * @LastEditTime: 2021-09-05 14:29:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\mongodb.config.ts
@@ -11,22 +11,24 @@
 //     netPath?: string; // serverapi/data/rtd
 //     method?: string; // ? epcode=320400010005&mode=1
 // }
-import { IVendorConfig } from './interface.config';
+import { IVendorConfig } from "./interface.config";
+import { netIPAddress } from "./net.config";
+
 const netAddressConfig = {
-    IPAddress: '10.32.203.157',
-    Port: '8999'
+    IPAddress: netIPAddress,
+    Port: "8999"
 };
 const netAddress = `http://${netAddressConfig.IPAddress}:${netAddressConfig.Port}`;
 
 export const collectorUrlConfig: IVendorConfig = {
     netAddress: netAddress,
-    netPath: 'serverapi/cfg/collector'
+    netPath: "serverapi/cfg/collector"
 };
 
 export const trendConfig = function (netParam: object) {
     return {
         netAddress: netAddress,
-        netPath: 'serverapi/data/trend',
+        netPath: "serverapi/data/trend",
         netParam: netParam
         // ? netParam->{ epcode: epcode, name: name, begintime: begintime, endtime: endtime } -> epcode=320400010005&mode=1
         // netData?: Object;
@@ -36,7 +38,7 @@ export const trendConfig = function (netParam: object) {
 export const vhConfig = function (netParam: object) {
     return {
         netAddress: netAddress,
-        netPath: 'serverapi/data/vh/history',
+        netPath: "serverapi/data/vh/history",
         netParam: netParam
         // eslint-disable-next-line max-len
         // ? name=MD_73034683210015.A21026&begintime=2021-08-17+00:00:01&endtime=2021-08-21+12:00:00&mode=day&datamode=avg=>{name:'MD_73034683210015.A21026',mode:1,}

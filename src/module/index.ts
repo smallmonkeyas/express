@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-31 11:23:25
- * @LastEditTime: 2021-09-03 02:13:24
+ * @LastEditTime: 2021-09-05 01:32:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\module.ts
@@ -13,7 +13,10 @@ export * from "./factorytable";
 export * from "./vendor";
 export * from "./supos";
 export * from "./data-anamaly";
-export * from "./";
+export * from "./ruletable";
+export * from "./alarm";
+export * from "./alarmtable";
+export * from "./user";
 
 // !测试包导入
 // import { system } from '../../modulejs';

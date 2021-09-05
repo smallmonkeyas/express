@@ -1,65 +1,34 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 08:28:45
- * @LastEditTime: 2021-09-03 17:07:48
+ * @LastEditTime: 2021-09-05 14:46:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\alarm.ts
  */
 
-import { CDataMiss, CMeanAlarm, CEmissionAlarm } from './data-anamaly';
-import { Container, Service, Inject } from 'typedi';
-import 'reflect-metadata';
+import { CDataMiss, CMeanAlarm, CEmissionAlarm } from "./data-anamaly";
+import { Container, Service, Inject } from "typedi";
+import "reflect-metadata";
 import {
-    IAlarmStruct,
-    SetPropertyValueNetConfig,
-    GetPropertyValueNetConfig,
-    CreatObjectConfig,
-    CreatProperityConfig
-} from '../config';
-import { CSupOSData } from './supos';
+    IAlarmStruct
+    // SetPropertyValueNetConfig,
+    // GetPropertyValueNetConfig,
+    // CreatObjectConfig,
+    // CreatProperityConfig
+} from "../config";
+import { CSupOSData, CPlatformObject } from "./supos";
 
 //* supos工业操作系统平台上报警对象实例
-@Service('supOS平台报警实例与属性设置')
-class CPlatformAlarmObject {
-    @Inject('supOS数据接口')
-    plantInterface!: CSupOSData;
+@Service("supOS平台报警实例与属性设置")
+class CPlatformAlarmObject extends CPlatformObject {
+    // @Inject("supOS数据接口")
+    // plantInterface!: CSupOSData;
     alarmInfo!: IAlarmStruct;
-    alarmSetValue!: number;
-    // alarmGetValue
-    //* 设置属性值
-    async setPropertyValue() {
-        const {
-            alarmObjname,
-            alarmObjDisplayName,
-            alarmObjDescription,
-            alarmParamName,
-            alarmParamDisplayName,
-            alarmParamDescription
-        } = this.alarmInfo;
-        this.plantInterface.supos = SetPropertyValueNetConfig(
-            alarmObjname,
-            alarmObjDisplayName,
-            alarmObjDescription,
-            alarmParamName,
-            alarmParamDisplayName,
-            alarmParamDescription,
-            this.alarmSetValue
-        );
-        return await this.plantInterface.post();
-    }
-    //* 创建对象实例
-    creatObject() {
-        const { alarmObjname, alarmObjDisplayName, alarmObjDescription } = this.alarmInfo;
-        this.plantInterface.supos = CreatObjectConfig(
-            alarmObjname,
-            alarmObjDisplayName,
-            alarmObjDescription
-        );
-        this.plantInterface.post();
-    }
-    //* 创建对象属性
-    creatProperityWithAlarm() {
+    // alarmSetValue!: number;
+
+    // properityInfo!: ISuposProperity;
+    setProperityInfo() {
         const {
             alarmObjname,
             alarmObjDisplayName,
@@ -71,20 +40,67 @@ class CPlatformAlarmObject {
             alarmProperityDisplayName,
             alarmProperityDescription
         } = this.alarmInfo;
-        this.plantInterface.supos = CreatProperityConfig(
-            alarmObjname,
-            alarmObjDisplayName,
-            alarmObjDescription,
-            alarmParamName,
-            alarmParamDisplayName,
-            alarmParamDescription,
-            this.alarmSetValue,
-            alarmProperityName,
-            alarmProperityDisplayName,
-            alarmProperityDescription
-        );
-        this.plantInterface.post();
+        this.properityInfo = {
+            objectName: alarmObjname,
+            objectDisplayName: alarmObjDisplayName,
+            objectDescription: alarmObjDescription,
+            propName: alarmParamName,
+            propDisplayName: alarmParamDisplayName,
+            propDescription: alarmParamDescription,
+            primitiveType: "Integer",
+            alarmProperityName: alarmProperityName,
+            alarmProperityDisplayName: alarmProperityDisplayName,
+            alarmProperityDescription: alarmProperityDescription
+        };
     }
+    // // alarmGetValue
+    // //* 设置属性值
+    // async setPropertyValue() {
+    //     const { alarmObjname, alarmParamName } = this.alarmInfo;
+    //     this.plantInterface.supos = SetPropertyValueNetConfig(
+    //         alarmObjname,
+    //         alarmParamName,
+    //         this.alarmSetValue
+    //     );
+    //     return await this.plantInterface.post();
+    // }
+    // //* 创建对象实例
+    // creatObject() {
+    //     const { alarmObjname, alarmObjDisplayName, alarmObjDescription } = this.alarmInfo;
+    //     this.plantInterface.supos = CreatObjectConfig(
+    //         alarmObjname,
+    //         alarmObjDisplayName,
+    //         alarmObjDescription
+    //     );
+    //     this.plantInterface.post();
+    // }
+    // //* 创建对象属性
+    // creatProperityWithAlarm() {
+    //     const {
+    //         alarmObjname,
+    //         alarmObjDisplayName,
+    //         alarmObjDescription,
+    //         alarmParamName,
+    //         alarmParamDisplayName,
+    //         alarmParamDescription,
+    //         alarmProperityName,
+    //         alarmProperityDisplayName,
+    //         alarmProperityDescription
+    //     } = this.alarmInfo;
+    //     this.plantInterface.supos = CreatProperityConfig(
+    //         alarmObjname,
+    //         alarmObjDisplayName,
+    //         alarmObjDescription,
+    //         alarmParamName,
+    //         alarmParamDisplayName,
+    //         alarmParamDescription,
+    //         this.alarmSetValue,
+    //         alarmProperityName,
+    //         alarmProperityDisplayName,
+    //         alarmProperityDescription
+    //     );
+    //     this.plantInterface.post();
+    // }
 }
 
 Container.import([CDataMiss, CMeanAlarm, CEmissionAlarm, CSupOSData]);
@@ -98,12 +114,13 @@ interface IAlarmTask {
     platformAlarmObject: CPlatformAlarmObject;
     exec(): void;
 }
-@Service('数据缺失设置报警任务')
+@Service("数据缺失设置报警任务")
 class CDataMissAlarmTask implements IAlarmTask {
     alarmInfo!: IAlarmStruct;
-    @Inject('连续10分钟无数据或值为0')
+    service!: string;
+    @Inject("连续10分钟无数据或值为0")
     dataMissHandler!: CDataMiss;
-    @Inject('supOS平台报警实例与属性设置')
+    @Inject("supOS平台报警实例与属性设置")
     platformAlarmObject!: CPlatformAlarmObject;
     async exec(): Promise<any> {
         if (this.alarmInfo.enableStatus) {
@@ -118,16 +135,17 @@ class CDataMissAlarmTask implements IAlarmTask {
         this.dataMissHandler.includeParam = String(this.alarmInfo.includeParamName);
         let alarmSetValue = await this.dataMissHandler.getDataMissAlarm();
         this.platformAlarmObject.alarmInfo = this.alarmInfo;
-        this.platformAlarmObject.alarmSetValue = alarmSetValue;
+        this.platformAlarmObject.setProperityInfo();
+        this.platformAlarmObject.propSetValue = alarmSetValue;
         return await this.platformAlarmObject.setPropertyValue();
     }
 }
-@Service('均值异常设置报警任务')
+@Service("均值异常设置报警任务")
 class CMeanAbnormalAlarmTask implements IAlarmTask {
     alarmInfo!: IAlarmStruct;
-    @Inject('日数据不等于小时数据汇总')
+    @Inject("日数据不等于小时数据汇总")
     meanAlarmHandler!: CMeanAlarm;
-    @Inject('supOS平台报警实例与属性设置')
+    @Inject("supOS平台报警实例与属性设置")
     platformAlarmObject!: CPlatformAlarmObject;
     async exec(): Promise<any> {
         if (this.alarmInfo.enableStatus) {
@@ -144,16 +162,18 @@ class CMeanAbnormalAlarmTask implements IAlarmTask {
         let alarmSetValue = await this.meanAlarmHandler.getMeanAlarm();
 
         this.platformAlarmObject.alarmInfo = this.alarmInfo;
-        this.platformAlarmObject.alarmSetValue = alarmSetValue;
+        this.platformAlarmObject.setProperityInfo();
+
+        this.platformAlarmObject.propSetValue = alarmSetValue;
         return await this.platformAlarmObject.setPropertyValue();
     }
 }
-@Service('排放量异常设置报警任务')
+@Service("排放量异常设置报警任务")
 class CEmissionAbnormalAlarmTask implements IAlarmTask {
     alarmInfo!: IAlarmStruct;
-    @Inject('排放量不等于浓度乘以流量')
+    @Inject("排放量不等于浓度乘以流量")
     emissionAlarmHandler!: CEmissionAlarm;
-    @Inject('supOS平台报警实例与属性设置')
+    @Inject("supOS平台报警实例与属性设置")
     platformAlarmObject!: CPlatformAlarmObject;
     async exec(): Promise<any> {
         if (this.alarmInfo.enableStatus) {
@@ -171,7 +191,9 @@ class CEmissionAbnormalAlarmTask implements IAlarmTask {
         let alarmSetValue = await this.emissionAlarmHandler.getEmissAlarm();
 
         this.platformAlarmObject.alarmInfo = this.alarmInfo;
-        this.platformAlarmObject.alarmSetValue = alarmSetValue;
+        this.platformAlarmObject.setProperityInfo();
+
+        this.platformAlarmObject.propSetValue = alarmSetValue;
         return await this.platformAlarmObject.setPropertyValue();
     }
 }

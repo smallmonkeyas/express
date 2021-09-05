@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-04 21:35:54
+ * @LastEditTime: 2021-09-05 01:39:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\ruletable.ts
@@ -11,7 +11,7 @@ import "reflect-metadata";
 // import mongoose from 'mongoose';
 
 import { Container, Service, Inject } from "typedi";
-import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate } from "../dao";
+import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../dao";
 import {
     factoryConfig,
     ruletableConfig,
@@ -21,7 +21,6 @@ import {
     IVendorConfig,
     ruletableFileConfig
 } from "../config";
-import { CTable } from "../dao/table";
 import { CVendorData, IVendorData } from "./vendor";
 import { request, system, XLSX_JSON, fs } from "../../modulejs";
 import { factoryCollectorTempleData } from "../respository/factory/collector";
@@ -45,7 +44,7 @@ Container.import([CFileOperate]);
 export class CRuleTable extends CTable {}
 //* 规则数据表本地操作类
 @Service("规则数据表本地操作类")
-class CRuleTableLocal extends CFileOperate {
+export class CRuleTableLocal extends CFileOperate {
     file!: IFile;
     // fileContent: any;
     @Inject("本地文件操作操作类")

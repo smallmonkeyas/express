@@ -1,11 +1,23 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 22:28:47
- * @LastEditTime: 2021-09-03 19:08:53
+ * @LastEditTime: 2021-09-05 13:10:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\factory.config.ts
  */
+
+export interface IAlarmBasicStruct {
+    alarmObjname: string;
+    // alarmObjDisplayName: string;
+    // alarmObjDescription: string;
+    alarmParamName: string;
+    alarmParamDisplayName: string;
+    alarmParamDescription: string;
+    alarmProperityName: string;
+    // alarmProperityDisplayName: string;
+    alarmProperityDescription: string;
+}
 export interface IAlarmStruct {
     id?: number;
     objnameInclude: string;
@@ -58,33 +70,33 @@ export const AlarmStruct = {
 };
 
 export const AlarmTypeDescConfig = [
-    '数据缺失',
-    '',
-    '关联度异常',
-    '数据恒值',
-    '',
-    '数采仪离线',
-    '设备异常',
-    '',
-    '数据超范围',
-    '去除率异常',
-    '均值异常',
-    '排放量异常'
+    "数据缺失",
+    "",
+    "关联度异常",
+    "数据恒值",
+    "",
+    "数采仪离线",
+    "设备异常",
+    "",
+    "数据超范围",
+    "去除率异常",
+    "均值异常",
+    "排放量异常"
 ];
 
 export const AlarmTypeConfig = [1, 3, 4, 6, 7, 9, 10, 11, 12];
 export const AlarmTypeDeprecated = [3, 4, 6, 7, 9, 10];
 export const AlarmObjnameConfig = [
-    'DataMiss',
-    '',
-    'AbnormalRelevance',
-    'DataConstant',
-    '',
-    'DataAcquisitionOffline',
-    'EquipmentAbnormal',
-    '',
-    'DataOutofRange',
-    'AbnormalRemovalrate',
-    'DayMeanAlarm',
-    'EmissionAlarm'
+    "DataMiss",
+    "",
+    "AbnormalRelevance",
+    "DataConstant",
+    "",
+    "DataAcquisitionOffline",
+    "EquipmentAbnormal",
+    "",
+    "DataOutofRange",
+    "AbnormalRemovalrate",
+    "DayMeanAlarm",
+    "EmissionAlarm"
 ];
