@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:00:34
- * @LastEditTime: 2021-09-05 20:41:14
+ * @LastEditTime: 2021-09-06 01:28:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\properity.ts
@@ -25,7 +25,6 @@ import {
     rmObjectConfig
 } from "../config";
 import { User } from "./user";
-
 Container.import([User]);
 
 export interface ISupOSData {
@@ -79,8 +78,15 @@ export class CSupOSData implements ISupOSData {
                 if (error) {
                     throw new Error(error);
                 }
+                let res = response
+                    ? response.body
+                        ? system.isJSON(response.body)
+                            ? JSON.parse(response.body)
+                            : response.body
+                        : response
+                    : "错误请求";
 
-                let res = JSON.parse(response.body);
+                // let res = JSON.parse(response.body);
                 // if (res instanceof IVendorResponseConfig) {
                 // resolve(res);
                 // return { error: 1, info: 'success', data: [] };
@@ -135,7 +141,14 @@ export class CSupOSData implements ISupOSData {
                 if (error) {
                     resolve(error);
                 }
-                let res = JSON.parse(response.body);
+                let res = response
+                    ? response.body
+                        ? system.isJSON(response.body)
+                            ? JSON.parse(response.body)
+                            : response.body
+                        : response
+                    : response;
+                // let res = JSON.parse(response.body);
                 // if (res instanceof IVendorResponseConfig) {
                 // resolve(res);
                 // return { error: 1, info: 'success', data: [] };
@@ -187,15 +200,21 @@ export class CSupOSData implements ISupOSData {
                 if (error) {
                     throw new Error(error);
                 }
-
-                resolve(response.body);
+                let res = response
+                    ? response.body
+                        ? system.isJSON(response.body)
+                            ? JSON.parse(response.body)
+                            : response.body
+                        : response
+                    : "错误请求";
+                // resolve(response.body);
 
                 // let res = JSON.parse(response.body);
                 // // if (res instanceof IVendorResponseConfig) {
                 // // resolve(res);
                 // // return { error: 1, info: 'success', data: [] };
                 // // }
-                // resolve(res);
+                resolve(res);
             });
         });
     }

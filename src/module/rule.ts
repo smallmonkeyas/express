@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:35
- * @LastEditTime: 2021-09-04 02:08:18
+ * @LastEditTime: 2021-09-07 01:29:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\rule.ts
@@ -13,7 +13,7 @@ export class CSingleRuleInfo {
     rule!: IRuleStruct;
     // alarmType!: string;
     getObjnameInclude(): string {
-        return this.rule.objectName;
+        return this.rule.objectName.toLocaleUpperCase();
     }
     getFactoryName(): string {
         return this.rule.name;
@@ -22,45 +22,47 @@ export class CSingleRuleInfo {
         return this.rule.factoryCatatory;
     }
     getRuleContent(): string {
-        return this.rule.content;
+        return this.rule.content || "";
     }
     getEpcode(): string {
-        return this.rule.epcode;
+        return this.rule.epcode.toLocaleUpperCase();
     }
     getAlarmtype(): number {
         let alarmType = AlarmTypeDescConfig.indexOf(this.rule.ruleType) + 1;
         let alarmTypeIncluded = AlarmTypeConfig.includes(alarmType);
+
         if (!alarmTypeIncluded) {
             throw new Error("报警类型无效");
         }
         return alarmType;
     }
     getAlarmtypeDescription(): string {
-        return this.rule.ruleType;
+        return this.rule.ruleType || "";
     }
     getParamNameInclude(): Array<string> {
-        let paramNameInclude: string = this.rule.paramNameInclude;
+        let paramNameInclude: string = this.rule.paramNameInclude || "";
+        paramNameInclude = paramNameInclude.toLocaleUpperCase();
         return paramNameInclude
             .replace(/( )|,{1,}$/g, "")
             .replace(/[，,]{1,}/g, ",")
             .split(/,/);
     }
     getParamDescInclude(): Array<string> {
-        let paramDescInclude: string = this.rule.paramInclude;
+        let paramDescInclude: string = this.rule.paramInclude || "";
         return paramDescInclude
             .replace(/( )|,{1,}$/g, "")
             .replace(/[，,、]{1,}/g, ",")
             .split(/,/);
     }
     getConfigParam(): Array<string> {
-        let ruleConfigParam: string = this.rule.ruleConfigParam;
+        let ruleConfigParam: string = this.rule.ruleConfigParam || "";
         return ruleConfigParam
             .replace(/( )|,{1,}$/g, "")
             .replace(/[，,]{1,}/g, ",")
             .split(/,/);
     }
     getConfigParamDefaultValue(): Array<number> {
-        let configParamDefaultValue: string = this.rule.SetValue;
+        let configParamDefaultValue: string = this.rule.SetValue || "";
         let configParamDefaultValueStrArr = configParamDefaultValue
             .replace(/( )|,{1,}$/g, "")
             .replace(/[，,]{1,}/g, ",")
@@ -73,11 +75,11 @@ export class CSingleRuleInfo {
         return configParamDefaultValueNumArr;
     }
     getFlagParam(): string {
-        let ruleConfigParam: string = this.rule.flagParam;
+        let ruleConfigParam: string = this.rule.flagParam || "";
         return ruleConfigParam.replace(/( )|,{1,}$/g, "").replace(/[，,]{1,}/g, ",");
     }
     getFlagParamValue(): boolean {
-        let flagParamDefaultValue = this.rule.SetFlagValue;
+        let flagParamDefaultValue = this.rule.SetFlagValue || "";
         let alarmType = this.getAlarmtype();
         let hasNullParam = this.getParamNameInclude()
             .join("_")

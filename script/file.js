@@ -1,26 +1,26 @@
 /*
  * @Author: your name
  * @Date: 2021-07-24 21:50:12
- * @LastEditTime: 2021-09-01 18:55:04
+ * @LastEditTime: 2021-09-06 21:46:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \SolidPollutionItem\tmp\script\file.js
  */
 
-var request = require('request');
+var request = require("request");
 // var request = require("request");
-const XLSX = require('xlsx');
-const xlsx = require('node-xlsx');
-var fs = require('fs');
-var moment = require('moment');
-var os = require('os');
-var path = require('path'); /* nodejs自带的模块*/
-var cheerio = require('cheerio');
-const jsdom = require('jsdom');
-const json2xls = require('json2xls');
-const csv2json = require('csv2json');
-const csv = require('csvtojson');
-const wxm = require('wxmnode'); // 微信
+const XLSX = require("xlsx");
+const xlsx = require("node-xlsx");
+var fs = require("fs");
+var moment = require("moment");
+var os = require("os");
+var path = require("path"); /* nodejs自带的模块*/
+var cheerio = require("cheerio");
+const jsdom = require("jsdom");
+const json2xls = require("json2xls");
+const csv2json = require("csv2json");
+const csv = require("csvtojson");
+const wxm = require("wxmnode"); // 微信
 
 const creatdir = function (filePath) {
     if (!fs.existsSync(filePath)) {
@@ -40,7 +40,7 @@ const rmFileSync = function (filePath) {
                 console.log(err);
                 resolve(err);
             } else {
-                console.log('删除文件成功');
+                console.log("删除文件成功");
                 resolve(true);
             }
         });
@@ -86,7 +86,8 @@ const writeFile = async function (fileNameWithExtension, fileContent, code) {
 // 1、读取目录下固定后缀类型的文件
 const get = function () {
     if (!fs.existsSync(arguments[1])) {
-        console.log('目录出错，要不再调试调试？😂');
+        console.log(arguments[1]);
+        console.log("目录出错，要不再调试调试？😂");
         return [];
     }
     let filesPath = [];

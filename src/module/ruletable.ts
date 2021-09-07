@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-05 01:39:56
+ * @LastEditTime: 2021-09-06 11:55:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\ruletable.ts
@@ -15,6 +15,7 @@ import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from ".
 import {
     factoryConfig,
     ruletableConfig,
+    IRuleStruct,
     ImongodbConfig,
     collectorUrlConfig,
     IFile,
@@ -22,7 +23,7 @@ import {
     ruletableFileConfig
 } from "../config";
 import { CVendorData, IVendorData } from "./vendor";
-import { request, system, XLSX_JSON, fs } from "../../modulejs";
+import { request, system, XLSX_JSON, file, fs } from "../../modulejs";
 import { factoryCollectorTempleData } from "../respository/factory/collector";
 Container.import([CFileOperate]);
 // interface IFactoryCollector {
@@ -47,7 +48,7 @@ export class CRuleTable extends CTable {}
 export class CRuleTableLocal extends CFileOperate {
     file!: IFile;
     // fileContent: any;
-    @Inject("本地文件操作操作类")
+    // @Inject("本地文件操作操作类")
     // operateHandler!: CFileOperate;
     // constructor(file: IFile) {
     //     this.file = file;
@@ -63,27 +64,38 @@ export class CRuleTableLocal extends CFileOperate {
     //     this.operateHandler.fileContent = this.fileContent;
     //     this.operateHandler.writeFile();
     // }
-    excelTojson(): Array<object> {
+    excelTojson(): Array<IRuleStruct> {
         let pathFileDir = this.file.filePath,
             fileName = this.file.fileName;
         return XLSX_JSON.excelToJson(pathFileDir, fileName);
     }
+    patchExcelToJson(): Array<IRuleStruct> {
+        let pathFileDir = this.file.filePath;
+        let fileType = this.file.fileExtension;
+        let filesName = file.get(`.${fileType}`, pathFileDir);
+        let jsonTotal: Array<any> = [];
+        filesName.forEach((currfileName: string) => {
+            this.file.fileName = currfileName;
+            jsonTotal.push(...this.excelTojson());
+        });
+        return jsonTotal;
+    }
 }
 
 // ? 文件测试
-// let ruleTableHandler = Container.get(CRuleTableLocal);
+// let ruleTableHandler = Container.get<CRuleTableLocal>("规则数据表本地操作类");
 
 // ruleTableHandler.file = ruletableFileConfig;
-// const excelTojson = ruleTableHandler.excelTojson();
+// const excelTojson = ruleTableHandler.patchExcelToJson();
 
 // let fileStr = ruleTableHandler.readFile();
-// ruletableFileConfig.fileName = '数据输出';
+// ruletableFileConfig.fileName = "数据输出";
 // ruleTableHandler.file = ruletableFileConfig;
 
 // ruleTableHandler.fileContent = fileStr;
 // ruleTableHandler.writeFile();
 // console.log(fileStr);
-// console.log(excelTojson);
+// console.log(excelTojson.length);
 // ? 依赖注入测试
 // const urlConfig = {
 //     netAddress: 'http://10.32.203.157:8999', // 10.32.203.157:8999

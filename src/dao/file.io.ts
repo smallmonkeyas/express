@@ -1,15 +1,15 @@
 /*
  * @Author: your name
  * @Date: 2021-08-31 18:58:52
- * @LastEditTime: 2021-09-04 21:32:19
+ * @LastEditTime: 2021-09-07 12:27:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\dao\file.io.ts
  */
-import { IFile } from "../config";
-import { file } from "../../modulejs";
+import { IFile, ruletableFileConfig } from "../config";
+import { file, path } from "../../modulejs";
 import { Container, Service, Inject } from "typedi";
-
+import "reflect-metadata";
 // ! 文件操作接口
 export interface IFileOperate {
     creatDir(): void;
@@ -69,3 +69,37 @@ export class CFileOperate implements IFileOperate {
         file.rmdir(this.file.filePath);
     }
 }
+
+async function filoUnitTest() {
+    let filehandler = Container.get<CFileOperate>("本地文件操作操作类");
+    let fileConfig = ruletableFileConfig;
+    fileConfig.filePath = path.resolve(fileConfig.filePath, "../fileTest");
+    fileConfig.fileExtension = "txt";
+    console.log(Object.keys([...Array(10)]));
+    let fileNameArr = Object.keys([...Array(10)]);
+    let promises = fileNameArr.map((fileName) => {
+        if (Number(fileName) % 2 === 0) {
+            filehandler.fileContent = fileName + 10;
+            fileConfig.fileName = fileName + 10;
+        } else {
+            filehandler.fileContent = fileName + 20;
+            fileConfig.fileName = fileName + 20;
+        }
+
+        filehandler.file = fileConfig;
+
+        filehandler.creatDir();
+
+        // await filehandler.creatFile();
+        return filehandler.writeFile();
+    });
+    const promiseall = await Promise.all(promises);
+
+    return promiseall;
+}
+filoUnitTest()
+    .then((item) => console.log(item))
+    .catch((e) => console.log(e));
+// let fileConfig = ruletableFileConfig;
+// let fileNewPath = path.resolve(fileConfig.filePath, "../fileTest");
+// console.log(ruletableFileConfig, fileNewPath);

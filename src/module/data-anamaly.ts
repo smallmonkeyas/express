@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:01:15
- * @LastEditTime: 2021-09-05 21:50:41
+ * @LastEditTime: 2021-09-06 03:21:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\data-anamaly.ts
@@ -27,8 +27,9 @@ export class CDataMiss {
     @Inject("贴源数据接口")
     vendorApi!: CVendorData;
     netParam!: IDataMissType;
-    includeParam!: string;
+    includeParam!: string; // 对象实例.对象属性
     epcode!: string;
+    // objnameInclude!: string;
     configLimitValue!: number;
     setNetParam(): void {
         let beginTime = moment()
@@ -81,14 +82,14 @@ export class CDataMiss {
     }
 }
 // ?数据缺失异常测试
-let alarmHander = Container.get<CDataMiss>("连续10分钟无数据或值为0");
-alarmHander.includeParam = "E111F1";
-alarmHander.epcode = "320482000003";
-alarmHander.configLimitValue = 10;
-// console.log();
-alarmHander.getDataMissAlarm().then((item) => {
-    console.log(item);
-});
+// let alarmHander = Container.get<CDataMiss>("连续10分钟无数据或值为0");
+// alarmHander.includeParam = "E111F1";
+// alarmHander.epcode = "320482000003";
+// alarmHander.configLimitValue = 10;
+// // console.log();
+// alarmHander.getDataMissAlarm().then((item) => {
+//     console.log(item);
+// });
 interface IDayMeanType {
     name: string;
     begintime: string;

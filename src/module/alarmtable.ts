@@ -3,7 +3,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-05 21:26:54
+ * @LastEditTime: 2021-09-06 00:33:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\ruletable.ts
@@ -83,7 +83,7 @@ export class AlarmTableRecordGenerateTask {
             alarmParamDescription = `${factoryName}_涉及参数_${includeParamDescription.join(
                 "_"
             )}_报警产生条件：${alarmCondition}`,
-            alarmProperityName = `A_${alarmType}_xxx_${includeParamName.join("_")}`,
+            alarmProperityName = `A${epcode}_${alarmType}_xxx_${includeParamName.join("_")}`,
             alarmProperityDisplayName = `配置参数_${alarmConfigParam.join("__")}`,
             alarmProperityDescription = `使能配置参数:${enableConfigparam},报警条件：为1则触发报警`;
 

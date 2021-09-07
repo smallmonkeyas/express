@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-05 01:33:25
- * @LastEditTime: 2021-09-05 23:25:41
+ * @LastEditTime: 2021-09-07 01:32:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\main\index.ts
@@ -10,7 +10,7 @@
 
 import "reflect-metadata";
 import { Container, Service, Inject } from "typedi";
-import { ruletableFileConfig, ruletableConfig, alarmtableConfig } from "../config";
+import { ruletableFileConfig, ruletableConfig, alarmtableConfig, IAlarmStruct } from "../config";
 import {
     User,
     CSupOSData,
@@ -21,8 +21,10 @@ import {
     CAlarmTableGenerateTask,
     CPlatformAlarmObject,
     CDataMissAlarmTask,
+    CDataMiss,
     CAlarmUpdateTask,
     CMeanAbnormalAlarmTask,
+    CMeanAlarm,
     CEmissionAbnormalAlarmTask
 } from "../module";
 import { system, XLSX_JSON } from "../../modulejs";
@@ -60,7 +62,8 @@ class CTask extends AbsTask {
         // let ruleTableLocalHandler = Container.get<CRuleTableLocal>('规则数据表本地操作类');
 
         this.ruleTableLocalHandler.file = ruletableFileConfig;
-        const ruleJson = this.ruleTableLocalHandler.excelTojson();
+        const ruleJson = this.ruleTableLocalHandler.patchExcelToJson();
+        // const ruleJson = this.ruleTableLocalHandler.excelTojson();
         // return ruleJson;
         // TODO: 2、存到规则库
         //     let ruleTableLocalHandler = Container.get<CRuleTableLocal>('规则数据表本地操作类');
@@ -98,23 +101,120 @@ class CTask extends AbsTask {
         // return alarmTable;
         // TODO: 6、遍历报警配置数据，完成以下任务：
         let res = [];
+
         for (let alarmRecord of alarmTable) {
-            // console.log(alarmRecord);
-            // if (alarmRecord.alarmType !== 1) {
-            //     continue;
-            // }
-            // console.log(alarmRecord);
-            // TODO: ①创建平台报警对象
-            this.platformAlarmObject.alarmInfo = alarmRecord;
-            this.platformAlarmObject.setProperityInfo();
-            // let createObjRes = await this.platformAlarmObject.rmObject();
-            let createObjRes = await this.platformAlarmObject.creatObject();
-            let createPropRes = await this.platformAlarmObject.creatProperity();
-            // console.log(createObjRes, createPropRes);
-            // console.log(createObjRes);
-            res.push(createObjRes, createPropRes);
-            // res.push(createObjRes);
+            if (alarmRecord.enableStatus) {
+                // console.log(alarmRecord);
+                // if (alarmRecord.alarmType !== 1) {
+                //     continue;
+                // }
+                // console.log(alarmRecord);
+                // TODO: ①创建平台报警对象
+                this.platformAlarmObject.alarmInfo = alarmRecord;
+                this.platformAlarmObject.setProperityInfo();
+                // let createObjRes = await this.platformAlarmObject.rmObject();
+                let createObjRes = await this.platformAlarmObject.creatObject();
+                let createPropRes = await this.platformAlarmObject.creatProperity();
+                // // console.log(createObjRes, createPropRes);
+                // console.log(createObjRes);
+                res.push(createObjRes, createPropRes);
+                // res.push(createObjRes);
+            }
         }
+        // Promise.all(
+        //     alarmTable.map(async (alarmRecord: IAlarmStruct) => {
+        //         if (!alarmRecord.enableStatus) {
+        //             return "报警不使能";
+        //         }
+        //         // TODO: ②依据异常算法判定是否报警
+        //         // if (alarmRecord.enableStatus) {
+        //         this.alarmUpdateHandler.alarmInfo = alarmRecord;
+        //         if (alarmRecord.alarmType === 1) {
+        //             this.alarmUpdateHandler.alarmTaskHandler = this.dataMissHandler;
+        //         } else if (alarmRecord.alarmType === 11) {
+        //             this.alarmUpdateHandler.alarmTaskHandler = this.meanAbnormalHandler;
+        //         } else if (alarmRecord.alarmType === 12) {
+        //             this.alarmUpdateHandler.alarmTaskHandler = this.emissionAbnormalHandler;
+        //         } else {
+        //             return "其它类型";
+        //         }
+        //         await this.alarmUpdateHandler.exec();
+        //         // res.push(alarmExecRes);
+        //         // console.log(alarmExecRes);
+        //         // } else {
+        //         //     return `报警不使能`;
+        //         // }
+        //     })
+        // );
+        // let promise = alarmTable.map((alarmRecord: any) => {
+        //     if (!alarmRecord.enableStatus) {
+        //         return "报警不使能";
+        //     }
+        //     // TODO: ②依据异常算法判定是否报警
+        //     // if (alarmRecord.enableStatus) {
+        //     // this.alarmUpdateHandler.alarmInfo = alarmRecord;
+        //     if (alarmRecord.alarmType === 1) {
+        //         // this.dataMissHandler.alarmInfo = alarmRecord;
+        //         let newDataMissHandler = new CDataMissAlarmTask();
+        //         newDataMissHandler.alarmInfo = alarmRecord;
+        //         newDataMissHandler.dataMissHandler = new CDataMiss();
+        //         newDataMissHandler.platformAlarmObject = new CPlatformAlarmObject();
+        //         newDataMissHandler.exec();
+        //         // Container.set("数据缺失设置报警任务", new CDataMissAlarmTask());
+        //         // Container.import([CDataMissAlarmTask]);
+        //         // return this.dataMissHandler.exec();
+        //     } else if (alarmRecord.alarmType === 11) {
+        //         let newMeanAbnormalAlarmHandler = new CMeanAbnormalAlarmTask();
+        //         newMeanAbnormalAlarmHandler.alarmInfo = alarmRecord;
+        //         newMeanAbnormalAlarmHandler.meanAlarmHandler = new CMeanAlarm();
+        //         newMeanAbnormalAlarmHandler.platformAlarmObject = new CPlatformAlarmObject();
+        //         newMeanAbnormalAlarmHandler.exec();
+        //         this.meanAbnormalHandler.alarmInfo = alarmRecord;
+
+        //         return this.meanAbnormalHandler.exec();
+        //     } else if (alarmRecord.alarmType === 12) {
+        //         this.emissionAbnormalHandler.alarmInfo = alarmRecord;
+
+        //         return this.emissionAbnormalHandler.exec();
+        //     } else {
+        //         return "其它类型";
+        //     }
+        //     // return this.alarmUpdateHandler.exec();
+        //     // res.push(alarmExecRes);
+        //     // console.log(alarmExecRes);
+        //     // } else {
+        //     //     return `报警不使能`;
+        //     // }
+        // });
+
+        // let promise = alarmTable.map((alarmRecord: IAlarmStruct) => {
+        //     if (!alarmRecord.enableStatus) {
+        //         return "报警不使能";
+        //     }
+        //     // TODO: ②依据异常算法判定是否报警
+        //     // if (alarmRecord.enableStatus) {
+        //     this.alarmUpdateHandler.alarmInfo = alarmRecord;
+        //     if (alarmRecord.alarmType === 1) {
+        //         this.alarmUpdateHandler.alarmTaskHandler = this.dataMissHandler;
+        //         return this.alarmUpdateHandler.exec();
+        //     } else if (alarmRecord.alarmType === 11) {
+        //         this.alarmUpdateHandler.alarmTaskHandler = this.meanAbnormalHandler;
+        //         return this.alarmUpdateHandler.exec();
+        //     } else if (alarmRecord.alarmType === 12) {
+        //         this.alarmUpdateHandler.alarmTaskHandler = this.emissionAbnormalHandler;
+        //         return this.alarmUpdateHandler.exec();
+        //     } else {
+        //         return "其它类型";
+        //     }
+        //     // return this.alarmUpdateHandler.exec();
+        //     // res.push(alarmExecRes);
+        //     // console.log(alarmExecRes);
+        //     // } else {
+        //     //     return `报警不使能`;
+        //     // }
+        // });
+        // const promiseall = await Promise.all(promise);
+
         for (let alarmRecord of alarmTable) {
             // TODO: ②依据异常算法判定是否报警
             if (alarmRecord.enableStatus) {
@@ -127,13 +227,14 @@ class CTask extends AbsTask {
                     this.alarmUpdateHandler.alarmTaskHandler = this.emissionAbnormalHandler;
                 }
                 let alarmExecRes = await this.alarmUpdateHandler.exec();
-                res.push(alarmExecRes);
+                // res.push(alarmExecRes);
                 console.log(alarmExecRes);
             } else {
                 res.push(`${alarmRecord}报警不使能`);
             }
         }
-        return res;
+        // return promiseall;
+        return true;
     }
 }
 const test = async function () {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 08:28:45
- * @LastEditTime: 2021-09-05 20:16:13
+ * @LastEditTime: 2021-09-06 11:06:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\alarm.ts
@@ -112,7 +112,7 @@ interface IAlarmTask {
     alarmInfo: IAlarmStruct;
     // dataAnamalyHandler: any;
     platformAlarmObject: CPlatformAlarmObject;
-    exec(): void;
+    exec(): Promise<any>;
 }
 @Service("数据缺失设置报警任务")
 export class CDataMissAlarmTask implements IAlarmTask {
@@ -132,7 +132,10 @@ export class CDataMissAlarmTask implements IAlarmTask {
     async setDataMissAlarm(): Promise<any> {
         this.dataMissHandler.epcode = this.alarmInfo.epcode;
         this.dataMissHandler.configLimitValue = Number(this.alarmInfo.alarmConfigParamValue);
-        this.dataMissHandler.includeParam = String(this.alarmInfo.includeParamName);
+        let paramInclude = String(this.alarmInfo.includeParamName);
+        let objnameInclude = this.alarmInfo.objnameInclude;
+        this.dataMissHandler.includeParam = `${objnameInclude}.${paramInclude}`;
+        // this.dataMissHandler.objnameInclude = this.alarmInfo.objnameInclude
         let alarmSetValue = await this.dataMissHandler.getDataMissAlarm();
         this.platformAlarmObject.alarmInfo = this.alarmInfo;
         this.platformAlarmObject.setProperityInfo();
@@ -140,6 +143,31 @@ export class CDataMissAlarmTask implements IAlarmTask {
         return await this.platformAlarmObject.setPropertyValue();
     }
 }
+// export class CDataMissAlarmTotalTask {
+//     alarmlist!: Array<IAlarmStruct>;
+
+//     async exec(): Promise<any> {
+//         // let promise = this.alarmlist.map((alarmRecord) => {});
+//         Promise.all(
+//             this.alarmlist.map(async (alarmRecord: IAlarmStruct) => {
+//                 if (!alarmRecord.enableStatus) {
+//                     return "报警不使能";
+//                 }
+//                 // let datamiss = new CDataMiss();
+//                 let dataMissTask = new CDataMissAlarmTask();
+//                 dataMissTask.alarmInfo = alarmRecord;
+//                 dataMissTask.dataMissHandler = new CDataMiss();
+//                 dataMissTask.platformAlarmObject = new CPlatformAlarmObject();
+//                 dataMissTask.exec();
+//                 // res.push(alarmExecRes);
+//                 // console.log(alarmExecRes);
+//                 // } else {
+//                 //     return `报警不使能`;
+//                 // }
+//             })
+//         );
+//     }
+// }
 @Service("均值异常设置报警任务")
 export class CMeanAbnormalAlarmTask implements IAlarmTask {
     alarmInfo!: IAlarmStruct;
@@ -157,7 +185,12 @@ export class CMeanAbnormalAlarmTask implements IAlarmTask {
     async setMeanAlarm(): Promise<any> {
         // this.meanAlarmHandler.epcode = this.alarmInfo.epcode;
         this.meanAlarmHandler.configLimitValue = Number(this.alarmInfo.alarmConfigParamValue);
-        this.meanAlarmHandler.includeParam = String(this.alarmInfo.includeParamName);
+
+        let paramInclude = String(this.alarmInfo.includeParamName);
+        let objnameInclude = this.alarmInfo.objnameInclude;
+        // this.dataMissHandler.includeParam = `${objnameInclude}.${paramInclude}`;
+
+        this.meanAlarmHandler.includeParam = `${objnameInclude}.${paramInclude}`;
 
         let alarmSetValue = await this.meanAlarmHandler.getMeanAlarm();
 
@@ -185,8 +218,14 @@ export class CEmissionAbnormalAlarmTask implements IAlarmTask {
     async setEmissionAlarm(): Promise<any> {
         // this.meanAlarmHandler.epcode = this.alarmInfo.epcode;
         this.emissionAlarmHandler.configLimitValue = Number(this.alarmInfo.alarmConfigParamValue);
-        this.emissionAlarmHandler.includeEmissParam = this.alarmInfo.includeParamName[0];
-        this.emissionAlarmHandler.includeFlowParam = this.alarmInfo.includeParamName[1];
+
+        let [includeEmissParam, includeFlowParam] = this.alarmInfo.includeParamName;
+        // let  = this.alarmInfo.includeParamName[1];
+
+        let objnameInclude = this.alarmInfo.objnameInclude;
+
+        this.emissionAlarmHandler.includeEmissParam = `${objnameInclude}.${includeEmissParam}`;
+        this.emissionAlarmHandler.includeFlowParam = `${objnameInclude}.${includeFlowParam}`;
 
         let alarmSetValue = await this.emissionAlarmHandler.getEmissAlarm();
 
