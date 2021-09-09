@@ -1,7 +1,8 @@
+/* eslint-disable space-unary-ops */
 /*
  * @Author: your name
  * @Date: 2021-07-18 00:06:35
- * @LastEditTime: 2021-08-31 13:39:15
+ * @LastEditTime: 2021-09-07 13:56:10
  * @LastEditors: Please set LastEditors
  * @Description: 系统库函数
  * @FilePath: \SolidPollutionItem\tmp\interface\system.js
@@ -15,11 +16,17 @@ function delayms(time) {
         }, time);
     });
 }
+function delayus(time) {
+    return new Promise(function (resolve, reject) {
+        for (var i = 0; i < time; i++) {}
+        resolve(time);
+    });
+}
 const isJSON = function (str) {
-    if (typeof str === 'string') {
+    if (typeof str === "string") {
         try {
             var obj = JSON.parse(str);
-            if (typeof obj === 'object' && obj) {
+            if (typeof obj === "object" && obj) {
                 return true;
             } else {
                 return false;
@@ -31,5 +38,6 @@ const isJSON = function (str) {
 };
 module.exports = {
     delayms,
+    delayus,
     isJSON
 };

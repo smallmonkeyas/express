@@ -1,14 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2021-08-14 00:44:18
- * @LastEditTime: 2021-08-23 23:35:19
+ * @LastEditTime: 2021-09-08 13:51:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \first-project\controller\mongoose.js
  */
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/test', {
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://172.17.0.2:27017/test1", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -29,10 +29,10 @@ const blogSchema = new Schema({
     }
 });
 
-const Cat = mongoose.model('Cat', { name: String });
+const Cat = mongoose.model("Cat", { name: String });
 
-const kitty = new Cat({ name: 'Zildjian' });
+const kitty = new Cat({ name: "Zildjian" });
 kitty.save().then(() => {
-    console.log('meow');
+    console.log("meow");
     mongoose.disconnect();
 });

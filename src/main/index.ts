@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-05 01:33:25
- * @LastEditTime: 2021-09-07 01:32:01
+ * @LastEditTime: 2021-09-08 01:11:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\main\index.ts
@@ -187,54 +187,54 @@ class CTask extends AbsTask {
         //     // }
         // });
 
-        // let promise = alarmTable.map((alarmRecord: IAlarmStruct) => {
-        //     if (!alarmRecord.enableStatus) {
-        //         return "报警不使能";
-        //     }
-        //     // TODO: ②依据异常算法判定是否报警
-        //     // if (alarmRecord.enableStatus) {
-        //     this.alarmUpdateHandler.alarmInfo = alarmRecord;
-        //     if (alarmRecord.alarmType === 1) {
-        //         this.alarmUpdateHandler.alarmTaskHandler = this.dataMissHandler;
-        //         return this.alarmUpdateHandler.exec();
-        //     } else if (alarmRecord.alarmType === 11) {
-        //         this.alarmUpdateHandler.alarmTaskHandler = this.meanAbnormalHandler;
-        //         return this.alarmUpdateHandler.exec();
-        //     } else if (alarmRecord.alarmType === 12) {
-        //         this.alarmUpdateHandler.alarmTaskHandler = this.emissionAbnormalHandler;
-        //         return this.alarmUpdateHandler.exec();
-        //     } else {
-        //         return "其它类型";
-        //     }
-        //     // return this.alarmUpdateHandler.exec();
-        //     // res.push(alarmExecRes);
-        //     // console.log(alarmExecRes);
-        //     // } else {
-        //     //     return `报警不使能`;
-        //     // }
-        // });
-        // const promiseall = await Promise.all(promise);
-
-        for (let alarmRecord of alarmTable) {
-            // TODO: ②依据异常算法判定是否报警
-            if (alarmRecord.enableStatus) {
-                this.alarmUpdateHandler.alarmInfo = alarmRecord;
-                if (alarmRecord.alarmType === 1) {
-                    this.alarmUpdateHandler.alarmTaskHandler = this.dataMissHandler;
-                } else if (alarmRecord.alarmType === 11) {
-                    this.alarmUpdateHandler.alarmTaskHandler = this.meanAbnormalHandler;
-                } else if (alarmRecord.alarmType === 12) {
-                    this.alarmUpdateHandler.alarmTaskHandler = this.emissionAbnormalHandler;
-                }
-                let alarmExecRes = await this.alarmUpdateHandler.exec();
-                // res.push(alarmExecRes);
-                console.log(alarmExecRes);
-            } else {
-                res.push(`${alarmRecord}报警不使能`);
+        let promise = alarmTable.map((alarmRecord: IAlarmStruct) => {
+            if (!alarmRecord.enableStatus) {
+                return "报警不使能";
             }
-        }
-        // return promiseall;
-        return true;
+            // TODO: ②依据异常算法判定是否报警
+            // if (alarmRecord.enableStatus) {
+            this.alarmUpdateHandler.alarmInfo = alarmRecord;
+            if (alarmRecord.alarmType === 1) {
+                this.alarmUpdateHandler.alarmTaskHandler = this.dataMissHandler;
+                return this.alarmUpdateHandler.exec();
+            } else if (alarmRecord.alarmType === 11) {
+                this.alarmUpdateHandler.alarmTaskHandler = this.meanAbnormalHandler;
+                return this.alarmUpdateHandler.exec();
+            } else if (alarmRecord.alarmType === 12) {
+                this.alarmUpdateHandler.alarmTaskHandler = this.emissionAbnormalHandler;
+                return this.alarmUpdateHandler.exec();
+            } else {
+                return "其它类型";
+            }
+            // return this.alarmUpdateHandler.exec();
+            // res.push(alarmExecRes);
+            // console.log(alarmExecRes);
+            // } else {
+            //     return `报警不使能`;
+            // }
+        });
+        const promiseall = await Promise.all(promise);
+
+        // for (let alarmRecord of alarmTable) {
+        //     // TODO: ②依据异常算法判定是否报警
+        //     if (alarmRecord.enableStatus) {
+        //         this.alarmUpdateHandler.alarmInfo = alarmRecord;
+        //         if (alarmRecord.alarmType === 1) {
+        //             this.alarmUpdateHandler.alarmTaskHandler = this.dataMissHandler;
+        //         } else if (alarmRecord.alarmType === 11) {
+        //             this.alarmUpdateHandler.alarmTaskHandler = this.meanAbnormalHandler;
+        //         } else if (alarmRecord.alarmType === 12) {
+        //             this.alarmUpdateHandler.alarmTaskHandler = this.emissionAbnormalHandler;
+        //         }
+        //         let alarmExecRes = await this.alarmUpdateHandler.exec();
+        //         // res.push(alarmExecRes);
+        //         console.log(alarmExecRes);
+        //     } else {
+        //         res.push(`${alarmRecord}报警不使能`);
+        //     }
+        // }
+        return promiseall;
+        // return true;
     }
 }
 const test = async function () {

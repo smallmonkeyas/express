@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-07-24 21:50:12
- * @LastEditTime: 2021-09-06 21:46:55
+ * @LastEditTime: 2021-09-08 15:07:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \SolidPollutionItem\tmp\script\file.js
@@ -61,7 +61,8 @@ const rmfile = async function () {
         // eslint-disable-next-line space-unary-ops
         for (let i = 0; i < filesName.length; i++) {
             let fileName = filesName[i];
-            together[i] = await rmFileSync(`${pathFileDir}\\${fileName}${type}`);
+            together[i] = await rmFileSync(`${pathFileDir}/${fileName}${type}`);
+            // together[i] = await rmFileSync(`${pathFileDir}\\${fileName}${type}`);
         }
         result = Promise.all(together);
     }
@@ -69,15 +70,21 @@ const rmfile = async function () {
 };
 
 // !写文件
-const writeFile = async function (fileNameWithExtension, fileContent, code) {
+const writeFile = function (fileNameWithExtension, fileContent, code) {
+    console.log("writeFile", fileNameWithExtension, fileContent);
+
     return new Promise(function (resolve, reject) {
+        console.log("writeFile-promise", fileNameWithExtension, fileContent);
         // fs.writeFile('11.txt', '内容覆盖', 'utf8', function (error) {
         fs.writeFile(fileNameWithExtension, fileContent, code, function (error) {
             if (error) {
                 // console.log(error);
                 resolve(false);
             } else {
+                // setTimeout(function () {
+                //     console.log("resolve");
                 resolve(true);
+                // }, 10);
             }
         });
     });
@@ -102,7 +109,8 @@ const get = function () {
         // }
         files.forEach((item) => {
             let currentFile = item;
-            let filePath = `${pathFileDir}\\${currentFile}`;
+            let filePath = `${pathFileDir}/${currentFile}`;
+            // let filePath = `${pathFileDir}\\${currentFile}`;
             let extName = path.extname(currentFile);
             if (extName !== type) {
                 return;
@@ -124,7 +132,8 @@ const get = function () {
         // }
         files.forEach((item) => {
             let currentFile = item;
-            let filePath = `${pathFileDir}\\${currentFile}`;
+            let filePath = `${pathFileDir}/${currentFile}`;
+            // let filePath = `${pathFileDir}\\${currentFile}`;
             let extName = path.extname(currentFile);
             if (extName !== type) {
                 return;

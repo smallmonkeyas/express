@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-06 11:55:49
+ * @LastEditTime: 2021-09-08 18:02:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\ruletable.ts
@@ -54,7 +54,8 @@ export class CRuleTableLocal extends CFileOperate {
     //     this.file = file;
     // }
     readFile(): string {
-        let fileDirectory = `${this.file.filePath}\\${this.file.fileName}.${this.file.fileExtension}`;
+        let fileDirectory = `${this.file.filePath}/${this.file.fileName}.${this.file.fileExtension}`;
+        // let fileDirectory = `${this.file.filePath}\\${this.file.fileName}.${this.file.fileExtension}`;
         let fileStr = fs.readFileSync(fileDirectory);
         return fileStr;
     }
@@ -158,4 +159,32 @@ export class CRuleTableLocal extends CFileOperate {
 // };
 // ruleTableFun().then((item) => {
 //     console.log('ruleTable', item);
+// });
+
+// //* 单元测试新
+// async function mongoUnitTest() {
+//     let ruleTableHandler = Container.get<CRuleTable>("规则库操作类");
+//     ruleTableHandler.mongodb.conneConfig = ruletableConfig;
+//     let ruleTableLocalHandler = Container.get<CRuleTableLocal>("规则数据表本地操作类");
+
+//     ruleTableLocalHandler.file = ruletableFileConfig;
+//     const ruleJson = ruleTableLocalHandler.patchExcelToJson();
+//     // const ruleJson = this.ruleTableLocalHandler.excelTojson();
+//     // return ruleJson;
+//     // TODO: 2、存到规则库
+//     //     let ruleTableLocalHandler = Container.get<CRuleTableLocal>('规则数据表本地操作类');
+
+//     // let dataRes = factoryCollectorTempleData;
+//     // if (dataRes.info.toLocaleLowerCase() === 'success') {
+//     await ruleTableHandler.connect();
+//     await ruleTableHandler.deleteAll();
+//     await ruleTableHandler.add(ruleJson);
+//     await ruleTableHandler.update({ ruleType: "恒值异常" }, { ruleType: "数据恒值" });
+//     const ruletable = await ruleTableHandler.select(null, null);
+//     await ruleTableHandler.disconnect();
+//     return ruletable;
+// }
+
+// mongoUnitTest().then((item) => {
+//     console.log("ruletable", item);
 // });

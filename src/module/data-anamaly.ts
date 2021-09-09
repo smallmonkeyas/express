@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:01:15
- * @LastEditTime: 2021-09-06 03:21:36
+ * @LastEditTime: 2021-09-08 01:18:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\data-anamaly.ts
@@ -151,7 +151,7 @@ export class CMeanAlarm {
         // hoursAvgData = 4;
         let LimitValuePercent =
             this.configLimitValue > 1 ? this.configLimitValue / 100 : this.configLimitValue;
-        console.log(dayAvgData, hoursAvgData);
+        console.log("均值异常：日均值-时均值", dayAvgData, hoursAvgData);
         // return [dayAvgData, hoursAvgData];
         if (dayAvgData === 0 || hoursAvgData === 0) {
             // 若数据为0则产生报警

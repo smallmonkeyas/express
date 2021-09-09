@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 08:28:45
- * @LastEditTime: 2021-09-06 11:06:05
+ * @LastEditTime: 2021-09-08 01:10:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\alarm.ts
@@ -29,6 +29,7 @@ export class CPlatformAlarmObject extends CPlatformObject {
 
     // properityInfo!: ISuposProperity;
     setProperityInfo() {
+        let alarmInfo = JSON.parse(JSON.stringify(this.alarmInfo));
         const {
             alarmObjname,
             alarmObjDisplayName,
@@ -39,7 +40,7 @@ export class CPlatformAlarmObject extends CPlatformObject {
             alarmProperityName,
             alarmProperityDisplayName,
             alarmProperityDescription
-        } = this.alarmInfo;
+        } = alarmInfo;
         this.properityInfo = {
             objectName: alarmObjname,
             objectDisplayName: alarmObjDisplayName,
@@ -56,7 +57,7 @@ export class CPlatformAlarmObject extends CPlatformObject {
     // // alarmGetValue
     // //* 设置属性值
     // async setPropertyValue() {
-    //     const { alarmObjname, alarmParamName } = this.alarmInfo;
+    //     const { alarmObjname, alarmParamName } = alarmInfo;
     //     this.plantInterface.supos = SetPropertyValueNetConfig(
     //         alarmObjname,
     //         alarmParamName,
@@ -66,7 +67,7 @@ export class CPlatformAlarmObject extends CPlatformObject {
     // }
     // //* 创建对象实例
     // creatObject() {
-    //     const { alarmObjname, alarmObjDisplayName, alarmObjDescription } = this.alarmInfo;
+    //     const { alarmObjname, alarmObjDisplayName, alarmObjDescription } = alarmInfo;
     //     this.plantInterface.supos = CreatObjectConfig(
     //         alarmObjname,
     //         alarmObjDisplayName,
@@ -86,7 +87,7 @@ export class CPlatformAlarmObject extends CPlatformObject {
     //         alarmProperityName,
     //         alarmProperityDisplayName,
     //         alarmProperityDescription
-    //     } = this.alarmInfo;
+    //     } = alarmInfo;
     //     this.plantInterface.supos = CreatProperityConfig(
     //         alarmObjname,
     //         alarmObjDisplayName,
@@ -123,21 +124,23 @@ export class CDataMissAlarmTask implements IAlarmTask {
     @Inject("supOS平台报警实例与属性设置")
     platformAlarmObject!: CPlatformAlarmObject;
     async exec(): Promise<any> {
-        if (this.alarmInfo.enableStatus) {
+        let alarmInfo = JSON.parse(JSON.stringify(this.alarmInfo));
+        if (alarmInfo.enableStatus) {
             return await this.setDataMissAlarm();
         } else {
             return false;
         }
     }
     async setDataMissAlarm(): Promise<any> {
-        this.dataMissHandler.epcode = this.alarmInfo.epcode;
-        this.dataMissHandler.configLimitValue = Number(this.alarmInfo.alarmConfigParamValue);
-        let paramInclude = String(this.alarmInfo.includeParamName);
-        let objnameInclude = this.alarmInfo.objnameInclude;
+        let alarmInfo = JSON.parse(JSON.stringify(this.alarmInfo));
+        this.dataMissHandler.epcode = alarmInfo.epcode;
+        this.dataMissHandler.configLimitValue = Number(alarmInfo.alarmConfigParamValue);
+        let paramInclude = String(alarmInfo.includeParamName);
+        let objnameInclude = alarmInfo.objnameInclude;
         this.dataMissHandler.includeParam = `${objnameInclude}.${paramInclude}`;
-        // this.dataMissHandler.objnameInclude = this.alarmInfo.objnameInclude
+        // this.dataMissHandler.objnameInclude = alarmInfo.objnameInclude
         let alarmSetValue = await this.dataMissHandler.getDataMissAlarm();
-        this.platformAlarmObject.alarmInfo = this.alarmInfo;
+        this.platformAlarmObject.alarmInfo = alarmInfo;
         this.platformAlarmObject.setProperityInfo();
         this.platformAlarmObject.propSetValue = alarmSetValue;
         return await this.platformAlarmObject.setPropertyValue();
@@ -176,25 +179,27 @@ export class CMeanAbnormalAlarmTask implements IAlarmTask {
     @Inject("supOS平台报警实例与属性设置")
     platformAlarmObject!: CPlatformAlarmObject;
     async exec(): Promise<any> {
-        if (this.alarmInfo.enableStatus) {
+        let alarmInfo = JSON.parse(JSON.stringify(this.alarmInfo));
+        if (alarmInfo.enableStatus) {
             return await this.setMeanAlarm();
         } else {
             return false;
         }
     }
     async setMeanAlarm(): Promise<any> {
-        // this.meanAlarmHandler.epcode = this.alarmInfo.epcode;
-        this.meanAlarmHandler.configLimitValue = Number(this.alarmInfo.alarmConfigParamValue);
+        let alarmInfo = JSON.parse(JSON.stringify(this.alarmInfo));
+        // this.meanAlarmHandler.epcode = alarmInfo.epcode;
+        this.meanAlarmHandler.configLimitValue = Number(alarmInfo.alarmConfigParamValue);
 
-        let paramInclude = String(this.alarmInfo.includeParamName);
-        let objnameInclude = this.alarmInfo.objnameInclude;
+        let paramInclude = String(alarmInfo.includeParamName);
+        let objnameInclude = alarmInfo.objnameInclude;
         // this.dataMissHandler.includeParam = `${objnameInclude}.${paramInclude}`;
 
         this.meanAlarmHandler.includeParam = `${objnameInclude}.${paramInclude}`;
 
         let alarmSetValue = await this.meanAlarmHandler.getMeanAlarm();
 
-        this.platformAlarmObject.alarmInfo = this.alarmInfo;
+        this.platformAlarmObject.alarmInfo = alarmInfo;
         this.platformAlarmObject.setProperityInfo();
 
         this.platformAlarmObject.propSetValue = alarmSetValue;
@@ -209,27 +214,29 @@ export class CEmissionAbnormalAlarmTask implements IAlarmTask {
     @Inject("supOS平台报警实例与属性设置")
     platformAlarmObject!: CPlatformAlarmObject;
     async exec(): Promise<any> {
-        if (this.alarmInfo.enableStatus) {
+        let alarmInfo = JSON.parse(JSON.stringify(this.alarmInfo));
+        if (alarmInfo.enableStatus) {
             return await this.setEmissionAlarm();
         } else {
             return false;
         }
     }
     async setEmissionAlarm(): Promise<any> {
-        // this.meanAlarmHandler.epcode = this.alarmInfo.epcode;
-        this.emissionAlarmHandler.configLimitValue = Number(this.alarmInfo.alarmConfigParamValue);
+        let alarmInfo = JSON.parse(JSON.stringify(this.alarmInfo));
+        // this.meanAlarmHandler.epcode = alarmInfo.epcode;
+        this.emissionAlarmHandler.configLimitValue = Number(alarmInfo.alarmConfigParamValue);
 
-        let [includeEmissParam, includeFlowParam] = this.alarmInfo.includeParamName;
-        // let  = this.alarmInfo.includeParamName[1];
+        let [includeEmissParam, includeFlowParam] = alarmInfo.includeParamName;
+        // let  = alarmInfo.includeParamName[1];
 
-        let objnameInclude = this.alarmInfo.objnameInclude;
+        let objnameInclude = alarmInfo.objnameInclude;
 
         this.emissionAlarmHandler.includeEmissParam = `${objnameInclude}.${includeEmissParam}`;
         this.emissionAlarmHandler.includeFlowParam = `${objnameInclude}.${includeFlowParam}`;
 
         let alarmSetValue = await this.emissionAlarmHandler.getEmissAlarm();
 
-        this.platformAlarmObject.alarmInfo = this.alarmInfo;
+        this.platformAlarmObject.alarmInfo = alarmInfo;
         this.platformAlarmObject.setProperityInfo();
 
         this.platformAlarmObject.propSetValue = alarmSetValue;
@@ -244,7 +251,9 @@ export class CAlarmUpdateTask {
         this.alarmTaskHandler = alarmTask;
     }
     async exec(): Promise<any> {
-        this.alarmTaskHandler.alarmInfo = this.alarmInfo;
+        let alarmInfo = JSON.parse(JSON.stringify(this.alarmInfo));
+        // 深拷贝，避免promise.all时所有alarmInfo与alarmInfo均取一个数，导致最后alarmInfo均被promise.all最后一项alarmInfo覆盖
+        this.alarmTaskHandler.alarmInfo = alarmInfo;
         return await this.alarmTaskHandler.exec();
     }
 }
@@ -303,8 +312,8 @@ export class CAlarmUpdateTask {
 //     @Inject('supOS平台报警实例与属性设置')
 //     platformAlarmObject!: CPlatformAlarmObject;
 //     exec() {
-//         if (this.alarmInfo.enableStatus) {
-//             switch (this.alarmInfo.alarmType) {
+//         if (alarmInfo.enableStatus) {
+//             switch (alarmInfo.alarmType) {
 //                 case 1:
 //                     this.setDataMissAlarm();
 //                     break;
@@ -318,35 +327,35 @@ export class CAlarmUpdateTask {
 //     }
 
 //     async setDataMissAlarm(): Promise<any> {
-//         this.dataMissHandler.epcode = this.alarmInfo.epcode;
-//         this.dataMissHandler.configLimitValue = Number(this.alarmInfo.alarmConfigParamValue);
-//         this.dataMissHandler.includeParam = String(this.alarmInfo.includeParamName);
+//         this.dataMissHandler.epcode = alarmInfo.epcode;
+//         this.dataMissHandler.configLimitValue = Number(alarmInfo.alarmConfigParamValue);
+//         this.dataMissHandler.includeParam = String(alarmInfo.includeParamName);
 //         let alarmSetValue = await this.dataMissHandler.getDataMissAlarm();
 
-//         this.platformAlarmObject.alarmInfo = this.alarmInfo;
+//         this.platformAlarmObject.alarmInfo = alarmInfo;
 //         this.platformAlarmObject.alarmSetValue = alarmSetValue;
 //         return await this.platformAlarmObject.setPropertyValue();
 //     }
 //     async setMeanAlarm(): Promise<any> {
-//         // this.meanAlarmHandler.epcode = this.alarmInfo.epcode;
-//         this.meanAlarmHandler.configLimitValue = Number(this.alarmInfo.alarmConfigParamValue);
-//         this.meanAlarmHandler.includeParam = String(this.alarmInfo.includeParamName);
+//         // this.meanAlarmHandler.epcode = alarmInfo.epcode;
+//         this.meanAlarmHandler.configLimitValue = Number(alarmInfo.alarmConfigParamValue);
+//         this.meanAlarmHandler.includeParam = String(alarmInfo.includeParamName);
 
 //         let alarmSetValue = await this.meanAlarmHandler.getMeanAlarm();
 
-//         this.platformAlarmObject.alarmInfo = this.alarmInfo;
+//         this.platformAlarmObject.alarmInfo = alarmInfo;
 //         this.platformAlarmObject.alarmSetValue = alarmSetValue;
 //         return await this.platformAlarmObject.setPropertyValue();
 //     }
 //     async setEmissionAlarm(): Promise<any> {
-//         // this.meanAlarmHandler.epcode = this.alarmInfo.epcode;
-//         this.emissionAlarmHandler.configLimitValue = Number(this.alarmInfo.alarmConfigParamValue);
-//         this.emissionAlarmHandler.includeEmissParam = this.alarmInfo.includeParamName[0];
-//         this.emissionAlarmHandler.includeFlowParam = this.alarmInfo.includeParamName[1];
+//         // this.meanAlarmHandler.epcode = alarmInfo.epcode;
+//         this.emissionAlarmHandler.configLimitValue = Number(alarmInfo.alarmConfigParamValue);
+//         this.emissionAlarmHandler.includeEmissParam = alarmInfo.includeParamName[0];
+//         this.emissionAlarmHandler.includeFlowParam = alarmInfo.includeParamName[1];
 
 //         let alarmSetValue = await this.emissionAlarmHandler.getEmissAlarm();
 
-//         this.platformAlarmObject.alarmInfo = this.alarmInfo;
+//         this.platformAlarmObject.alarmInfo = alarmInfo;
 //         this.platformAlarmObject.alarmSetValue = alarmSetValue;
 //         return await this.platformAlarmObject.setPropertyValue();
 //     }

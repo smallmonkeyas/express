@@ -2,14 +2,14 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:11:34
- * @LastEditTime: 2021-09-05 22:14:21
+ * @LastEditTime: 2021-09-08 15:30:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\dao\mongoose.config.ts
  */
 
 import mongoose from "mongoose";
-import { factoryConfig, ruletableConfig, ImongodbConfig } from "../config";
+import { factoryConfig, ruletableConfig, ImongodbConfig, ruletableFileConfig } from "../config";
 import { Container, Service, Inject } from "typedi";
 export interface IDatabase {
     add(dataArr: Array<Object>): void;
@@ -93,20 +93,20 @@ export class CMongoDB implements IMongDB {
 }
 
 // ? 单元测试
-/* const classObj = new CMongoDB(factoryConfig);
-classObj.connect();
-const oo = { objname: 'sss' }; */
-// classObj.add([{ objname: 'sss', displayname: 'hhh', description: 'lll' }]).then(() => {
-//     classObj.select({ displayname: 'hhh' }, ['displayname']).then((res) => {
-//         console.log('ss', res);
+// const classObj = new CMongoDB(factoryConfig);
+// classObj.connect();
+// const oo = { objname: "sss" };
+// classObj.add([{ objname: "sss", displayname: "hhh", description: "lll" }]).then(() => {
+//     classObj.select({ displayname: "hhh" }, ["displayname"]).then((res) => {
+//         console.log("ss", res);
 //     });
 // });
 // classObj.delete({ _id: 0 }).then(() => {
 //     classObj.select(null, null).then((res) => {
-//         console.log('ss', res);
+//         console.log("ss", res);
 //     });
 // });
 
 // classObj.select(null, null).then((res) => {
-//     console.log('ss', res);
+//     console.log("ss", res);
 // });

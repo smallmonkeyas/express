@@ -1,27 +1,27 @@
 /*
  * @Author: your name
  * @Date: 2021-07-17 17:48:18
- * @LastEditTime: 2021-08-31 11:38:10
+ * @LastEditTime: 2021-09-08 17:54:59
  * @LastEditors: Please set LastEditors
  * @Description: 引用的库-excel和json数据转换库
  * @FilePath: \SolidPollutionItem\tmp\script\XLSX_JSON.js
  */
 
-var request = require('request');
+var request = require("request");
 // var request = require("request");
-const XLSX = require('xlsx');
-const xlsx = require('node-xlsx');
-var fs = require('fs');
-var moment = require('moment');
-var os = require('os');
-var path = require('path'); /* nodejs自带的模块*/
-var cheerio = require('cheerio');
-const jsdom = require('jsdom');
-const json2xls = require('json2xls');
-const csv2json = require('csv2json');
-const csv = require('csvtojson');
-const wxm = require('wxmnode'); // 微信
-var system = require('./system');
+const XLSX = require("xlsx");
+const xlsx = require("node-xlsx");
+var fs = require("fs");
+var moment = require("moment");
+var os = require("os");
+var path = require("path"); /* nodejs自带的模块*/
+var cheerio = require("cheerio");
+const jsdom = require("jsdom");
+const json2xls = require("json2xls");
+const csv2json = require("csv2json");
+const csv = require("csvtojson");
+const wxm = require("wxmnode"); // 微信
+var system = require("./system");
 
 const creatFolder = function (filePath) {
     if (!fs.existsSync(filePath)) {
@@ -41,7 +41,8 @@ let mkDirsSync = function mkDirsSync(dirname) {
 const saveJsonToFile = (dataJson, pathFileDir, fileName) => {
     // var fileDirectory = "E:\\files\\program\\supOS\\NanjinTechUniversity\\xlsx\\demo\\"+resonFileName+".xlsx";
     // var newfileDirectory = "E:\\files\\program\\supOS\\NanjinTechUniversity\\xlsx\\demo\\"+resonFileName+".json";
-    var newfileDirectory = `${pathFileDir}\\${fileName}.json`;
+    var newfileDirectory = `${pathFileDir}/${fileName}.json`;
+    // var newfileDirectory = `${pathFileDir}\\${fileName}.json`;
     // var newfileDirectory = "d:\\b";
     if (!fs.existsSync(pathFileDir)) {
         //   var files = fs.readdirSync(fileDirectory);
@@ -57,7 +58,8 @@ const saveJsonToFile = (dataJson, pathFileDir, fileName) => {
     fs.writeFileSync(newfileDirectory, JSON.stringify(dataJson));
 };
 const excelToJson = function (pathFileDir, fileName) {
-    var xlsxFileName = `${pathFileDir}\\${fileName}.xlsx`;
+    var xlsxFileName = `${pathFileDir}/${fileName}.xlsx`;
+    // var xlsxFileName = `${pathFileDir}\\${fileName}.xlsx`;
     var workbook = XLSX.readFile(xlsxFileName);
     var sheetNames = workbook.SheetNames;
     var worksheet = workbook.Sheets[sheetNames[0]];
@@ -74,7 +76,8 @@ const jsonToExcel = function (dataJson, pathFileDir, fileName) {
     //   let dataTrueJsonArr = []
     var ws, tmpexcelJson;
     const wb = XLSX.utils.book_new();
-    var newfileDirectory = `${pathFileDir}\\${fileName}.xlsx`;
+    var newfileDirectory = `${pathFileDir}/${fileName}.xlsx`;
+    // var newfileDirectory = `${pathFileDir}\\${fileName}.xlsx`;
     if (!fs.existsSync(pathFileDir)) {
         //   var files = fs.readdirSync(fileDirectory);
         //   for (var i = 0; i < files.length; i++) {
@@ -108,7 +111,8 @@ const jsonsToOneExcel = function (dataJsonArr, pathFileDir, fileName) {
     //   let dataTrueJsonArr = []
     var excelJson, ws;
     const wb = XLSX.utils.book_new();
-    var newfileDirectory = `${pathFileDir}\\${fileName}.xlsx`;
+    var newfileDirectory = `${pathFileDir}/${fileName}.xlsx`;
+    // var newfileDirectory = `${pathFileDir}\\${fileName}.xlsx`;
     if (!fs.existsSync(pathFileDir)) {
         mkDirsSync(pathFileDir);
     }
@@ -122,7 +126,8 @@ const jsonsToOneExcel = function (dataJsonArr, pathFileDir, fileName) {
 };
 
 const readJsonFile = function (pathFileDir, fileName) {
-    var basicDir = `${pathFileDir}\\${fileName}`;
+    var basicDir = `${pathFileDir}/${fileName}`;
+    // var basicDir = `${pathFileDir}\\${fileName}`;
     var jsonfileDirectory = `${basicDir}.json`;
     if (fs.existsSync(jsonfileDirectory)) {
         var fileFactoryResult = fs.readFileSync(jsonfileDirectory);
@@ -130,7 +135,7 @@ const readJsonFile = function (pathFileDir, fileName) {
             return JSON.parse(fileFactoryResult);
         }
     } else {
-        console.log(jsonfileDirectory + ' Not Found!');
+        console.log(jsonfileDirectory + " Not Found!");
         return false;
     }
 };
@@ -138,7 +143,8 @@ const readJsonFile = function (pathFileDir, fileName) {
 const jsonfileToExcel = function (pathFileDir, fileName) {
     //   let dataTrueJsonArr = []
     var excelToJsonArr;
-    var basicDir = `${pathFileDir}\\${fileName}`;
+    var basicDir = `${pathFileDir}/${fileName}`;
+    // var basicDir = `${pathFileDir}\\${fileName}`;
     var jsonfileDirectory = `${basicDir}.json`;
     var xlsxfileDirectory = `${basicDir}.xlsx`;
     if (fs.existsSync(jsonfileDirectory)) {
@@ -149,10 +155,10 @@ const jsonfileToExcel = function (pathFileDir, fileName) {
             let xls = json2xls(excelToJsonArr);
             //   console.log(xls);
 
-            fs.writeFileSync(xlsxfileDirectory, xls, 'binary');
+            fs.writeFileSync(xlsxfileDirectory, xls, "binary");
         }
     } else {
-        console.log(jsonfileDirectory + ' Not Found!');
+        console.log(jsonfileDirectory + " Not Found!");
     }
 };
 
@@ -161,7 +167,8 @@ const jsonfileToExcel = function (pathFileDir, fileName) {
  */
 
 const readcsvFile = function (pathFileDir, fileName) {
-    var basicDir = `${pathFileDir}\\${fileName}`;
+    var basicDir = `${pathFileDir}/${fileName}`;
+    // var basicDir = `${pathFileDir}\\${fileName}`;
     var jsonfileDirectory = `${basicDir}.csv`;
     if (fs.existsSync(jsonfileDirectory)) {
         var fileFactoryResult = fs.readFileSync(jsonfileDirectory);
@@ -170,13 +177,14 @@ const readcsvFile = function (pathFileDir, fileName) {
         // }
         return true;
     } else {
-        console.log(jsonfileDirectory + ' Not Found!');
+        console.log(jsonfileDirectory + " Not Found!");
         return false;
     }
 };
 
 const csvToJson = function (pathFileDir, fileName) {
-    var basicDir = `${pathFileDir}\\${fileName}`;
+    var basicDir = `${pathFileDir}/${fileName}`;
+    // var basicDir = `${pathFileDir}\\${fileName}`;
     var csvfileDirectory = `${basicDir}.csv`;
     var jsonfileDirectory = `${basicDir}.json`;
     return new Promise(function (resolve, reject) {
@@ -184,7 +192,7 @@ const csvToJson = function (pathFileDir, fileName) {
             .pipe(
                 csv2json({
                     // Defaults to comma.
-                    separator: ';'
+                    separator: ";"
                 })
             )
             .pipe(
@@ -196,7 +204,8 @@ const csvToJson = function (pathFileDir, fileName) {
     });
 };
 const csvToExcel = async function (pathFileDir, fileName) {
-    var basicDir = `${pathFileDir}\\${fileName}`;
+    var basicDir = `${pathFileDir}/${fileName}`;
+    // var basicDir = `${pathFileDir}\\${fileName}`;
     var csvfileDirectory = `${basicDir}.csv`;
     var jsonfileDirectory = `${basicDir}.json`;
     const jsonArray = await csv().fromFile(csvfileDirectory);
