@@ -2,21 +2,21 @@
 /*
  * @Author: your name
  * @Date: 2021-08-31 10:00:24
- * @LastEditTime: 2021-09-03 03:13:41
+ * @LastEditTime: 2021-09-09 12:27:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\vendor.ts
  */
-import { request, system } from '../../modulejs';
-import { Service } from 'typedi';
-import { IVendorConfig, IVendorResponseConfig } from '../config';
+import { request, system } from "../../modulejs";
+import { Service } from "typedi";
+import { IVendorConfig, IVendorResponseConfig } from "../config";
 
 export interface IVendorData {
     vendor: IVendorConfig;
     get(): object;
     post(): object;
 }
-@Service('贴源数据接口')
+@Service("贴源数据接口")
 export class CVendorData implements IVendorData {
     vendor: IVendorConfig;
     constructor(vendor: IVendorConfig) {
@@ -28,7 +28,7 @@ export class CVendorData implements IVendorData {
         // const ip = this.ip;
         let paramsObj, url, router, params;
         if (!this.vendor) {
-            throw new Error('vendor接口输入数据不足');
+            throw new Error("vendor接口输入数据不足");
         }
         url = this.vendor.netAddress;
         if (this.vendor.netPath) {
@@ -40,19 +40,19 @@ export class CVendorData implements IVendorData {
             paramStr = JSON.stringify(paramObj);
             // params = paramsObj.replace(/[\"\"{}]/g,"").replace(/:/g,"="),replace(/,/g,"&");
             params = paramStr
-                .replace(/\"(:{1})(\")?/g, '=')
-                .replace(/\"(,{1})\"/g, '&')
-                .replace(/[{}\"]/g, '');
+                .replace(/\"(:{1})(\")?/g, "=")
+                .replace(/\"?(,{1})\"/g, "&")
+                .replace(/[{}\"]/g, "");
             url = `${this.vendor.netAddress}/${this.vendor.netPath}?${params}`;
         }
 
         //   const authorization = global.authorization;
         let options = {
-            method: 'GET',
+            method: "GET",
             url: url,
             headers: {
                 //   Authorization: authorization,
-                Cookie: 'vertx-web.session=79b80599135734456f355ba9d47a5ac8'
+                Cookie: "vertx-web.session=79b80599135734456f355ba9d47a5ac8"
             }
         };
         return new Promise(function (resolve, reject) {
@@ -89,11 +89,11 @@ export class CVendorData implements IVendorData {
 
         //   const authorization = global.authorization;
         let options = {
-            method: 'POST',
+            method: "POST",
             url: url,
             headers: {
                 //   Authorization: authorization,
-                Cookie: 'vertx-web.session=79b80599135734456f355ba9d47a5ac8'
+                Cookie: "vertx-web.session=79b80599135734456f355ba9d47a5ac8"
             },
             body: JSON.stringify(data)
         };

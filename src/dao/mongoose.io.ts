@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:11:34
- * @LastEditTime: 2021-09-08 15:30:24
+ * @LastEditTime: 2021-09-11 13:13:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\dao\mongoose.config.ts
@@ -14,7 +14,7 @@ import { Container, Service, Inject } from "typedi";
 export interface IDatabase {
     add(dataArr: Array<Object>): void;
     delete(filterObj: Object): void;
-    update(filterObj: Object, newItem: Object): void;
+    update(filterObj: Object, newItem: Object | Array<any>, options: Object): void;
     select(whereFilterObj: Object | null, projection: Array<string> | null): void;
 }
 
@@ -71,7 +71,7 @@ export class CMongoDB implements IMongDB {
     async delete(filterObj: Object): Promise<any> {
         return await this.modelCollection.deleteMany(Object);
     }
-    async update(filterObj: Object, newItem: Object): Promise<any> {
+    async update(filterObj: Object, newItem: Object | Array<any>): Promise<any> {
         return await this.modelCollection.updateMany(filterObj, newItem);
     }
     // @query
@@ -81,14 +81,22 @@ export class CMongoDB implements IMongDB {
     ): Promise<Array<Object>> {
         fieldFilterArr = fieldFilterArr || [""];
         // fieldFilterArr.push(...['-_id', '-__v']);
-        fieldFilterArr.push(...["-_id", "-__v"]);
+        if (Number(fieldFilterArr) === 0) {
+            fieldFilterArr.push(...["-_id", "-__v"]);
+        } else {
+            fieldFilterArr.push(...["-_id"]);
+        }
+        // fieldFilterArr.push(...["-_id", "-__v"]);
         let fieldRemoveIdFilter: Array<string> = fieldFilterArr;
         // return await this.modelCollection.find(filterObj, { _id: 0, __v: 0 });
         return await this.modelCollection.find(whereFilterObj, fieldRemoveIdFilter.join(" "));
     }
-    async distinct(fieldFilterArr: Array<object>): Promise<any> {
+    async aggregate(fieldFilterArr: Array<object>): Promise<any> {
         return await this.modelCollection.aggregate(fieldFilterArr);
         // return await this.modelCollection.distinct(fieldFilterArr);
+    }
+    async distinct(fieldFilter: string, query: object): Promise<any> {
+        return await this.modelCollection.distinct(fieldFilter, query);
     }
 }
 

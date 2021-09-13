@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-31 11:23:25
- * @LastEditTime: 2021-09-05 01:32:52
+ * @LastEditTime: 2021-09-14 00:12:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\module.ts
@@ -17,6 +17,7 @@ export * from "./ruletable";
 export * from "./alarm";
 export * from "./alarmtable";
 export * from "./user";
+export * from "./requesttable";
 
 // !测试包导入
 // import { system } from '../../modulejs';

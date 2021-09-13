@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-05 01:33:25
- * @LastEditTime: 2021-09-14 00:52:29
+ * @LastEditTime: 2021-09-08 01:11:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\main\index.ts
@@ -10,13 +10,7 @@
 
 import "reflect-metadata";
 import { Container, Service, Inject } from "typedi";
-import {
-    ruletableFileConfig,
-    ruletableConfig,
-    alarmtableConfig,
-    IAlarmStruct,
-    requesttableConfig
-} from "../config";
+import { ruletableFileConfig, ruletableConfig, alarmtableConfig, IAlarmStruct } from "../config";
 import {
     User,
     CSupOSData,
@@ -31,9 +25,7 @@ import {
     CAlarmUpdateTask,
     CMeanAbnormalAlarmTask,
     CMeanAlarm,
-    CEmissionAbnormalAlarmTask,
-    CServerRequestTableGenerateTask,
-    CServerRequestTable
+    CEmissionAbnormalAlarmTask
 } from "../module";
 import { system, XLSX_JSON } from "../../modulejs";
 // Container.import([User, CAlarmTableGenerateTask, AlarmTableRecordGenerateTask]);
@@ -59,10 +51,6 @@ class AbsTask {
     meanAbnormalHandler!: CMeanAbnormalAlarmTask;
     @Inject("排放量异常设置报警任务")
     emissionAbnormalHandler!: CEmissionAbnormalAlarmTask;
-    @Inject("服务请求库生成任务类")
-    requestTableTaskHandler!: CServerRequestTableGenerateTask;
-    @Inject("服务请求配置库")
-    requestTableHandler!: CServerRequestTable;
 }
 
 @Service("主程序")
@@ -108,7 +96,7 @@ class CTask extends AbsTask {
         await this.alarmTableHandler.add(alarmConfigTableJson);
 
         // TODO: 5、获取报警配置库数据
-        const alarmTable = await this.alarmTableHandler.select({ enableStatus: true }, null);
+        const alarmTable = await this.alarmTableHandler.select(null, null);
         await this.alarmTableHandler.disconnect();
         // return alarmTable;
         // TODO: 6、遍历报警配置数据，完成以下任务：
@@ -133,7 +121,6 @@ class CTask extends AbsTask {
                 // res.push(createObjRes);
             }
         }
-        XLSX_JSON.saveJsonToFile(res, __dirname, "creatProplog");
         // Promise.all(
         //     alarmTable.map(async (alarmRecord: IAlarmStruct) => {
         //         if (!alarmRecord.enableStatus) {
@@ -200,33 +187,33 @@ class CTask extends AbsTask {
         //     // }
         // });
 
-        // let promise = alarmTable.map((alarmRecord: IAlarmStruct) => {
-        //     if (!alarmRecord.enableStatus) {
-        //         return "报警不使能";
-        //     }
-        //     // TODO: ②依据异常算法判定是否报警
-        //     // if (alarmRecord.enableStatus) {
-        //     this.alarmUpdateHandler.alarmInfo = alarmRecord;
-        //     if (alarmRecord.alarmType === 1) {
-        //         this.alarmUpdateHandler.alarmTaskHandler = this.dataMissHandler;
-        //         return this.alarmUpdateHandler.exec();
-        //     } else if (alarmRecord.alarmType === 11) {
-        //         this.alarmUpdateHandler.alarmTaskHandler = this.meanAbnormalHandler;
-        //         return this.alarmUpdateHandler.exec();
-        //     } else if (alarmRecord.alarmType === 12) {
-        //         this.alarmUpdateHandler.alarmTaskHandler = this.emissionAbnormalHandler;
-        //         return this.alarmUpdateHandler.exec();
-        //     } else {
-        //         return "其它类型";
-        //     }
-        //     // return this.alarmUpdateHandler.exec();
-        //     // res.push(alarmExecRes);
-        //     // console.log(alarmExecRes);
-        //     // } else {
-        //     //     return `报警不使能`;
-        //     // }
-        // });
-        // const promiseall = await Promise.all(promise);
+        let promise = alarmTable.map((alarmRecord: IAlarmStruct) => {
+            if (!alarmRecord.enableStatus) {
+                return "报警不使能";
+            }
+            // TODO: ②依据异常算法判定是否报警
+            // if (alarmRecord.enableStatus) {
+            this.alarmUpdateHandler.alarmInfo = alarmRecord;
+            if (alarmRecord.alarmType === 1) {
+                this.alarmUpdateHandler.alarmTaskHandler = this.dataMissHandler;
+                return this.alarmUpdateHandler.exec();
+            } else if (alarmRecord.alarmType === 11) {
+                this.alarmUpdateHandler.alarmTaskHandler = this.meanAbnormalHandler;
+                return this.alarmUpdateHandler.exec();
+            } else if (alarmRecord.alarmType === 12) {
+                this.alarmUpdateHandler.alarmTaskHandler = this.emissionAbnormalHandler;
+                return this.alarmUpdateHandler.exec();
+            } else {
+                return "其它类型";
+            }
+            // return this.alarmUpdateHandler.exec();
+            // res.push(alarmExecRes);
+            // console.log(alarmExecRes);
+            // } else {
+            //     return `报警不使能`;
+            // }
+        });
+        const promiseall = await Promise.all(promise);
 
         // for (let alarmRecord of alarmTable) {
         //     // TODO: ②依据异常算法判定是否报警
@@ -246,24 +233,7 @@ class CTask extends AbsTask {
         //         res.push(`${alarmRecord}报警不使能`);
         //     }
         // }
-        this.requestTableTaskHandler.alarmTableWithEnabled = alarmTable;
-        this.requestTableTaskHandler.getServerRequestTable();
-
-        const requestTable = this.requestTableTaskHandler.serverRequestTable;
-        // const requestTableHandler = Container.get<CServerRequestTable>("服务请求配置库");
-        this.requestTableHandler.mongodb.conneConfig = requesttableConfig;
-        await this.requestTableHandler.connect();
-        const resDelete = await this.requestTableHandler.deleteAll();
-        //* 增加服务请求配置库
-        await this.requestTableHandler.add(requestTable);
-        let updateRes = await this.requestTableHandler.updateRequestTable();
-        console.log("请求配置库更新情况：", updateRes);
-        XLSX_JSON.saveJsonToFile(updateRes, __dirname, "updatelog");
-        let setPropertyRes = await this.requestTableHandler.setPropValues();
-
-        await this.requestTableHandler.disconnect();
-        return setPropertyRes;
-        // return promiseall;
+        return promiseall;
         // return true;
     }
 }

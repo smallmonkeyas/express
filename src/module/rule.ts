@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:35
- * @LastEditTime: 2021-09-07 01:29:25
+ * @LastEditTime: 2021-09-10 18:32:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\rule.ts
@@ -25,7 +25,7 @@ export class CSingleRuleInfo {
         return this.rule.content || "";
     }
     getEpcode(): string {
-        return this.rule.epcode.toLocaleUpperCase();
+        return String(this.rule.epcode).toLocaleUpperCase();
     }
     getAlarmtype(): number {
         let alarmType = AlarmTypeDescConfig.indexOf(this.rule.ruleType) + 1;
@@ -79,7 +79,7 @@ export class CSingleRuleInfo {
         return ruleConfigParam.replace(/( )|,{1,}$/g, "").replace(/[，,]{1,}/g, ",");
     }
     getFlagParamValue(): boolean {
-        let flagParamDefaultValue = this.rule.SetFlagValue || "";
+        let flagParamDefaultValue = String(this.rule.SetFlagValue) || "";
         let alarmType = this.getAlarmtype();
         let hasNullParam = this.getParamNameInclude()
             .join("_")

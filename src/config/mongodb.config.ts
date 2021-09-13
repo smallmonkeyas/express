@@ -1,32 +1,40 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:17:14
- * @LastEditTime: 2021-09-02 10:57:55
+ * @LastEditTime: 2021-09-10 18:02:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\mongodb.config.ts
  */
-import { RuleStruct } from './rule.config';
-import { FactoryStruct } from './factory.config';
-import { AlarmStruct } from './alarm.config';
+import { RuleStruct } from "./rule.config";
+import { FactoryStruct } from "./factory.config";
+import { AlarmStruct } from "./alarm.config";
+import { ServerRequestStruct } from "./server-request.config";
 const factoryConfig = {
-    ip: 'localhost:27017',
-    datasename: 'workCondition_subSystem',
-    collectionname: 'Factory',
+    ip: "localhost:27017",
+    datasename: "workCondition_subSystem",
+    collectionname: "Factory",
     schema: FactoryStruct
 };
 
 const ruletableConfig = {
-    ip: 'localhost:27017',
-    datasename: 'workCondition_subSystem',
-    collectionname: 'Ruletable',
+    ip: "localhost:27017",
+    datasename: "workCondition_subSystem",
+    collectionname: "Ruletable",
     schema: RuleStruct
 };
 const alarmtableConfig = {
-    ip: 'localhost:27017',
-    datasename: 'workCondition_subSystem',
-    collectionname: 'Alarmtable',
+    ip: "localhost:27017",
+    datasename: "workCondition_subSystem",
+    collectionname: "Alarmtable",
     schema: AlarmStruct
+};
+
+const requesttableConfig = {
+    ip: "localhost:27017",
+    datasename: "workCondition_subSystem",
+    collectionname: "Requesttable",
+    schema: ServerRequestStruct
 };
 // {
 //     id: { String, Number },
@@ -45,7 +53,7 @@ const alarmtableConfig = {
 //     SetValue: { String, Number },
 //     SetFlagValue: { String, Number }
 // }
-export { factoryConfig, ruletableConfig, alarmtableConfig };
+export { factoryConfig, ruletableConfig, alarmtableConfig, requesttableConfig };
 
 // export interface ImongodbConfig {
 //     ip: string;

@@ -1,0 +1,27 @@
+db.test.drop();
+
+db.test.insert([
+    { dept: "A", item: { sku: "111", color: "red" }, sizes: ["S", "M"] },
+    { dept: "A", item: { sku: "111", color: "blue" }, sizes: ["M", "L"] },
+    { dept: "B", item: { sku: "222", color: "blue" }, sizes: "S" },
+    { dept: "A", item: { sku: "333", color: "black" }, sizes: ["S"] }
+]);
+
+db.test.insert([
+    {
+        body: "this is the body",
+        sender: "John"
+    },
+    {
+        body: "message body",
+        sender: "Jake"
+    },
+    {
+        body: "message body",
+        sender: "Jake"
+    }
+]);
+db.test.distinct("dept", { _id: { $exists: true } });
+db.test.find(null, { sender: "Jake", _id: 0 }).toObject();
+// .select("-_id -__v")
+// .exec();

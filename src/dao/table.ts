@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-01 19:24:11
+ * @LastEditTime: 2021-09-11 13:14:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\factorytable.ts
@@ -40,7 +40,7 @@ Container.import([CMongoDB, CMongoose, CVendorData]);
 interface ITable extends IDatabase {}
 // class CFactory {}
 @Service()
-export class CTable implements ITable {
+export class CTable extends CMongoDB implements ITable {
     @Inject("mongodb操作类")
     mongodb!: CMongoDB;
     async connect(): Promise<any> {
@@ -60,7 +60,7 @@ export class CTable implements ITable {
         // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
         return await this.mongodb.delete(filterObj);
     }
-    async update(filterObj: Object, newItem: Object): Promise<any> {
+    async update(filterObj: Object, newItem: Object | Array<any>, options?: Object): Promise<any> {
         // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
         // return mongodbInstance.update(filterObj, newItem);
         return await this.mongodb.update(filterObj, newItem);
@@ -75,10 +75,13 @@ export class CTable implements ITable {
         // return mongodbInstance.delete({ _id: 0 });
         return await this.mongodb.delete({ _id: 0 });
     }
-    async distinct(projection: Array<object>): Promise<any> {
+    async aggregate(projection: Array<object>): Promise<any> {
         // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
         // return mongodbInstance.select(whereFilterObj, projection);
-        return await this.mongodb.distinct(projection);
+        return await this.mongodb.aggregate(projection);
+    }
+    async distinct(fieldFilter: string, query: object): Promise<any> {
+        return await this.mongodb.distinct(fieldFilter, query);
     }
 }
 // //* 企业数据本地持久化类

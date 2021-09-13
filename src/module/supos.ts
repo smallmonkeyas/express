@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:00:34
- * @LastEditTime: 2021-09-06 01:28:02
+ * @LastEditTime: 2021-09-13 23:07:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\properity.ts
@@ -56,7 +56,7 @@ export class CSupOSData implements ISupOSData {
             // params = paramsObj.replace(/[\"\"{}]/g,"").replace(/:/g,"="),replace(/,/g,"&");
             params = paramStr
                 .replace(/\"(:{1})(\")?/g, "=")
-                .replace(/\"(,{1})\"/g, "&")
+                .replace(/\"?(,{1})\"/g, "&")
                 .replace(/[{}\"]/g, "");
             url = `${this.supos.netAddress}/${this.supos.netPath}?${params}`;
         }
@@ -96,26 +96,27 @@ export class CSupOSData implements ISupOSData {
         });
     }
     post(): Promise<any> {
+        let supos = JSON.parse(JSON.stringify(this.supos));
         // let arguments = args;
         // const ip = this.ip;
         let paramsObj, url, router, params;
-        if (!this.supos) {
+        if (!supos) {
             throw new Error("supos接口输入数据不足");
         }
-        url = this.supos.netAddress;
-        if (this.supos.netPath) {
-            url = `${this.supos.netAddress}/${this.supos.netPath}`;
+        url = supos.netAddress;
+        if (supos.netPath) {
+            url = `${supos.netAddress}/${supos.netPath}`;
         }
-        if (this.supos.netParam) {
+        if (supos.netParam) {
             let paramObj, paramStr;
-            paramObj = this.supos.netParam;
+            paramObj = supos.netParam;
             paramStr = JSON.stringify(paramObj);
             // params = paramsObj.replace(/[\"\"{}]/g,"").replace(/:/g,"="),replace(/,/g,"&");
             params = paramStr
                 .replace(/\"(:{1})(\")?/g, "=")
-                .replace(/\"(,{1})\"/g, "&")
+                .replace(/\"?(,{1})\"/g, "&")
                 .replace(/[{}\"]/g, "");
-            url = `${this.supos.netAddress}/${this.supos.netPath}?${params}`;
+            url = `${supos.netAddress}/${supos.netPath}?${params}`;
         }
 
         //   const authorization = global.authorization;
@@ -130,9 +131,10 @@ export class CSupOSData implements ISupOSData {
             // body: JSON.stringify({
             //     propName: "QCL_TLT_SO2_01_L"
             // })
-            body: JSON.stringify(this.supos.netData)
+            body: JSON.stringify(supos.netData)
         };
         return new Promise(function (resolve, reject) {
+            // console.log("options", supos, options);
             request(options, function (error: any, response: { body: string }) {
                 // let res: IVendorResponseConfig;
                 // if (error) {
@@ -175,7 +177,7 @@ export class CSupOSData implements ISupOSData {
             // params = paramsObj.replace(/[\"\"{}]/g,"").replace(/:/g,"="),replace(/,/g,"&");
             params = paramStr
                 .replace(/\"(:{1})(\")?/g, "=")
-                .replace(/\"(,{1})\"/g, "&")
+                .replace(/\"?(,{1})\"/g, "&")
                 .replace(/[{}\"]/g, "");
             url = `${this.supos.netAddress}/${this.supos.netPath}?${params}`;
         }

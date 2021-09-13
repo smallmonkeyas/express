@@ -140,6 +140,7 @@ export class CRuleTableLocal extends CFileOperate {
 //         //         }
 //         //     }
 //         // },
+// { $project: { itemDescription: { $concat: [ "$item", " - ", "$description" ] } } }
 //         {
 //             $group: {
 //                 _id: '$epcode',

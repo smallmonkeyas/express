@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 23:03:24
- * @LastEditTime: 2021-09-05 14:28:48
+ * @LastEditTime: 2021-09-13 11:56:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\supos.config.ts
@@ -115,7 +115,20 @@ export const SetPropertyValueNetConfig = function (
     //     "logs": "[]"
     // }
 };
-
+export const SetPropertyValuesNetConfig = function (objectName: string, propValues: object) {
+    return {
+        netAddress: netAddress,
+        netPath: `api/runtime/objects/${objectName}/debugServices/setPropertyValues`,
+        netData: {
+            propValues: JSON.stringify(propValues).replace(/[\\""']*/g, "")
+        }
+    };
+    // response.body
+    // {
+    //     "result": null,
+    //     "logs": "[]"
+    // }
+};
 export const GetPropertyValueNetConfig = function (objectName: string, propName: string) {
     return {
         netAddress: netAddress,
@@ -123,6 +136,36 @@ export const GetPropertyValueNetConfig = function (objectName: string, propName:
         netData: {
             propName: `${propName}`
         }
+    };
+    // response.body
+    // {
+    //     "result": 11.0,
+    //     "logs": "[]"
+    // }
+};
+export const GetPropertyValuesNetConfig = function (objectName: string, name: string) {
+    return {
+        netAddress: netAddress,
+        netPath: `api/runtime/objects/${objectName}/debugServices/getPropertyValues`,
+        netData: {
+            propNames: `${name}`
+        }
+    };
+    // response.body
+    // {
+    //     "result": 11.0,
+    //     "logs": "[]"
+    // }
+};
+
+export const GetPropertyInfosNetConfig = function (
+    objectName: string,
+    netParam: { type: string; page: number; per_page: number }
+) {
+    return {
+        netAddress: netAddress,
+        netPath: `api/metadata/objects/${objectName}/properties`,
+        netParam: netParam // ?type=own&page=1&per_page=200
     };
     // response.body
     // {

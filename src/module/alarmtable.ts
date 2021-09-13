@@ -3,7 +3,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-06 00:33:39
+ * @LastEditTime: 2021-09-12 00:02:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\ruletable.ts
@@ -151,8 +151,8 @@ export class AlarmTableRecordGenerateTask {
     async getAlarmTableRecord() {
         this.singleRule.rule = this.ruleRecord;
         this.getDefaultAlarmTableRecord();
-        this.singleAlarm.alarmConfigParamValue = await this.getConfigParamValue();
-        this.singleAlarm.enableStatus = await this.getConfigFlagValue();
+        // ?暂时 this.singleAlarm.alarmConfigParamValue = await this.getConfigParamValue();
+        // ?暂时 this.singleAlarm.enableStatus = await this.getConfigFlagValue();
         return this.singleAlarm;
     }
 }
