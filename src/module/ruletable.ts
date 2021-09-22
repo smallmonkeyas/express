@@ -2,16 +2,16 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-08 18:02:31
+ * @LastEditTime: 2021-09-22 23:34:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\ruletable.ts
  */
-import "reflect-metadata";
+import "reflect-metadata"
 // import mongoose from 'mongoose';
 
-import { Container, Service, Inject } from "typedi";
-import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../dao";
+import { Container, Service, Inject } from "typedi"
+import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../dao"
 import {
     factoryConfig,
     ruletableConfig,
@@ -21,11 +21,11 @@ import {
     IFile,
     IVendorConfig,
     ruletableFileConfig
-} from "../config";
-import { CVendorData, IVendorData } from "./vendor";
-import { request, system, XLSX_JSON, file, fs } from "../../modulejs";
-import { factoryCollectorTempleData } from "../respository/factory/collector";
-Container.import([CFileOperate]);
+} from "../config"
+import { CVendorData, IVendorData } from "./vendor"
+import { request, system, XLSX_JSON, file, fs } from "../../modulejs"
+import { factoryCollectorTempleData } from "../respository/factory/collector"
+Container.import([CFileOperate])
 // interface IFactoryCollector {
 //     id: number;
 //     objname: string;
@@ -46,7 +46,7 @@ export class CRuleTable extends CTable {}
 //* 规则数据表本地操作类
 @Service("规则数据表本地操作类")
 export class CRuleTableLocal extends CFileOperate {
-    file!: IFile;
+    file!: IFile
     // fileContent: any;
     // @Inject("本地文件操作操作类")
     // operateHandler!: CFileOperate;
@@ -54,10 +54,10 @@ export class CRuleTableLocal extends CFileOperate {
     //     this.file = file;
     // }
     readFile(): string {
-        let fileDirectory = `${this.file.filePath}/${this.file.fileName}.${this.file.fileExtension}`;
+        let fileDirectory = `${this.file.filePath}/${this.file.fileName}.${this.file.fileExtension}`
         // let fileDirectory = `${this.file.filePath}\\${this.file.fileName}.${this.file.fileExtension}`;
-        let fileStr = fs.readFileSync(fileDirectory);
-        return fileStr;
+        let fileStr = fs.readFileSync(fileDirectory)
+        return fileStr
     }
     // async writeFile(): Promise<any> {
     //     let fileDirectory = `${this.file.filePath}\\${this.file.fileName}.${this.file.fileExtension}`;
@@ -67,19 +67,19 @@ export class CRuleTableLocal extends CFileOperate {
     // }
     excelTojson(): Array<IRuleStruct> {
         let pathFileDir = this.file.filePath,
-            fileName = this.file.fileName;
-        return XLSX_JSON.excelToJson(pathFileDir, fileName);
+            fileName = this.file.fileName
+        return XLSX_JSON.excelToJson(pathFileDir, fileName)
     }
     patchExcelToJson(): Array<IRuleStruct> {
-        let pathFileDir = this.file.filePath;
-        let fileType = this.file.fileExtension;
-        let filesName = file.get(`.${fileType}`, pathFileDir);
-        let jsonTotal: Array<any> = [];
+        let pathFileDir = this.file.filePath
+        let fileType = this.file.fileExtension
+        let filesName = file.get(`.${fileType}`, pathFileDir)
+        let jsonTotal: Array<any> = []
         filesName.forEach((currfileName: string) => {
-            this.file.fileName = currfileName;
-            jsonTotal.push(...this.excelTojson());
-        });
-        return jsonTotal;
+            this.file.fileName = currfileName
+            jsonTotal.push(...this.excelTojson())
+        })
+        return jsonTotal
     }
 }
 
