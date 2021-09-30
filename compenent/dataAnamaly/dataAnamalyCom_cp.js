@@ -1,18 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2021-09-08 19:24:48
- * @LastEditTime: 2021-09-08 19:24:48
+ * @LastEditTime: 2021-09-30 16:58:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\compenent\dataAnamaly\dataAnamalyCom_cp.js
- */
-/*
- * @Author: your name
- * @Date: 2021-07-18 14:41:21
- * @LastEditTime: 2021-08-11 13:32:05
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \SolidPollutionItem\compenent\dataAnamaly\DataAnamalyCom.js
  */
 
 /* eslint-disable prefer-destructuring */
@@ -22,50 +14,50 @@
 /* eslint-disable no-unused-vars */
 
 /* eslint-disable import/no-unresolved */
-import React, { Component, lazy, Suspense } from "react";
+import React, { Component, lazy, Suspense } from "react"
 // eslint-disable-next-line no-unused-vars
-import { Select, Button, Table, DatePicker, Input, Tabs, Popconfirm, message } from "antd";
-import moment from "moment";
-import Highcharts from "../Highcharts-8.2.2/code/highcharts";
+import { Select, Button, Table, DatePicker, Input, Tabs, Popconfirm, message } from "antd"
+import moment from "moment"
+import Highcharts from "../Highcharts-8.2.2/code/highcharts"
 
-window.moment = moment;
-window.Highcharts = Highcharts;
+window.moment = moment
+window.Highcharts = Highcharts
 // const path = require('path');
 const bgAnamalyTotal =
-    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyTotal.svg";
+    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyTotal.svg"
 const bgAnamalyTotalIcon =
-    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyTotalIcon.svg";
+    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyTotalIcon.svg"
 const bgAnamalyProcessed =
-    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyProcessed.svg";
+    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyProcessed.svg"
 const bgAnamalyProcessedIcon =
-    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyProcessedIcon.svg";
+    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyProcessedIcon.svg"
 const bgAnamalyNoTreat =
-    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyNoTreat.svg";
+    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyNoTreat.svg"
 const bgAnamalyNoTreatIcon =
-    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyNoTreatIcon.svg";
+    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异动数/bg_anamalyNoTreatIcon.svg"
 const bgAnamalyDetectFormLogo =
-    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异常检测表/bg_anamaly_detect_form_logo.svg";
+    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异常检测表/bg_anamaly_detect_form_logo.svg"
 const bgAnamalyParamTopLeft =
-    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异常检测参数表/bg_anamalyParamTopLeft.svg";
+    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异常检测参数表/bg_anamalyParamTopLeft.svg"
 const bgAnamalyParamTopRight =
-    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异常检测参数表/bg_anamalyParamTopRight.svg";
+    "resource/App_6b8d684522bb4c3eb492e1a02110eb80/img/异动分析/异常检测参数表/bg_anamalyParamTopRight.svg"
 Highcharts.setOptions({
     global: {
         useUTC: false
     }
-});
+})
 /*
  * 选择器设置-下拉框内容设置
  */
-const { Option } = Select;
-const staticChildren = [];
-const equipmentChildren = [];
-const anamalyLevelChildren = [];
-const anamalyCatagoryChildren = [];
+const { Option } = Select
+const staticChildren = []
+const equipmentChildren = []
+const anamalyLevelChildren = []
+const anamalyCatagoryChildren = []
 // G1
-const staticSelectArr = ["已处理", "待处理"];
-const equipmentSelectArr = ["设备1", "设备2", "设备3"];
-const anamalyLevelSelectArray = [1, 2, 3, 4];
+const staticSelectArr = ["已处理", "待处理"]
+const equipmentSelectArr = ["设备1", "设备2", "设备3"]
+const anamalyLevelSelectArray = [1, 2, 3, 4]
 const alarmTypeArr = [
     "其它",
     "数据缺失",
@@ -78,7 +70,7 @@ const alarmTypeArr = [
     "设限值",
     "数据超范围",
     "去除率异常"
-];
+]
 const anamalyCatagorySelectArr = [
     // '满屏跳',
     "恒值异常",
@@ -86,19 +78,19 @@ const anamalyCatagorySelectArr = [
     // '设限值',
     //   '相关性异常',
     // '陡升陡降',
-];
+]
 staticSelectArr.forEach((item) => {
-    staticChildren.push(<Option key={item}>{item}</Option>);
-});
+    staticChildren.push(<Option key={item}>{item}</Option>)
+})
 equipmentSelectArr.forEach((item) => {
-    equipmentChildren.push(<Option key={item}>{item}</Option>);
-});
+    equipmentChildren.push(<Option key={item}>{item}</Option>)
+})
 anamalyLevelSelectArray.forEach((item) => {
-    anamalyLevelChildren.push(<Option key={item}>{item}</Option>);
-});
+    anamalyLevelChildren.push(<Option key={item}>{item}</Option>)
+})
 anamalyCatagorySelectArr.forEach((item) => {
-    anamalyCatagoryChildren.push(<Option key={item}>{item}</Option>);
-});
+    anamalyCatagoryChildren.push(<Option key={item}>{item}</Option>)
+})
 
 /**
  * @table配置
@@ -115,7 +107,7 @@ const anamalyTableHeader = [
     "异常等级",
     "确认时间",
     "确认人员"
-];
+]
 // const anamalyTableHeaderParamName = [
 //   'id',
 //   'startTime',
@@ -138,9 +130,9 @@ const anamalyTableHeaderParamName = [
     "priority",
     "confirmtime",
     "confirmuser"
-];
-const anamalyTableHeaderWidth = [80, 170, 120, 150, 120, 120, 80, 170, 80];
-const columns = [];
+]
+const anamalyTableHeaderWidth = [80, 170, 120, 150, 120, 120, 80, 170, 80]
+const columns = []
 // columns.push({
 //   title: '时间',
 //   dataIndex: 'time',
@@ -202,22 +194,22 @@ for (let ii = 1; ii < 10; ii += 1) {
  * @table配置
  * @参数表部分
  */
-const paramTableHeader = ["序号", "数值", "单位"];
-const paramTablePropName = ["id", "propValue", "unit"];
-const paramTableHeaderWidth = [80, 90, 80];
-const columnsParam = [];
+const paramTableHeader = ["序号", "数值", "单位"]
+const paramTablePropName = ["id", "propValue", "unit"]
+const paramTableHeaderWidth = [80, 90, 80]
+const columnsParam = []
 paramTableHeader.forEach((item, index) => {
     columnsParam.push({
         title: item,
         dataIndex: paramTablePropName[index],
         key: paramTablePropName[index],
         width: paramTableHeaderWidth[index]
-    });
-});
+    })
+})
 columnsParam.push({
     title: "时间",
     dataIndex: `time`
-});
+})
 // const dataParam = [];
 // let jj = 1;
 
@@ -236,22 +228,22 @@ columnsParam.push({
  * @function模块
  */
 const parmseToObject = function () {
-    let parmse = window.location.search;
+    let parmse = window.location.search
     if (!parmse) {
-        return {};
+        return {}
     }
-    parmse = parmse.replace(/\?/, "").split("&");
-    const obj = {};
+    parmse = parmse.replace(/\?/, "").split("&")
+    const obj = {}
     parmse.forEach((item) => {
-        const o = item.split("=");
-        obj[o[0]] = o[1];
-    });
-    return obj;
-};
+        const o = item.split("=")
+        obj[o[0]] = o[1]
+    })
+    return obj
+}
 /**
  * @时间筛选
  */
-let chart;
+let chart
 /* const onRangePickerChange = (value, dateString) => {
     console.log('Selected Time: ', value);
     console.log('Formatted Selected Time: ', dateString);
@@ -260,22 +252,22 @@ let chart;
   };
  */
 const onRangePickerOk = (value) => {
-    console.log("onOk: ", value);
-};
+    console.log("onOk: ", value)
+}
 
-const onSearch = (value) => console.log(value);
+const onSearch = (value) => console.log(value)
 // 标签页function模块
-let tabIndex;
+let tabIndex
 function tabsCallback(key) {
-    console.log(key);
+    console.log(key)
     if (key === "1") {
-        tabIndex = 1;
+        tabIndex = 1
     } else if (key === "2") {
-        tabIndex = 2;
+        tabIndex = 2
     }
     // eslint-disable-next-line no-use-before-define
-    adapterPage();
-    console.log("tabIndex", tabIndex);
+    adapterPage()
+    console.log("tabIndex", tabIndex)
     // eslint-disable-next-line no-use-before-define
 }
 /**
@@ -284,24 +276,24 @@ function tabsCallback(key) {
 function utc2beijing(dateForm) {
     if (dateForm === "") {
         // 解决deteForm为空传1970-01-01 00:00:00
-        return "";
+        return ""
     }
-    const dateee = new Date(dateForm).toJSON();
+    const dateee = new Date(dateForm).toJSON()
     const date = new Date(Number(new Date(dateee)) + 8 * 3600 * 1000)
         .toISOString()
         .replace(/T/g, " ")
-        .replace(/\.[\d]{3}Z/, "");
-    return date;
+        .replace(/\.[\d]{3}Z/, "")
+    return date
 }
 /**
  * @页面适配
  */
 function adapterPage() {
-    const radio = document.documentElement.clientWidth / 1400;
-    console.log("radio", radio + 10);
-    document.querySelector("#data-anamaly-tabs").style.transform = `scale(${radio.toString()})`;
-    document.querySelector("#data-anamaly-tabs").style.webkitTransformOrigin = "0% 0%";
-    document.querySelector("#data-anamaly-tabs").style.transformOrigin = "0% 0%";
+    const radio = document.documentElement.clientWidth / 1400
+    console.log("radio", radio + 10)
+    document.querySelector("#data-anamaly-tabs").style.transform = `scale(${radio.toString()})`
+    document.querySelector("#data-anamaly-tabs").style.webkitTransformOrigin = "0% 0%"
+    document.querySelector("#data-anamaly-tabs").style.transformOrigin = "0% 0%"
     //   if (tabIndex === 1) {
     //     document.querySelector('.draw_g6CsK').style.height = `${Math.floor(
     //       680 * radio
@@ -317,10 +309,10 @@ function adapterPage() {
 /**
  * @历史数据异步请求
  */
-const objName = "GK_CZ_JT_DEWS";
-const propName = "E101F1";
-const startTime = "2021-04-13T10:32:28Z";
-const endTime = "2021-04-13T13:32:28Z";
+const objName = "GK_CZ_JT_DEWS"
+const propName = "E101F1"
+const startTime = "2021-04-13T10:32:28Z"
+const endTime = "2021-04-13T13:32:28Z"
 const inputs = {
     objName,
     propNames: [propName],
@@ -328,7 +320,7 @@ const inputs = {
     endTime,
     limit: "500",
     pageNo: "1"
-};
+}
 
 function getPropertiesHistoryService(inputsParam) {
     return new Promise((resolve) => {
@@ -341,13 +333,13 @@ function getPropertiesHistoryService(inputsParam) {
                 params: { inputs: JSON.stringify(inputsParam) }
             },
             (res) => {
-                resolve(res);
+                resolve(res)
                 // result = res;
                 // console.log('res',res)
                 // result = res
             }
-        );
-    });
+        )
+    })
 }
 function getPropsList(objName) {
     return new Promise((resolve) => {
@@ -360,54 +352,54 @@ function getPropsList(objName) {
                 params: { obj: objName }
             },
             (res) => {
-                resolve(res);
+                resolve(res)
                 // result = res;
                 // console.log('res',res)
                 // result = res
             }
-        );
-    });
+        )
+    })
 }
 
 async function getSinglePropHis(obj, prop, starttime, endtime) {
-    let ii = 1;
-    const resArr = [];
-    inputs.objName = obj;
-    inputs.propNames = [prop];
-    inputs.startTime = starttime;
-    inputs.endTime = endtime;
+    let ii = 1
+    const resArr = []
+    inputs.objName = obj
+    inputs.propNames = [prop]
+    inputs.startTime = starttime
+    inputs.endTime = endtime
     // let res = await getPropertiesHistory(inputs)
     // if(res.code==='200'&&res.result.list[0].hasNext){
     //   resArr.push(...res.result.list[0][prop])
     // }
-    let res = { code: "200" };
-    console.log("hhh");
-    console.log("res", res);
+    let res = { code: "200" }
+    console.log("hhh")
+    console.log("res", res)
     // const hasNext=true
     while (res.code === "200") {
-        console.log(ii);
-        inputs.pageNo = ii.toString();
-        console.log("inputs", inputs);
-        res = await getPropertiesHistoryService(inputs);
-        console.log("res1", res);
+        console.log(ii)
+        inputs.pageNo = ii.toString()
+        console.log("inputs", inputs)
+        res = await getPropertiesHistoryService(inputs)
+        console.log("res1", res)
         // const dataResObj=res.result.list[0]
-        const dataResObj = res.result ? res.result.list[0] : {};
+        const dataResObj = res.result ? res.result.list[0] : {}
         if (!dataResObj) {
-            break;
+            break
         }
-        console.log("dataResObj", dataResObj);
+        console.log("dataResObj", dataResObj)
         if (Object.keys(dataResObj).length > 0) {
-            resArr.push(...dataResObj[prop]);
+            resArr.push(...dataResObj[prop])
             if (!dataResObj.hasNext) {
-                break;
+                break
             }
-            ii += 1;
-            console.log("res2-ii", ii);
+            ii += 1
+            console.log("res2-ii", ii)
         }
     }
     // var result = await Promise.all(resArr)
     // return result
-    return resArr;
+    return resArr
 }
 // const myAsnc = getSinglePropHis('GK_CZ_JT_DEWS','E101F1','2021-04-13T10:32:28Z','2021-04-13T13:32:28Z')
 // myAsnc.then(resArr=>{console.log('myAsnc',resArr,resArr.length)}).catch((e) =>
@@ -418,40 +410,40 @@ function cutPropsArrByAllList(propsArr) {
         "常州市光大高新环保新能源（常州）有限公司",
         "连云港光大城乡再生能源（灌云）有限公司",
         "淮安市明通环保工程有限公司"
-    ];
-    const propsArrSelect = [];
-    const factoryList = ["GK_CZ_GD_GXHB", "GK_LYG_GDCXZSNY", "GK_HA_MT_WSCL"];
+    ]
+    const propsArrSelect = []
+    const factoryList = ["GK_CZ_GD_GXHB", "GK_LYG_GDCXZSNY", "GK_HA_MT_WSCL"]
     factoryList.forEach((item) => {
-        const reg = new RegExp(`${item}`, "g");
+        const reg = new RegExp(`${item}`, "g")
         propsArr.forEach((item) => {
             if (item.search(reg) === 0) {
-                propsArrSelect.push(item);
+                propsArrSelect.push(item)
             }
-        });
+        })
 
         // let n = arr[3].search(reg)
-    });
-    return propsArrSelect;
+    })
+    return propsArrSelect
 }
 
 async function getAllPropsHisData(obj, starttime, endtime) {
-    const res = await getPropsList(obj);
-    let propList = [];
-    let propHisArr = [];
-    const propsHisArr = [];
-    let propsHisArrObj = {};
+    const res = await getPropsList(obj)
+    let propList = []
+    let propHisArr = []
+    const propsHisArr = []
+    let propsHisArrObj = {}
     if (res.code === "200") {
-        const propListOrgin = res.result;
-        propList = cutPropsArrByAllList(propListOrgin);
-        console.log("propList", propList);
+        const propListOrgin = res.result
+        propList = cutPropsArrByAllList(propListOrgin)
+        console.log("propList", propList)
         // var prop = propList[9]
         for (let ii = 0; ii < propList.length; ii += 1) {
-            const prop = propList[ii];
-            propHisArr = await getSinglePropHis(obj, prop, starttime, endtime);
-            const propsHisArrItem = {};
-            propsHisArrItem[prop] = propHisArr;
-            console.log("propsHisArrItem", propsHisArrItem);
-            propsHisArr.push(propsHisArrItem);
+            const prop = propList[ii]
+            propHisArr = await getSinglePropHis(obj, prop, starttime, endtime)
+            const propsHisArrItem = {}
+            propsHisArrItem[prop] = propHisArr
+            console.log("propsHisArrItem", propsHisArrItem)
+            propsHisArr.push(propsHisArrItem)
         }
         // propList.forEach(item =>{
         //   const prop=item
@@ -467,11 +459,11 @@ async function getAllPropsHisData(obj, starttime, endtime) {
         // // propsHisArr.push({prop:propHisArr})
         // })
     }
-    propsHisArrObj = { list: propsHisArr };
-    console.log("propList", propList);
-    console.log("propHisArr", propHisArr);
-    console.log("propsHisArrObj", propsHisArrObj);
-    return propsHisArrObj;
+    propsHisArrObj = { list: propsHisArr }
+    console.log("propList", propList)
+    console.log("propHisArr", propHisArr)
+    console.log("propsHisArrObj", propsHisArrObj)
+    return propsHisArrObj
 }
 
 // const propListPromise = getAllPropsHisData(
@@ -483,13 +475,13 @@ async function getAllPropsHisData(obj, starttime, endtime) {
 //   console.log('propListPromise', propsHisArrObj);
 // });
 function convertHisData(hisData) {
-    let res = {};
-    const arrArrAlermData = [];
-    const objArrAlermData = [];
-    console.log("hisData.length", hisData.length);
+    let res = {}
+    const arrArrAlermData = []
+    const objArrAlermData = []
+    console.log("hisData.length", hisData.length)
     hisData.forEach((item, index) => {
         // arrArrAlermData.push([moment.utc(item.time).valueOf(), item.numberValue]);
-        arrArrAlermData.push([moment(item.time).valueOf(), item.value]);
+        arrArrAlermData.push([moment(item.time).valueOf(), item.value])
         // objArrAlermData.push({
         //   id: index.toString(),
         //   propValue: item.numberValue,
@@ -503,10 +495,10 @@ function convertHisData(hisData) {
             //   unit: 'mg/l',
             unit: "",
             time: moment(item.time).format("YYYY-MM-DD HH:mm:ss")
-        });
-    });
-    res = { arrArrAlermData, objArrAlermData };
-    return res;
+        })
+    })
+    res = { arrArrAlermData, objArrAlermData }
+    return res
 }
 /**
  * @后端数据交互模块
@@ -520,28 +512,28 @@ async function fetchAlarmListByInterface(epcode, starttime, endtime) {
     const requestOptions = {
         method: "GET",
         redirect: "follow"
-    };
+    }
     // console.log('fetchAlarmList', this.starttime, this.endtime);
     // this.setState({ loading: true });
     if (!epcode) {
-        epcode = "320802000005";
+        epcode = "320802000005"
     }
     const response = await fetch(
         // `http://${window.location.hostname}:8999/serverapi/event/total/alarmhis?epcode=${epcode}&alarmtype=1,2,4,5,8&begintime=${starttime}&endtime=${endtime}`,
         `http://${window.location.hostname}:8999/serverapi/event/total/alarmhis?epcode=${epcode}&alarmtype=1,4&begintime=${starttime}&endtime=${endtime}`,
         requestOptions
-    );
-    const result = await response.text();
-    const httpResultJson = JSON.parse(result);
+    )
+    const result = await response.text()
+    const httpResultJson = JSON.parse(result)
     //   let tableRowFetchRow = [];
     if (httpResultJson.info === "Success" && httpResultJson.data.length > 0) {
         //  getch(result)
         // eslint-disable-next-line no-use-before-define
-        console.log("httpResultJson", httpResultJson);
+        console.log("httpResultJson", httpResultJson)
 
         // tableRowFetchRow = await addAlarmInfo(JSON.stringify(httpResultJson));
     }
-    return httpResultJson;
+    return httpResultJson
     //   .then(response => response.text())
     //   .then(result => {
     //     const httpResultJson = JSON.parse(result);
@@ -579,7 +571,7 @@ function addAlarmInfo(data) {
                 // params: { epcode: '320802000005', beginTime:'2021-04-07+11:48:39',endTime:'2021-04-08+11:48:39'},
             },
             (res) => {
-                resolve(res);
+                resolve(res)
                 // console.log('addAlarmInfo-------22', res);
                 // if (res.code === '200') {
                 //   console.log('addAlarmInfo-------111', res);
@@ -589,8 +581,8 @@ function addAlarmInfo(data) {
                 //   // selectAlarmInfo();
                 // }
             }
-        );
-    });
+        )
+    })
 }
 
 /**
@@ -609,50 +601,50 @@ function getInstanceInfo(objName) {
                 // params: { epcode: '320802000005', beginTime:'2021-04-07+11:48:39',endTime:'2021-04-08+11:48:39'},
             },
             (res) => {
-                resolve(res);
+                resolve(res)
             }
-        );
-    });
+        )
+    })
 }
 // 根据实例下所有属性信息，提取描述以及属性别名，每个属性转换为对象{别名：描述}
 function convertInstanceInfo(propsInfoArr) {
     //   const propDesc = [];
-    const propDesc = {};
+    const propDesc = {}
     propsInfoArr.forEach((item) => {
         // propDesc.push({
         //   [item.name]: item.description,
         // });
-        propDesc[item.name] = item.description;
-    });
-    return propDesc;
+        propDesc[item.name] = item.description
+    })
+    return propDesc
 }
 
 /**
  * @融合报警数据查询和实例信息查询
  */
 
-let propsInfoArr;
+let propsInfoArr
 // 根据实例别名获取该实例下所有属性描述并且格式化
 async function getInstanceDes(objectName) {
-    const res = await getInstanceInfo(objectName);
-    const propsInfo = await convertInstanceInfo(res.result);
-    return propsInfo;
+    const res = await getInstanceInfo(objectName)
+    const propsInfo = await convertInstanceInfo(res.result)
+    return propsInfo
 }
 async function getAlarmInfo(epcode, starttime, endtime) {
-    console.log(epcode, starttime, endtime);
+    console.log(epcode, starttime, endtime)
     //   let result = {};
-    const httpResultJson = await fetchAlarmListByInterface(epcode, starttime, endtime);
-    console.log("httpResultJson", httpResultJson);
+    const httpResultJson = await fetchAlarmListByInterface(epcode, starttime, endtime)
+    console.log("httpResultJson", httpResultJson)
     if (httpResultJson.info === "Success" && httpResultJson.data.length > 0) {
-        const tableRowFetchRow = await addAlarmInfo(JSON.stringify(httpResultJson));
+        const tableRowFetchRow = await addAlarmInfo(JSON.stringify(httpResultJson))
         //   result.dataAlarm = tableRowFetchRow.result;
         // const res = await getInstanceInfo(httpResultJson.data[0].objectname);
         // const propsInfo = await convertInstanceInfo(res.result);
-        propsInfoArr = await getInstanceDes(httpResultJson.data[0].objectname);
+        propsInfoArr = await getInstanceDes(httpResultJson.data[0].objectname)
         // console.log('getAlarmInfo', res, propsInfo, httpResultJson);
-        return tableRowFetchRow.result;
+        return tableRowFetchRow.result
     }
-    return [];
+    return []
 }
 
 //  getInstanceInfo('GK_CZ_LY_DEWSC').then(res => {
@@ -670,23 +662,23 @@ async function getAlarmInfo(epcode, starttime, endtime) {
  */
 
 async function getHisDataByhttpInterface(selectedRows, epcode) {
-    const hisEndTime = moment(selectedRows.starttime).add(1, "days").format("YYYY-MM-DD HH:mm:ss");
+    const hisEndTime = moment(selectedRows.starttime).add(1, "days").format("YYYY-MM-DD HH:mm:ss")
     const hisStartTime = moment(selectedRows.starttime)
         .subtract(12, "days")
-        .format("YYYY-MM-DD HH:mm:ss");
+        .format("YYYY-MM-DD HH:mm:ss")
 
     const requestOptions = {
         method: "GET",
         redirect: "follow"
-    };
-    console.log("getHisDataByhttpInterface_epcode", epcode);
+    }
+    console.log("getHisDataByhttpInterface_epcode", epcode)
     //   this.setState({ loading: true });
     const response = await fetch(
         `http://${window.location.hostname}:8999/serverapi/data/trend?epcode=${epcode}&name=${selectedRows.sourcename}&begintime=${hisStartTime}&endtime=${hisEndTime}`,
         requestOptions
-    );
-    const result = await response.text();
-    return JSON.parse(result);
+    )
+    const result = await response.text()
+    return JSON.parse(result)
     // .then(response => response.text())
     // .then(result => {
     //   console.log(result);
@@ -767,7 +759,7 @@ function traceDataAnamalyParamHistoryPicInit() {
                 autoRotation: -20,
                 step: 1,
                 formatter() {
-                    return Highcharts.dateFormat("%Y-%m-%d %H:%M:%S", this.value);
+                    return Highcharts.dateFormat("%Y-%m-%d %H:%M:%S", this.value)
                 }
             },
             dateTimeLabelFormats: {
@@ -806,7 +798,7 @@ function traceDataAnamalyParamHistoryPicInit() {
                     this.series.name
                 }</b><br/>时间：${moment(this.point.x).format("HH:mm:ss")}<br/>数值：${
                     this.point.y
-                }<br/>`;
+                }<br/>`
             }
             //   headerFormat: '<b>{series.name}</b><br>',
             //   pointFormat: '{point.x:%e. %b}: {point.y:.2f}mg/l',
@@ -838,7 +830,7 @@ function traceDataAnamalyParamHistoryPicInit() {
                 data: []
             }
         ]
-    });
+    })
 }
 
 /**
@@ -850,26 +842,26 @@ function traceDataAnamalyParamHistoryPicInit() {
  * @param{异常数、已处理数、未处理数}
  */
 
-const countAnamalySum = 1000;
-const countAnamalyProcessed = 800;
-const countAnamalyNoTreated = 200;
-const anamalyStatisNumberChildern = [];
-const textAnamalyStatisticArr = ["异常数", "已处理", "待处理"];
-const countAnamalyArr = [countAnamalySum, countAnamalyProcessed, countAnamalyNoTreated];
+const countAnamalySum = 1000
+const countAnamalyProcessed = 800
+const countAnamalyNoTreated = 200
+const anamalyStatisNumberChildern = []
+const textAnamalyStatisticArr = ["异常数", "已处理", "待处理"]
+const countAnamalyArr = [countAnamalySum, countAnamalyProcessed, countAnamalyNoTreated]
 textAnamalyStatisticArr.forEach((item, index) => {
     anamalyStatisNumberChildern.push(
         <div
-            className="anamaly-static"
+            className='anamaly-static'
             /* style={{ backgroundImage: `url(${bgAnamalyTotal}})` }} */
         >
-            <div className="anamly-number-icon" />
-            <div className="anamly-number-text">
+            <div className='anamly-number-icon' />
+            <div className='anamly-number-text'>
                 <span>{item}</span>
                 <span>{countAnamalyArr[index]}</span>
             </div>
         </div>
-    );
-});
+    )
+})
 /** ************************************@main******************************* */
 /**
  * @组件部分
@@ -878,7 +870,7 @@ textAnamalyStatisticArr.forEach((item, index) => {
 // const classRef = React.createRef();
 class AnamalyDetectChartTab extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             dataSource: [],
             dataParam: [],
@@ -890,19 +882,19 @@ class AnamalyDetectChartTab extends Component {
                 moment(moment().subtract(1, "days"), "YYYY-MM-DD HH:mm:ss"),
                 moment(moment(), "YYYY-MM-DD HH:mm:ss")
             ]
-        };
-        this.staticFilterRef = React.createRef();
-        this.equipmentFilterRef = React.createRef();
-        this.levelFilterRef = React.createRef();
-        this.anamalyCatagoryFilterRef = React.createRef();
-        this.endtime = moment().format("YYYY-MM-DD HH:mm:ss");
-        this.starttime = moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss");
-        this.initColumn();
+        }
+        this.staticFilterRef = React.createRef()
+        this.equipmentFilterRef = React.createRef()
+        this.levelFilterRef = React.createRef()
+        this.anamalyCatagoryFilterRef = React.createRef()
+        this.endtime = moment().format("YYYY-MM-DD HH:mm:ss")
+        this.starttime = moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss")
+        this.initColumn()
     }
 
     initColumn = () => {
         anamalyTableHeader.forEach((item, index) => {
-            console.log("item", item);
+            console.log("item", item)
             if (item === "发生时间") {
                 columns.push({
                     title: item,
@@ -917,8 +909,8 @@ class AnamalyDetectChartTab extends Component {
                             )}
                         </span>
                     )
-                });
-                return;
+                })
+                return
             }
             if (item === "确认时间") {
                 columns.push({
@@ -936,8 +928,8 @@ class AnamalyDetectChartTab extends Component {
                                 : ""}
                         </span>
                     )
-                });
-                return;
+                })
+                return
             }
             if (item === "管理状态") {
                 columns.push({
@@ -949,8 +941,8 @@ class AnamalyDetectChartTab extends Component {
                     render: (text, record) => (
                         <span>{record.confirmtime ? "已处理" : "待处理"}</span>
                     )
-                });
-                return;
+                })
+                return
             }
             if (item === "位号名称") {
                 columns.push({
@@ -961,10 +953,10 @@ class AnamalyDetectChartTab extends Component {
                     width: anamalyTableHeaderWidth[index],
                     render: (text, record) => {
                         // console.log('propsInfoArr[record.sourcename]', propsInfoArr);
-                        return <span>{propsInfoArr[record.sourcename]}</span>;
+                        return <span>{propsInfoArr[record.sourcename]}</span>
                     }
-                });
-                return;
+                })
+                return
             }
             columns.push({
                 title: item,
@@ -972,25 +964,25 @@ class AnamalyDetectChartTab extends Component {
                 dataIndex: anamalyTableHeaderParamName[index],
                 key: anamalyTableHeaderParamName[index],
                 width: anamalyTableHeaderWidth[index]
-            });
-        });
+            })
+        })
         columns.push({
             title: "操作",
             key: "action",
             dataIndex: "action",
             render: (text, record) => (
-                <div id="table-action">
+                <div id='table-action'>
                     <Popconfirm
-                        title="是否确认该条报警"
+                        title='是否确认该条报警'
                         onConfirm={() => {
-                            this.confirmConfirm(record);
+                            this.confirmConfirm(record)
                         }}
                         onCancel={this.confirmCancel}
-                        okText="是"
-                        cancelText="否"
+                        okText='是'
+                        cancelText='否'
                     >
                         <Button
-                            size="small"
+                            size='small'
                             disabled={record.confirmtime !== ""}
                             className={
                                 record.confirmtime !== "" ? "btn-processed" : "btn-untreated"
@@ -1000,82 +992,82 @@ class AnamalyDetectChartTab extends Component {
                         </Button>
                     </Popconfirm>
                     <Popconfirm
-                        title="是否确认删除该条记录"
+                        title='是否确认删除该条记录'
                         onConfirm={() => {
-                            this.deleteConfirm(record);
+                            this.deleteConfirm(record)
                         }}
                         onCancel={this.deleteCancel}
-                        okText="是"
-                        cancelText="否"
+                        okText='是'
+                        cancelText='否'
                     >
-                        <Button size="small">删除</Button>
+                        <Button size='small'>删除</Button>
                     </Popconfirm>
                 </div>
             )
-        });
-        console.log(columns);
-    };
+        })
+        console.log(columns)
+    }
 
     fetchPostDeleteAlarm = (record, method, info) => {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+        const myHeaders = new Headers()
+        myHeaders.append("Content-Type", "application/json")
 
         const raw = JSON.stringify({
             name: record.name
-        });
+        })
 
         const requestOptions = {
             method,
             headers: myHeaders,
             body: raw,
             redirect: "follow"
-        };
+        }
 
         fetch(`http://${window.location.hostname}:8999/serverapi/event/alarm`, requestOptions)
             .then((response) => response.text())
             .then((result) => {
-                message.success(`${info}成功`);
+                message.success(`${info}成功`)
                 // 原始用法
                 // this.fetchAlarmList();
-                this.fetchAlarmListAsync();
+                this.fetchAlarmListAsync()
 
-                console.log(result);
+                console.log(result)
             })
-            .catch((error) => console.log("error", error));
-    };
+            .catch((error) => console.log("error", error))
+    }
 
     confirmConfirm = (record) => {
-        console.log(record);
-        const preRecord = record;
-        const method = "POST";
-        const backMessage = "确认";
-        this.fetchPostDeleteAlarm(preRecord, method, backMessage);
-    };
+        console.log(record)
+        const preRecord = record
+        const method = "POST"
+        const backMessage = "确认"
+        this.fetchPostDeleteAlarm(preRecord, method, backMessage)
+    }
 
     confirmCancel = (e) => {
-        console.log(e);
-        message.error("取消确认");
-    };
+        console.log(e)
+        message.error("取消确认")
+    }
 
     deleteConfirm = (record) => {
-        console.log(record);
-        const preRecord = record;
-        const method = "DELETE";
-        const backMessage = "删除";
-        this.fetchPostDeleteAlarm(preRecord, method, backMessage);
-    };
+        console.log(record)
+        const preRecord = record
+        const method = "DELETE"
+        const backMessage = "删除"
+        this.fetchPostDeleteAlarm(preRecord, method, backMessage)
+    }
 
     deleteCancel = (e) => {
-        console.log(e);
-        message.error("取消删除");
-    };
+        console.log(e)
+        message.error("取消删除")
+    }
 
     // 查询刷新历史报警
     checkAnamaly = () => {
         // 原始用法
         // this.fetchAlarmList();
-        this.fetchAlarmListAsync();
-    };
+        this.fetchAlarmListAsync()
+    }
 
     // 获取报警列表
     getAlermformList = () => {
@@ -1088,43 +1080,43 @@ class AnamalyDetectChartTab extends Component {
                 params: { epcode: this.epcode }
             },
             (res) => {
-                console.log("getAlermformList", res);
+                console.log("getAlermformList", res)
                 if (res.code === "200") {
-                    console.log("getAlermformList", res.result.list);
+                    console.log("getAlermformList", res.result.list)
                     this.setState({
                         dataSource: res.result
-                    });
+                    })
                 }
             }
-        );
-    };
+        )
+    }
 
     // 异步获取报警列表
     fetchAlarmListAsync = () => {
         this.setState({
             loading: true
-        });
-        const getAlarmInfoPromise = getAlarmInfo(this.epcode, this.starttime, this.endtime);
-        getAlarmInfoPromise.catch((e) => console.log("fetchAlarmListAsync_e", e));
+        })
+        const getAlarmInfoPromise = getAlarmInfo(this.epcode, this.starttime, this.endtime)
+        getAlarmInfoPromise.catch((e) => console.log("fetchAlarmListAsync_e", e))
         getAlarmInfoPromise.then((data) => {
-            console.log("fetchAlarmListAsync_getAlarmInfoPromise", data);
+            console.log("fetchAlarmListAsync_getAlarmInfoPromise", data)
             this.setState({
                 dataSource: data,
                 loading: false
-            });
-        });
-    };
+            })
+        })
+    }
 
     // 获取报警列表-原始方法
     fetchAlarmList = () => {
         const requestOptions = {
             method: "GET",
             redirect: "follow"
-        };
-        console.log("fetchAlarmList", this.starttime, this.endtime);
-        this.setState({ loading: true });
+        }
+        console.log("fetchAlarmList", this.starttime, this.endtime)
+        this.setState({ loading: true })
         if (!this.epcode) {
-            this.epcode = "320802000005";
+            this.epcode = "320802000005"
         }
         fetch(
             // `http://${window.location.hostname}:8999/serverapi/event/total/alarmhis?epcode=${this.epcode}&alarmtype=1,2,4,5,8&begintime=${this.starttime}&endtime=${this.endtime}`,
@@ -1133,18 +1125,18 @@ class AnamalyDetectChartTab extends Component {
         )
             .then((response) => response.text())
             .then((result) => {
-                const httpResultJson = JSON.parse(result);
-                console.log(result);
-                this.setState({ loading: false });
+                const httpResultJson = JSON.parse(result)
+                console.log(result)
+                this.setState({ loading: false })
                 if (httpResultJson.info === "Success" && httpResultJson.data.length > 0) {
                     //  getch(result)
                     // eslint-disable-next-line no-use-before-define
-                    console.log("httpResultJson", httpResultJson);
+                    console.log("httpResultJson", httpResultJson)
 
-                    this.addAlarmInfo(JSON.stringify(httpResultJson));
+                    this.addAlarmInfo(JSON.stringify(httpResultJson))
                 }
-            });
-    };
+            })
+    }
 
     addAlarmInfo = (data) => {
         scriptUtil.excuteScriptService(
@@ -1157,21 +1149,21 @@ class AnamalyDetectChartTab extends Component {
                 // params: { epcode: '320802000005', beginTime:'2021-04-07+11:48:39',endTime:'2021-04-08+11:48:39'},
             },
             (res) => {
-                console.log("addAlarmInfo-------22", res);
+                console.log("addAlarmInfo-------22", res)
                 if (res.code === "200") {
-                    console.log("addAlarmInfo-------111", res);
+                    console.log("addAlarmInfo-------111", res)
                     this.setState({
                         dataSource: res.result
-                    });
+                    })
                     // selectAlarmInfo();
                 }
             }
-        );
-    };
+        )
+    }
 
     getTableDataBySelectFilter = (param) => {
-        const input = param;
-        console.log("input", input);
+        const input = param
+        console.log("input", input)
         scriptUtil.excuteScriptService(
             {
                 objName: "httpAlermInterface", // 对象实例名
@@ -1180,16 +1172,16 @@ class AnamalyDetectChartTab extends Component {
                 params: input
             },
             (res) => {
-                console.log("data", res);
+                console.log("data", res)
                 if (res.code === "200") {
                     this.setState({
                         // dataSource: res.result.list.data.dataSource,
                         dataSource: res.result
-                    });
+                    })
                 }
             }
-        );
-    };
+        )
+    }
 
     /**
      * @获取所选报警表格行对应的历史时刻的区间实时值
@@ -1197,57 +1189,57 @@ class AnamalyDetectChartTab extends Component {
     getchHisData = (selectedRows) => {
         const hisEndTime = moment(selectedRows.starttime)
             .add(1, "hours")
-            .format("YYYY-MM-DD HH:mm:ss");
+            .format("YYYY-MM-DD HH:mm:ss")
         const hisStartTime = moment(selectedRows.starttime)
             .subtract(12, "hours")
-            .format("YYYY-MM-DD HH:mm:ss");
+            .format("YYYY-MM-DD HH:mm:ss")
 
         const requestOptions = {
             method: "GET",
             redirect: "follow"
-        };
-        this.setState({ loading: true });
+        }
+        this.setState({ loading: true })
         fetch(
             `http://${window.location.hostname}:8999/serverapi/data/trend?epcode=${this.epcode}&sourcename=${selectedRows.sourcename}&begintime=${hisStartTime}&endtime=${hisEndTime}`,
             requestOptions
         )
             .then((response) => response.text())
             .then((result) => {
-                console.log(result);
-                this.setState({ loading: false });
-                const httpResultJson = JSON.parse(result);
+                console.log(result)
+                this.setState({ loading: false })
+                const httpResultJson = JSON.parse(result)
                 if (httpResultJson.info === "Success") {
-                    this.getCurveTableValue(httpResultJson.data[0]);
+                    this.getCurveTableValue(httpResultJson.data[0])
                 }
             })
-            .catch((error) => console.log("error", error));
-    };
+            .catch((error) => console.log("error", error))
+    }
 
     preTreatHisData = (hisData) => {
-        let res = {};
-        const arrArrAlermData = [];
-        const objArrAlermData = [];
-        console.log("hisData.length", hisData.length);
+        let res = {}
+        const arrArrAlermData = []
+        const objArrAlermData = []
+        console.log("hisData.length", hisData.length)
         hisData.forEach((item, index) => {
-            arrArrAlermData.push([moment.utc(item.time).valueOf(), item.value]);
+            arrArrAlermData.push([moment.utc(item.time).valueOf(), item.value])
             objArrAlermData.push({
                 id: index.toString(),
                 propValue: item.value,
                 // unit: 'mg/l',
                 unit: "",
                 time: moment(item.time).format("YYYY-MM-DD HH:mm:ss")
-            });
-        });
-        res = { arrArrAlermData, objArrAlermData };
-        return res;
-    };
+            })
+        })
+        res = { arrArrAlermData, objArrAlermData }
+        return res
+    }
 
     getCurveTableValue = (hisData) => {
-        console.log("hisData", hisData);
-        const curveTableValue = this.preTreatHisData(hisData);
-        console.log("curveTableValue", curveTableValue);
+        console.log("hisData", hisData)
+        const curveTableValue = this.preTreatHisData(hisData)
+        console.log("curveTableValue", curveTableValue)
         while (chart.series.length > 0) {
-            chart.series[0].remove(true);
+            chart.series[0].remove(true)
         }
         const seriesData = [
             {
@@ -1255,13 +1247,13 @@ class AnamalyDetectChartTab extends Component {
                 name: this.tag,
                 data: curveTableValue.arrArrAlermData
             }
-        ];
-        chart.addSeries(seriesData[0]);
+        ]
+        chart.addSeries(seriesData[0])
 
         this.setState({
             dataParam: curveTableValue.objArrAlermData
-        });
-    };
+        })
+    }
     /**
      *@查询历史值
      */
@@ -1284,31 +1276,31 @@ class AnamalyDetectChartTab extends Component {
         //   hisStartTime,
         //   hisEndTime
         // );
-        const propHisPromise = getHisDataByhttpInterface(selectedRows, this.epcode);
+        const propHisPromise = getHisDataByhttpInterface(selectedRows, this.epcode)
 
-        chart.showLoading();
-        this.setState({ paramLoading: true });
+        chart.showLoading()
+        this.setState({ paramLoading: true })
         // chart.hideLoading();
         propHisPromise.then((resArr) => {
-            console.log("propHisPromise", resArr);
+            console.log("propHisPromise", resArr)
             //   const hisData = resArr.reverse();
-            const hisData = resArr.data[0];
-            const curveTableValue = convertHisData(hisData);
+            const hisData = resArr.data[0]
+            const curveTableValue = convertHisData(hisData)
             //   const curveTableValue = this.preTreatHisData(hisData);
-            console.log("propHisPromise_curveTableValue", curveTableValue);
+            console.log("propHisPromise_curveTableValue", curveTableValue)
             while (chart.series.length > 0) {
-                chart.series[0].remove(true);
+                chart.series[0].remove(true)
             }
-            chart.xAxis[0].removePlotLine("plot-line-1"); // 把id为plot-line-1的标示线删除
-            this.tag = propsInfoArr[this.alarmSourceName];
+            chart.xAxis[0].removePlotLine("plot-line-1") // 把id为plot-line-1的标示线删除
+            this.tag = propsInfoArr[this.alarmSourceName]
             const seriesData = [
                 {
                     type: "line",
                     name: this.tag,
                     data: curveTableValue.arrArrAlermData
                 }
-            ];
-            chart.addSeries(seriesData[0]);
+            ]
+            chart.addSeries(seriesData[0])
             // TODO: 以报警开始时间绘制标尺线(直线函数：x = this.alarmStartTime)
             // moment.utc(item.time).valueOf()
             chart.xAxis[0].addPlotLine({
@@ -1318,15 +1310,15 @@ class AnamalyDetectChartTab extends Component {
                 color: "red", // 线的颜色，定义为红色
                 dashStyle: "longdashdot", // 标示线的样式，默认是solid（实线），这里定义为长虚线
                 id: "plot-line-1" // 标示线的id，在删除该标示线的时候需要该id标示
-            });
-            chart.hideLoading();
+            })
+            chart.hideLoading()
 
             this.setState({
                 paramLoading: false,
                 dataParam: curveTableValue.objArrAlermData
-            });
-        });
-    };
+            })
+        })
+    }
 
     //   getAnamalyCurveTable = param => {
     //     const input = param;
@@ -1361,18 +1353,18 @@ class AnamalyDetectChartTab extends Component {
     //   };
 
     onRangePickerChange = (value, dateString) => {
-        console.log("Selected Time: ", value);
-        console.log("Formatted Selected Time: ", dateString);
-        this.starttime = dateString[0];
-        this.endtime = dateString[1];
+        console.log("Selected Time: ", value)
+        console.log("Formatted Selected Time: ", dateString)
+        this.starttime = dateString[0]
+        this.endtime = dateString[1]
         // this.fetchAlarmList();
-    };
+    }
 
     onRangePickerOk = (value) => {
-        console.log("onOk: ", value);
-    };
+        console.log("onOk: ", value)
+    }
 
-    onSearch = (value) => console.log(value);
+    onSearch = (value) => console.log(value)
 
     /**
      * @table表格部分
@@ -1400,7 +1392,7 @@ class AnamalyDetectChartTab extends Component {
         //   //   e.currentTarget.style.color = 'black';
         //   e.currentTarget.style.backgroundColor = 'rgba(19,100,120,1)';
         //   selectColor = 'black';
-    };
+    }
 
     // 点击行
     /* const onTableRowDoubleClick = e => {
@@ -1419,61 +1411,61 @@ class AnamalyDetectChartTab extends Component {
         //   selectColor = e.currentTarget.style.color;
         //   //   e.currentTarget.style.color = 'black';
         //   e.currentTarget.style.backgroundColor = 'red';
-    };
+    }
 
     // 鼠标移出行
     onTableRowMouseLeaver = (e) => {
         // console.log(e);
         //   e.currentTarget.style.color = selectColor;
-    };
+    }
 
     // let compentRef;
     rowCheckSelect = (selectedRowKeys, selectedRows) => {
-        console.log("chart", chart);
+        console.log("chart", chart)
 
         chart.update({
             chart: {
                 type: "line"
             }
-        });
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, "selectedRows: ", selectedRows);
+        })
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, "selectedRows: ", selectedRows)
         console.log(
             moment(selectedRows[0].starttime).format("YYYY-MM-DD HH:mm:ss"),
             moment(selectedRows[0].starttime).valueOf()
-        );
+        )
         // console.log(
         //   'utc时间',
         //   moment(moment(selectedRows[0].starttime).valueOf())
         //     .utc()
         //     .format()
         // );
-        console.log("utc时间", moment(selectedRows[0].starttime).utc().format());
+        console.log("utc时间", moment(selectedRows[0].starttime).utc().format())
         if (selectedRows.length > 0) {
-            this.checkId = selectedRows[0].id;
+            this.checkId = selectedRows[0].id
             //   this.tag = selectedRows[0].devicename + selectedRows[0].sourceshowname;
             //   this.tag = propsInfoArr[selectedRows[0].sourcename];
-            this.alarmSourceName = selectedRows[0].sourcename;
+            this.alarmSourceName = selectedRows[0].sourcename
             const paramObj = {
                 alermTime: selectedRows[0].starttime
-            };
+            }
             /*  clearInterval(this.alarmFreshTime); */
             //   this.getchHisData(selectedRows[0]);
-            this.getAnamalyCurveTable(selectedRows[0]);
+            this.getAnamalyCurveTable(selectedRows[0])
             //   this.getAnamalyCurveTable(paramObj);
         } else {
-            this.checkId = null;
+            this.checkId = null
             //   this.forceUpdate();
-            this.setState({ state: this.state });
+            this.setState({ state: this.state })
             //   this.getAlermformList();
             /* this.alarmFreshTime = setInterval(() => {
         // this.getAlermformList();
         this.fetchAlarmList();
       }, 60000); */
         }
-    };
+    }
 
     selectFilterChange = (value) => {
-        this.arrFilterSelect = {};
+        this.arrFilterSelect = {}
 
         setTimeout(() => {
             this.arrFilterSelect = [
@@ -1481,12 +1473,12 @@ class AnamalyDetectChartTab extends Component {
                 ...this.equipmentFilterRef.current.rcSelect.state.value,
                 ...this.levelFilterRef.current.rcSelect.state.value,
                 ...this.anamalyCatagoryFilterRef.current.rcSelect.state.value
-            ];
+            ]
             let type = alarmTypeArr
                 .indexOf(this.anamalyCatagoryFilterRef.current.rcSelect.state.value[0])
-                .toString();
+                .toString()
             if (type === "-1") {
-                type = "";
+                type = ""
             }
             this.arrFilterSelectParam = {
                 staticFilter: this.staticFilterRef.current.rcSelect.state.value[0],
@@ -1495,21 +1487,21 @@ class AnamalyDetectChartTab extends Component {
                 anamalyCatagoryFilter:
                     this.anamalyCatagoryFilterRef.current.rcSelect.state.value[0],
                 anamalyTypeFilter: type
-            };
+            }
             console.log(
                 "arrFilterSelect",
                 this.arrFilterSelectParam
                 //   this.staticFilterRef.current.rcSelect.state.value
-            );
+            )
             console.log(
                 "anamalyTypeIndex",
                 alarmTypeArr
                     .indexOf(this.anamalyCatagoryFilterRef.current.rcSelect.state.value[0])
                     .toString()
-            );
-            this.getTableDataBySelectFilter(this.arrFilterSelectParam);
-        }, 200);
-    };
+            )
+            this.getTableDataBySelectFilter(this.arrFilterSelectParam)
+        }, 200)
+    }
 
     //   selectFilterOnBlur = value => {
     //     const arrFilterSelect = [];
@@ -1528,16 +1520,16 @@ class AnamalyDetectChartTab extends Component {
     //   };
 
     selectOnSearch = (value) => {
-        console.log("selectOnSearch", value);
-    };
+        console.log("selectOnSearch", value)
+    }
 
     /**
      * @Table页面切换
      */
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = { ...this.state.pagination };
-        pager.current = pagination.current;
-        console.log(pager);
+        const pager = { ...this.state.pagination }
+        pager.current = pagination.current
+        console.log(pager)
         /* this.setState({
       pagination: pager,
     }); */
@@ -1548,37 +1540,37 @@ class AnamalyDetectChartTab extends Component {
       sortOrder: sorter.order,
       ...filters,
     }); */
-    };
+    }
 
     componentDidMount = () => {
         // sumDataAnamalyCatagoryPicInit();
         // sumDataAnamalyLevelPicInit();
         // sumDataAnamalyEquipmentPicInit();
 
-        const oobj = parmseToObject();
-        console.log("oobj", oobj);
-        this.epcode = oobj.epcode;
-        console.log("epcodeepcode", this.epcode);
-        traceDataAnamalyParamHistoryPicInit();
+        const oobj = parmseToObject()
+        console.log("oobj", oobj)
+        this.epcode = oobj.epcode
+        console.log("epcodeepcode", this.epcode)
+        traceDataAnamalyParamHistoryPicInit()
         // this.getTableDataBySelectFilter('');
-        adapterPage();
-        window.onresize = adapterPage;
+        adapterPage()
+        window.onresize = adapterPage
         // this.getAlermformList();
         //* 如果传开始时间参数
         if (oobj.starttime !== "") {
-            console.log("oobj-传开始时间", oobj);
+            console.log("oobj-传开始时间", oobj)
             // TODO: 时间格式化为‘YYYY-MM-DD HH:mm:ss’
-            this.alarmStartTime = decodeURIComponent(oobj.starttime).replace(/\+/, " ");
-            this.alarmSourceName = decodeURIComponent(oobj.sourcename).split(",")[0];
+            this.alarmStartTime = decodeURIComponent(oobj.starttime).replace(/\+/, " ")
+            this.alarmSourceName = decodeURIComponent(oobj.sourcename).split(",")[0]
             console.log(
                 "alarmStartTime",
                 moment(this.alarmStartTime).add(1, "days").format("YYYY-MM-DD HH:mm:ss"),
                 this.alarmSourceName
-            );
-            this.endtime = moment(this.alarmStartTime).add(1, "days").format("YYYY-MM-DD HH:mm:ss");
+            )
+            this.endtime = moment(this.alarmStartTime).add(1, "days").format("YYYY-MM-DD HH:mm:ss")
             this.starttime = moment(this.alarmStartTime)
                 .subtract(12, "days")
-                .format("YYYY-MM-DD HH:mm:ss");
+                .format("YYYY-MM-DD HH:mm:ss")
             // TODO: 改变时间组件开始结束时间
 
             this.setState({
@@ -1586,31 +1578,31 @@ class AnamalyDetectChartTab extends Component {
                     moment(moment(this.alarmStartTime).subtract(12, "days"), "YYYY-MM-DD HH:mm:ss"),
                     moment(moment(this.alarmStartTime).add(1, "days"), "YYYY-MM-DD HH:mm:ss")
                 ]
-            });
+            })
 
             // TODO: 以报警开始时间绘制标尺线(直线函数：x = this.alarmStartTime)
-            this.fetchAlarmListAsync();
+            this.fetchAlarmListAsync()
             // TODO: 回溯历史报警曲线
             //   getInstanceDes(objectName)
-            console.log("propsInfoArr", propsInfoArr);
+            console.log("propsInfoArr", propsInfoArr)
             //   this.tag = propsInfoArr[this.alarmSourceName];
             const endtime = moment(this.alarmStartTime)
                 .add(1, "hours")
-                .format("YYYY-MM-DD HH:mm:ss");
+                .format("YYYY-MM-DD HH:mm:ss")
             const starttime = moment(this.alarmStartTime)
                 .subtract(1, "hours")
-                .format("YYYY-MM-DD HH:mm:ss");
-            const getAlarmInfoPromise = getAlarmInfo(this.epcode, starttime, endtime);
+                .format("YYYY-MM-DD HH:mm:ss")
+            const getAlarmInfoPromise = getAlarmInfo(this.epcode, starttime, endtime)
             getAlarmInfoPromise.then((result) => {
                 this.getAnamalyCurveTable({
                     starttime: this.alarmStartTime,
                     sourcename: this.alarmSourceName
-                });
-            });
+                })
+            })
         } else {
             // 原始用法
             // this.fetchAlarmList();
-            this.fetchAlarmListAsync();
+            this.fetchAlarmListAsync()
         }
         // getInstanceInfo('GK_CZ_LY_DEWSC').then(res => {
         //   if (res.code === '200') {
@@ -1632,24 +1624,24 @@ class AnamalyDetectChartTab extends Component {
         //     script.onload = () => this.scriptLoaded();
         //     document.body.appendChild(script);
         // console.log('statisticTableRef.current', statisticTableRef.current);
-        console.log("this", this);
+        console.log("this", this)
         // compentRef = this;
         /* const timeObj = setInterval(() => {
       console.log('1秒', data);
       this.forceUpdate();
     }, 1000); */
-    };
+    }
 
     render() {
         const { dataSource, dataParam, pagination, loading, paramLoading, timeRangeValue } =
-            this.state;
+            this.state
 
         // eslint-disable-next-line prefer-const
         let rowSelection = {
             type: "radio",
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log("selectedRowKeys", selectedRowKeys);
-                this.rowCheckSelect(selectedRowKeys, selectedRows);
+                console.log("selectedRowKeys", selectedRowKeys)
+                this.rowCheckSelect(selectedRowKeys, selectedRows)
                 // eslint-disable-next-line no-use-before-define
             },
             getCheckboxProps: (record) => {
@@ -1661,9 +1653,9 @@ class AnamalyDetectChartTab extends Component {
                 //     name: record.name,
                 //   };
                 // }
-                return {};
+                return {}
             }
-        };
+        }
         /**
          * todo:***************************************************************************
          * todo:*********************************************************************************
@@ -1675,15 +1667,15 @@ class AnamalyDetectChartTab extends Component {
          */
 
         const anamalyStaticContainer = (
-            <div id="anamalyStaticContainer">{anamalyStatisNumberChildern}</div>
-        );
+            <div id='anamalyStaticContainer'>{anamalyStatisNumberChildern}</div>
+        )
 
         const loadingDiv = (
             <div>
                 Loading...
                 <div>网速有点慢哈</div>
             </div>
-        );
+        )
         // const statisticChartContainer = (
         //   <div id="statisticChartContainer">
         //     <div id="anamaly-static-container">{anamalyStaticContainer}</div>
@@ -1705,7 +1697,7 @@ class AnamalyDetectChartTab extends Component {
 
         const staticFilterSelect = (
             <Select
-                className="statistic-filter-select"
+                className='statistic-filter-select'
                 ref={this.staticFilterRef}
                 dropdownStyle={{ backgroundColor: "rgba(135,158,192,0.9)" }}
                 allowClear
@@ -1713,83 +1705,83 @@ class AnamalyDetectChartTab extends Component {
                 onBlur={this.selectFilterOnBlur}
                 onChange={this.selectFilterChange}
                 onSearch={this.selectOnSearch}
-                placeholder="异常状态筛选"
+                placeholder='异常状态筛选'
             >
                 {staticChildren}
             </Select>
-        );
+        )
         const equipmentFilterSelect = (
             <Select
-                className="statistic-filter-select"
+                className='statistic-filter-select'
                 ref={this.equipmentFilterRef}
                 dropdownStyle={{ backgroundColor: "rgba(135,158,192,0.9)" }}
                 allowClear
                 onBlur={this.selectFilterOnBlur}
                 onChange={this.selectFilterChange}
-                placeholder="异常设备筛选"
+                placeholder='异常设备筛选'
             >
                 {equipmentChildren}
             </Select>
-        );
+        )
         const levelFilterSelect = (
             <Select
-                className="statistic-filter-select"
+                className='statistic-filter-select'
                 ref={this.levelFilterRef}
                 dropdownStyle={{ backgroundColor: "rgba(135,158,192,0.9)" }}
                 allowClear
                 onBlur={this.selectFilterOnBlur}
                 onChange={this.selectFilterChange}
-                placeholder="异常等级筛选"
+                placeholder='异常等级筛选'
             >
                 {anamalyLevelChildren}
             </Select>
-        );
+        )
         const anamalyCatagoryFilterSelect = (
             <Select
-                className="statistic-filter-select"
+                className='statistic-filter-select'
                 ref={this.anamalyCatagoryFilterRef}
                 dropdownStyle={{ backgroundColor: "rgba(135,158,192,0.9)" }}
                 allowClear
                 onBlur={this.selectFilterOnBlur}
                 onChange={this.selectFilterChange}
-                placeholder="异常类型筛选"
+                placeholder='异常类型筛选'
             >
                 {anamalyCatagoryChildren}
             </Select>
-        );
+        )
 
         /**
          * @统计表格部分
          * @按照多种类别对统计表格进行筛选
          */
         const statisTableFilterContainer = (
-            <div id="statisTableFilterContainer">
-                <div id="static-filter" className="table-filter">
+            <div id='statisTableFilterContainer'>
+                <div id='static-filter' className='table-filter'>
                     {staticFilterSelect}
                 </div>
-                <div id="equipment-filter" className="table-filter">
+                <div id='equipment-filter' className='table-filter'>
                     {equipmentFilterSelect}
                 </div>
-                <div id="level-filter" className="table-filter">
+                <div id='level-filter' className='table-filter'>
                     {levelFilterSelect}
                 </div>
-                <div id="anamaly-catagory-filter" className="table-filter">
+                <div id='anamaly-catagory-filter' className='table-filter'>
                     {anamalyCatagoryFilterSelect}
                 </div>
             </div>
-        );
+        )
         /**
          * @统计表格部分
          * @表格主体部分
          */
-        const { RangePicker } = DatePicker;
+        const { RangePicker } = DatePicker
         // const statisticTableRef = React.createRef();
         const statisticTable = (
-            <div id="statisticTable">
-                <div id="statistic-table-header">
+            <div id='statisticTable'>
+                <div id='statistic-table-header'>
                     {statisTableFilterContainer}
                     <div
-                        id="statistic-table-header-right"
+                        id='statistic-table-header-right'
                         /* style={{
               width: '450px',
               height: '38px',
@@ -1806,16 +1798,16 @@ class AnamalyDetectChartTab extends Component {
                             defaultValue={timeRangeValue}
                             value={timeRangeValue}
                             showTime={{ format: "HH:mm:ss" }}
-                            format="YYYY-MM-DD HH:mm:ss"
+                            format='YYYY-MM-DD HH:mm:ss'
                             onChange={this.onRangePickerChange}
                             onOk={this.onRangePickerOk}
                         />
-                        <Button className="anamaly-check-btn" onClick={this.checkAnamaly}>
+                        <Button className='anamaly-check-btn' onClick={this.checkAnamaly}>
                             查询
                         </Button>
                     </div>
                 </div>
-                <div id="statistic-table-body">
+                <div id='statistic-table-body'>
                     <Table
                         // ref={statisticTableRef}
                         rowSelection={{
@@ -1829,31 +1821,31 @@ class AnamalyDetectChartTab extends Component {
                         scroll={{ y: 180 }}
                         loading={loading}
                         /* onChange={this.handleTableChange} */
-                        size="small"
+                        size='small'
                         onRow={(record) => {
                             return {
                                 onClick: (event) => {
-                                    this.onTableRowclick(event);
+                                    this.onTableRowclick(event)
                                 }, // 点击行
                                 onDoubleClick: (event) => {
-                                    this.onTableRowDoubleClick(event);
+                                    this.onTableRowDoubleClick(event)
                                 },
                                 onContextMenu: (event) => {
-                                    this.onTableRowContextMenu(event);
+                                    this.onTableRowContextMenu(event)
                                 },
                                 onMouseEnter: (event) => {
-                                    this.onTableRowMouseEnter(event);
+                                    this.onTableRowMouseEnter(event)
                                 }, // 鼠标移入行
                                 onMouseLeave: (event) => {
-                                    this.onTableRowMouseLeaver(event);
+                                    this.onTableRowMouseLeaver(event)
                                 }
-                            };
+                            }
                         }}
                         /* bordered */
                     />
                 </div>
             </div>
-        );
+        )
         /**
          * @统计表格部分
          * @主框架
@@ -1870,20 +1862,20 @@ class AnamalyDetectChartTab extends Component {
          * @数据异动核心部分
          * @参数表格部分
          */
-        const { Search } = Input;
+        const { Search } = Input
         const paramCatagoryFilterSelect = (
             <Select
-                className="param-filter-select"
+                className='param-filter-select'
                 dropdownStyle={{ backgroundColor: "rgba(135,158,192,0.9)" }}
                 allowClear
-                placeholder="请选择参数"
+                placeholder='请选择参数'
             >
                 {anamalyCatagoryChildren}
             </Select>
-        );
+        )
 
         const dataAnamalyParametersTable = (
-            <div id="dataAnamalyParametersTable" style={{ width: "100%", height: "100%" }}>
+            <div id='dataAnamalyParametersTable' style={{ width: "100%", height: "100%" }}>
                 {/* <div id="anamaly-param-form-content-header">
        {paramCatagoryFilterSelect}
        <Search
@@ -1892,7 +1884,7 @@ class AnamalyDetectChartTab extends Component {
          style={{ width: 200 }}
        />
      </div> */}
-                <div id="anamaly-param-form-content-table">
+                <div id='anamaly-param-form-content-table'>
                     <Table
                         columns={columnsParam}
                         dataSource={dataParam}
@@ -1900,11 +1892,11 @@ class AnamalyDetectChartTab extends Component {
                         loading={paramLoading}
                         scroll={{ y: 180 }}
                         /* bordered */
-                        size="small"
+                        size='small'
                     />
                 </div>
             </div>
-        );
+        )
         /**
          * @数据异动核心部分
          * @单曲线数据异动呈现
@@ -1912,57 +1904,57 @@ class AnamalyDetectChartTab extends Component {
          *
          */
         const dataAnamalySingleCurve = (
-            <div id="dataAnamalySingleCurve">
-                <div id="single-curve-container" className="curve-container" />
+            <div id='dataAnamalySingleCurve'>
+                <div id='single-curve-container' className='curve-container' />
             </div>
-        );
+        )
         /**
          * @数据异动核心部分
          * @双曲线数据异动呈现
          * @设限值
          */
         const dataAnamalyDoubleCurve = (
-            <div id="dataAnamalyDoubleCurve">
-                <div id="double-curve-container" className="curve-container" />
+            <div id='dataAnamalyDoubleCurve'>
+                <div id='double-curve-container' className='curve-container' />
             </div>
-        );
+        )
         /**
          * @数据异动核心部分
          * @组合曲线数据异动呈现
          * @关联度异常监测曲线
          */
         const dataAnamalyGroupCurve = (
-            <div id="dataAnamalyGroupCurve">
-                <div id="group-curve-container" className="curve-container" />
+            <div id='dataAnamalyGroupCurve'>
+                <div id='group-curve-container' className='curve-container' />
             </div>
-        );
+        )
         /**
          * @数据异动核心部分
          * @数据异动曲线呈现框架
          */
         const dataAnamalyChartContainer = (
-            <div id="dataAnamalyChartContainer">
-                <div id="data-anamaly-single-curve" className="data-anamaly-curve">
+            <div id='dataAnamalyChartContainer'>
+                <div id='data-anamaly-single-curve' className='data-anamaly-curve'>
                     {dataAnamalySingleCurve}
                 </div>
-                <div id="data-anamaly-double-curve" className="data-anamaly-curve">
+                <div id='data-anamaly-double-curve' className='data-anamaly-curve'>
                     {dataAnamalyDoubleCurve}
                 </div>
-                <div id="data-anamaly-group-curve" className="data-anamaly-curve">
+                <div id='data-anamaly-group-curve' className='data-anamaly-curve'>
                     {dataAnamalyGroupCurve}
                 </div>
             </div>
-        );
+        )
         /**
          * @数据异动核心部分
          * @主框架
          */
         const dataAnamalyContainer = (
-            <div id="dataAnamalyContainer">
-                <div id="data-anamaly-parameters-table">{dataAnamalyParametersTable}</div>
-                <div id="data-anamaly-chart-container">{dataAnamalyChartContainer}</div>
+            <div id='dataAnamalyContainer'>
+                <div id='data-anamaly-parameters-table'>{dataAnamalyParametersTable}</div>
+                <div id='data-anamaly-chart-container'>{dataAnamalyChartContainer}</div>
             </div>
-        );
+        )
         /**
          *@svg背景部分
          *@异常检测表背景
@@ -1976,7 +1968,7 @@ class AnamalyDetectChartTab extends Component {
                 }}
             >
                 <svg
-                    version="1.1"
+                    version='1.1'
                     style={{
                         width: "14px",
                         height: "10.98px",
@@ -1985,15 +1977,15 @@ class AnamalyDetectChartTab extends Component {
                     }}
                 >
                     <path
-                        fill="transparent"
-                        stroke="#DFF0FE"
-                        strokeWidth="4"
-                        d="M0 2 L 8 2 T 14 20"
-                        className="path"
+                        fill='transparent'
+                        stroke='#DFF0FE'
+                        strokeWidth='4'
+                        d='M0 2 L 8 2 T 14 20'
+                        className='path'
                     />
                 </svg>
                 <svg
-                    version="1.1"
+                    version='1.1'
                     style={{
                         width: "100%",
                         height: "350px",
@@ -2002,46 +1994,46 @@ class AnamalyDetectChartTab extends Component {
                     }}
                 >
                     <path
-                        fill="#09344C"
-                        stroke="#09344C"
-                        strokeWidth="1"
-                        d="M1373 3 L 5 3 L 5 318 L 100 350 L 1393 350 T 1393 17"
-                        className="path"
+                        fill='#09344C'
+                        stroke='#09344C'
+                        strokeWidth='1'
+                        d='M1373 3 L 5 3 L 5 318 L 100 350 L 1393 350 T 1393 17'
+                        className='path'
                     />
                     <path
-                        fill="transparent"
-                        stroke="#00898B"
-                        strokeWidth="1"
-                        d="M1380 1 L 2 1 L 2 350 T 1398 350"
-                        className="path"
+                        fill='transparent'
+                        stroke='#00898B'
+                        strokeWidth='1'
+                        d='M1380 1 L 2 1 L 2 350 T 1398 350'
+                        className='path'
                     />
                     <path
-                        fill="transparent"
-                        stroke="#00898B"
-                        strokeWidth="1"
-                        d="M1398 350 T 1398 17"
-                        className="path"
+                        fill='transparent'
+                        stroke='#00898B'
+                        strokeWidth='1'
+                        d='M1398 350 T 1398 17'
+                        className='path'
                     />
                 </svg>
             </div>
-        );
+        )
 
         const anamalyDetectFormBorder = (
-            <div id="bg-anamaly-chart-form-border">
-                <div id="bg-anamaly-chart-form-border-left">
-                    <div className="form-border-left" />
-                    <div className="form-border-left" />
-                    <div className="form-border-left" />
-                    <div className="form-border-left" />
-                    <div className="form-border-left" />
+            <div id='bg-anamaly-chart-form-border'>
+                <div id='bg-anamaly-chart-form-border-left'>
+                    <div className='form-border-left' />
+                    <div className='form-border-left' />
+                    <div className='form-border-left' />
+                    <div className='form-border-left' />
+                    <div className='form-border-left' />
                 </div>
-                <div id="bg-anamaly-chart-form-border-right">
-                    <div className="form-border-right" />
-                    <div className="form-border-right" />
-                    <div className="form-border-right" />
+                <div id='bg-anamaly-chart-form-border-right'>
+                    <div className='form-border-right' />
+                    <div className='form-border-right' />
+                    <div className='form-border-right' />
                 </div>
             </div>
-        );
+        )
 
         /**
          *@svg背景部分
@@ -2059,8 +2051,8 @@ class AnamalyDetectChartTab extends Component {
        src={bgAnamalyParamTopRight}
        type="image/svg+xml"
      /> */}
-                <img id="anamaly-param-top-right" src={bgAnamalyParamTopRight} alt="1" />
-                <img id="anamaly-param-top-left" src={bgAnamalyParamTopLeft} alt="2" />
+                <img id='anamaly-param-top-right' src={bgAnamalyParamTopRight} alt='1' />
+                <img id='anamaly-param-top-left' src={bgAnamalyParamTopLeft} alt='2' />
                 {/* <svg
        version="1.1"
        style={{
@@ -2096,7 +2088,7 @@ class AnamalyDetectChartTab extends Component {
        />
      </svg> */}
                 <svg
-                    version="1.1"
+                    version='1.1'
                     style={{
                         width: "100%",
                         height: "100%",
@@ -2105,65 +2097,65 @@ class AnamalyDetectChartTab extends Component {
                     }}
                 >
                     <path
-                        fill="#09344C"
-                        stroke="#09344C"
-                        strokeWidth="1"
-                        d="M445 5 L 11 5 L5 12 L 5 257 L 25 284 L 451 284 L 451 12 T 445 5"
-                        className="path"
+                        fill='#09344C'
+                        stroke='#09344C'
+                        strokeWidth='1'
+                        d='M445 5 L 11 5 L5 12 L 5 257 L 25 284 L 451 284 L 451 12 T 445 5'
+                        className='path'
                     />
                     <path
-                        fill="transparent"
-                        stroke="#00898B"
-                        strokeWidth="1"
-                        d="M430 1 T 26 1 "
-                        className="path"
+                        fill='transparent'
+                        stroke='#00898B'
+                        strokeWidth='1'
+                        d='M430 1 T 26 1 '
+                        className='path'
                     />
                     <path
-                        fill="transparent"
-                        stroke="#00898B"
-                        strokeWidth="1"
-                        d="M2 12 L 2 257 L 25 284 L 454 284 T 454 12"
-                        className="path"
+                        fill='transparent'
+                        stroke='#00898B'
+                        strokeWidth='1'
+                        d='M2 12 L 2 257 L 25 284 L 454 284 T 454 12'
+                        className='path'
                     />
                 </svg>
             </div>
-        );
+        )
         const anamalyDetectParamBorder = (
-            <div id="bg-anamaly-chart-param-border">
-                <div id="bg-anamaly-chart-param-border-left">
-                    <div className="param-border-left" />
-                    <div className="param-border-left" />
-                    <div className="param-border-left" />
-                    <div className="param-border-left" />
-                    <div className="param-border-left" />
+            <div id='bg-anamaly-chart-param-border'>
+                <div id='bg-anamaly-chart-param-border-left'>
+                    <div className='param-border-left' />
+                    <div className='param-border-left' />
+                    <div className='param-border-left' />
+                    <div className='param-border-left' />
+                    <div className='param-border-left' />
                 </div>
-                <div id="bg-anamaly-chart-param-border-right">
-                    <div className="param-border-right" />
-                    <div className="param-border-right" />
-                    <div className="param-border-right" />
+                <div id='bg-anamaly-chart-param-border-right'>
+                    <div className='param-border-right' />
+                    <div className='param-border-right' />
+                    <div className='param-border-right' />
                 </div>
             </div>
-        );
+        )
 
         /**
          * @标签页部分
          * @标签页序列1_异常检测图表_总体内容_框架
          */
         const anamalyDetectFormContentFrame = (
-            <div id="anamaly-detect-form-content-frame">
-                <div id="anamaly-detect-form-logo">
+            <div id='anamaly-detect-form-content-frame'>
+                <div id='anamaly-detect-form-logo'>
                     {/*       <img
          id="anamaly-detect-form-logo-svg"
          src={bgAnamalyDetectFormLogo}
          alt="3"
        /> */}
-                    <div id="form-logo-inframe">
-                        <div id="anamaly-detect-form-logo-text">异常监测图表</div>
+                    <div id='form-logo-inframe'>
+                        <div id='anamaly-detect-form-logo-text'>异常监测图表</div>
                     </div>
                 </div>
-                <div id="anamaly-detect-form-content">{statisticTable}</div>
+                <div id='anamaly-detect-form-content'>{statisticTable}</div>
             </div>
-        );
+        )
 
         /**
          * @标签页部分
@@ -2181,7 +2173,7 @@ class AnamalyDetectChartTab extends Component {
                 {anamalyDetectFormBorder}
                 {anamalyDetectFormContentFrame}
             </div>
-        );
+        )
         const anamalyParamForm = (
             <div
                 style={{
@@ -2200,40 +2192,40 @@ class AnamalyDetectChartTab extends Component {
                     }}
                 >
                     {anamalyDetectParamBorder}
-                    <div id="anamaly-param-form-content" style={{ width: "100%", height: "100%" }}>
+                    <div id='anamaly-param-form-content' style={{ width: "100%", height: "100%" }}>
                         {dataAnamalyParametersTable}
                         {/* <div id="anamaly-param-form-content-header">表格头</div>
          <div id="anamaly-param-form-content-table">表格</div> */}
                     </div>
                 </div>
             </div>
-        );
+        )
         /**
          * @异常检测图
          */
 
-        const anamalyDetectPic = <div id="anamalyDetectPic" />;
+        const anamalyDetectPic = <div id='anamalyDetectPic' />
         const anamalyDetectChartTab = (
-            <div id="anamaly-detect-chart-tab">
-                <div id="anamaly-detect-form">
+            <div id='anamaly-detect-chart-tab'>
+                <div id='anamaly-detect-form'>
                     {anamalyDetectFormSVG}
                     {anamalyDetectForm}
                 </div>
-                <div id="anamaly-detect-param-pic">
-                    <div id="anamaly-detect-pic">{anamalyDetectPic}</div>
-                    <div id="anamaly-detect-param">{anamalyParamForm}</div>
+                <div id='anamaly-detect-param-pic'>
+                    <div id='anamaly-detect-pic'>{anamalyDetectPic}</div>
+                    <div id='anamaly-detect-param'>{anamalyParamForm}</div>
                 </div>
             </div>
-        );
+        )
         /**
          * @标签页部分
          * @标签页序列2_异动种类分析_背景
          */
         const bgAnamalyCatagoryStatisticLogo = (
-            <div id="anamaly-catagory-statistic-logo">
-                <div id="anamaly-catagory-statistic-logo-text">异动种类分析</div>
+            <div id='anamaly-catagory-statistic-logo'>
+                <div id='anamaly-catagory-statistic-logo-text'>异动种类分析</div>
             </div>
-        );
+        )
         const bgAnamalyCatagoryStatisticSVG = (
             <div
                 style={{
@@ -2242,34 +2234,34 @@ class AnamalyDetectChartTab extends Component {
                 }}
             >
                 <svg
-                    version="1.1"
+                    version='1.1'
                     style={{
                         width: "100%",
                         height: "100%"
                     }}
                 >
                     <path
-                        fill="transparent"
-                        stroke="#017F84"
-                        strokeWidth="1"
-                        d="M899 40 T 899 630 "
-                        className="path"
+                        fill='transparent'
+                        stroke='#017F84'
+                        strokeWidth='1'
+                        d='M899 40 T 899 630 '
+                        className='path'
                     />
                     <path
-                        fill="transparent"
-                        stroke="#017F84"
-                        strokeWidth="1"
-                        d="M899 342 T 1369 342 "
-                        className="path"
+                        fill='transparent'
+                        stroke='#017F84'
+                        strokeWidth='1'
+                        d='M899 342 T 1369 342 '
+                        className='path'
                     />
                 </svg>
             </div>
-        );
+        )
         const bgAnamalyCatagoryStatistic = (
-            <div id="bgAnamalyCatagoryStatistic">
-                <div id="bg-anamaly-catagory-statistic-logo">{bgAnamalyCatagoryStatisticLogo}</div>
+            <div id='bgAnamalyCatagoryStatistic'>
+                <div id='bg-anamaly-catagory-statistic-logo'>{bgAnamalyCatagoryStatisticLogo}</div>
                 <div
-                    id="bg-anamaly-catagory-statistic-svg"
+                    id='bg-anamaly-catagory-statistic-svg'
                     style={{
                         width: "1400px",
                         height: "684px",
@@ -2280,48 +2272,48 @@ class AnamalyDetectChartTab extends Component {
                     {bgAnamalyCatagoryStatisticSVG}
                 </div>
             </div>
-        );
+        )
         /**
          * @标签页部分
          * @标签页序列2_异动种类分析_内容
          */
         const anamalyDetectTotalPic = (
             <div
-                id="anamaly-detect-total-pic-container"
+                id='anamaly-detect-total-pic-container'
                 style={{
                     width: "837px",
                     height: "570px"
                 }}
             />
-        );
+        )
         const anamalyDectectLevelProportionPic = (
             <div
-                id="anamaly-detect-level-proportion-pic-container"
+                id='anamaly-detect-level-proportion-pic-container'
                 style={{
                     width: "470px",
                     height: "278px"
                 }}
             />
-        );
+        )
         const anamalyDectectEquipmentProportionPic = (
             <div
-                id="anamaly-detect-equipment-proportion-pic-container"
+                id='anamaly-detect-equipment-proportion-pic-container'
                 style={{
                     width: "470px",
                     height: "278px"
                 }}
             />
-        );
+        )
         const contentAnamalyCatagoryStatistic = (
             <div
-                id="contentAnamalyCatagoryStatistic"
+                id='contentAnamalyCatagoryStatistic'
                 style={{
                     width: "1400px",
                     height: "684px"
                 }}
             >
                 <div
-                    id="anamaly-detect-total-pic"
+                    id='anamaly-detect-total-pic'
                     style={{
                         width: "837px",
                         height: "570px"
@@ -2330,7 +2322,7 @@ class AnamalyDetectChartTab extends Component {
                     {anamalyDetectTotalPic}
                 </div>
                 <div
-                    id="anamaly-detect-level-proportion-pic"
+                    id='anamaly-detect-level-proportion-pic'
                     style={{
                         width: "470px",
                         height: "278px"
@@ -2339,7 +2331,7 @@ class AnamalyDetectChartTab extends Component {
                     {anamalyDectectLevelProportionPic}
                 </div>
                 <div
-                    id="anamaly-detect-equipment-proportion-pic"
+                    id='anamaly-detect-equipment-proportion-pic'
                     style={{
                         width: "470px",
                         height: "278px",
@@ -2350,22 +2342,22 @@ class AnamalyDetectChartTab extends Component {
                     {anamalyDectectEquipmentProportionPic}
                 </div>
             </div>
-        );
+        )
         /**
          * @标签页部分
          * @标签页序列2_异动种类分析_总体框架
          */
 
         const anamalyCatagoryStatisticTab = (
-            <div id="anamaly-catagory-statistic-tab">
+            <div id='anamaly-catagory-statistic-tab'>
                 <div
-                    id="bg-anamaly-catagory-statistic"
+                    id='bg-anamaly-catagory-statistic'
                     /* style={{ width: '1400px', height: '684px', position: 'absolute' }} */
                 >
                     {bgAnamalyCatagoryStatistic}
                 </div>
                 <div
-                    id="content-anamaly-catagory-statistic"
+                    id='content-anamaly-catagory-statistic'
                     style={{
                         width: "1400px",
                         height: "684px",
@@ -2376,48 +2368,48 @@ class AnamalyDetectChartTab extends Component {
                     {contentAnamalyCatagoryStatistic}
                 </div>
             </div>
-        );
+        )
 
         /**
          * @标签页部分
          * @标签页框架
          */
-        const { TabPane } = Tabs;
+        const { TabPane } = Tabs
         const anamalyTabContainer = (
             <Tabs
-                defaultActiveKey="2"
+                defaultActiveKey='2'
                 animated={{ inkBar: false, tabPane: false }}
                 onChange={tabsCallback}
             >
                 <TabPane
-                    forceRender="true"
+                    forceRender='true'
                     tab={<span style={{ fontSize: 18 }}>异常监测图表</span>}
-                    key="1"
+                    key='1'
                 >
                     {anamalyDetectChartTab}
                 </TabPane>
                 <TabPane
-                    forceRender="true"
+                    forceRender='true'
                     tab={<span style={{ fontSize: 18 }}>异动种类分析</span>}
-                    key="2"
+                    key='2'
                 >
                     {anamalyCatagoryStatisticTab}
                 </TabPane>
             </Tabs>
-        );
+        )
 
         return (
             // 异动分析总框架
 
-            <div id="data-anamaly-tabs">{anamalyDetectChartTab}</div>
-        );
+            <div id='data-anamaly-tabs'>{anamalyDetectChartTab}</div>
+        )
     }
 }
 
-export default AnamalyDetectChartTab;
+export default AnamalyDetectChartTab
 
-const css = document.createElement("style");
-css.type = "text/css";
+const css = document.createElement("style")
+css.type = "text/css"
 css.innerHTML = `
 
 text.highcharts-credits {
@@ -3614,6 +3606,6 @@ text.highcharts-title{
 #htDiv-kkf8i7oj0-1760{
     transform: matrix(1, 0, 0, 1, 1022, 2000);
 }
-`;
+`
 
-document.getElementsByTagName("head")[0].appendChild(css);
+document.getElementsByTagName("head")[0].appendChild(css)

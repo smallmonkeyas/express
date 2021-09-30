@@ -41,6 +41,8 @@ services:
         # tty: true # -t tty
         # privileged: true
         # entrypoint: ["/bin/sh"] # 执行 sh
+        entrypoint: ["mongod", "--bind_ip_all"] # 执行 sh
+        # entrypoint: ["docker-entrypoint.sh"] # 执行 sh
 # volumes:
 #     mongodb:
 networks:
