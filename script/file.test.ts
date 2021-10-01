@@ -2,15 +2,15 @@
 /*
  * @Author: your name
  * @Date: 2021-09-06 21:38:49
- * @LastEditTime: 2021-09-28 00:01:19
+ * @LastEditTime: 2021-09-30 20:18:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\script\file.test.ts
  */
 
-import { path, XLSX, xlsx, fs, file } from "../modulejs"
+import { path, XLSX, xlsx, fs, file, ExcelTemplate, Excel } from "../modulejs"
 import { objnameTempleFileConfig, objnameFileConfig } from "../src/config"
-const EXCEL = require("xlsx-style")
+// const EXCEL = require("xlsx-style")
 // // let dir = __dirname;
 // // let configDir = path.resolve(process.cwd(), './');
 // let configDir = path.resolve(__dirname, "./")
@@ -86,7 +86,7 @@ const EXCEL = require("xlsx-style")
 // var sheetNames = workbook.SheetNames
 // var worksheet = workbook.Sheets[sheetNames[2]]
 var datas = []
-for (let ii = 0; ii < 11; ii++) {
+for (let ii = 0; ii < 1001; ii++) {
     // for (let jj = 0; jj < Math.ceil(ii / 100); jj++) {
     var excelJson = {
         objName: "GenericObject_008",
@@ -116,7 +116,7 @@ for (let ii = 0; ii < 11; ii++) {
 // let content = fs.readFileSync("E:/Download_Temp/Google/对象实例信息.xlsx", "utf-8")
 // // let tempCode = JSON.parse(content)
 // console.log("content", content)
-const ejsexcel = require("ejsexcel") // 官网教程： https://github.com/sail-sail/ejsExcel
+// const ejsexcel = require("ejsexcel") // 官网教程： https://github.com/sail-sail/ejsExcel
 // const fs = require("fs")
 const util = require("util")
 const readFileAsync = util.promisify(fs.readFile)
@@ -134,20 +134,22 @@ const writeFileAsync = util.promisify(fs.writeFile)
 
     // 用数据源(对象)data渲染Excel模板
     // cachePath 为编译缓存路径, 对于模板文件比较大的情况, 可显著提高运行效率, 绝对路径, 若不设置, 则无缓存
-    const exlBuf2 = await ejsexcel.renderExcel(exlBuf, data)
+    const exlBuf2 = await ExcelTemplate.renderExcel(exlBuf, data, {
+        cachePath: `${objnameFileConfig.filePath}/cache`
+    })
     // await writeFileAsync("E:/Download_Temp/Google/对象实例创建测试/对象实例信息12.xlsx", exlBuf2)
     const fileOutDir = `${objnameFileConfig.filePath}/${objnameFileConfig.fileName}.${objnameFileConfig.fileExtension}`
 
     // // const pathOutDir = path.resolve(__dirname, "./对象实例生成1.xlsx")
-    fs.writeFileSync(fileOutDir, exlBuf2, { type: "buffer" })
+    // fs.writeFileSync(fileOutDir, exlBuf2, { type: "buffer" })
     let fileOutDir1 = `${objnameFileConfig.filePath}/${objnameFileConfig.fileName}1.${objnameFileConfig.fileExtension}`
-    const fileR = fs.createReadStream(fileOutDir)
+    // const fileR = fs.createReadStream(fileOutDir)
     // const strFileR = JSON.stringify(fileR)
     // console.log(strFileR)
-    const fileR1 = fs.createReadStream(fileOutDir1)
+    // const fileR1 = fs.createReadStream(fileOutDir1)
     // const fileR1 = await readFileAsync(fileOutDir1)
-    fs.writeFileSync(`${objnameFileConfig.filePath}/fileOutOrigin.txt`, JSON.stringify(fileR))
-    fs.writeFileSync(`${objnameFileConfig.filePath}/fileOutTrue.txt`, JSON.stringify(fileR1))
+    // fs.writeFileSync(`${objnameFileConfig.filePath}/fileOutOrigin.txt`, JSON.stringify(fileR))
+    // fs.writeFileSync(`${objnameFileConfig.filePath}/fileOutTrue.txt`, JSON.stringify(fileR1))
     // console.log(new Uint8Array(exlBuf2))
     // fs.writeFileSync(fileOutDir, new Uint8Array(exlBuf2))
     // let value = fs.createReadStream(fileOutDir)
@@ -161,5 +163,5 @@ const writeFileAsync = util.promisify(fs.writeFile)
     //   let workbookOrigin = await workbook.xlsx.readFile(pathOutDir);
     await workbook.xlsx.load(exlBuf2)
     //   console.log("workbookOrigin", workbookOrigin);
-    await workbook.xlsx.writeFile(pathOutDir1)
+    await workbook.xlsx.writeFile(fileOutDir1)
 })()

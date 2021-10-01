@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-31 11:23:25
- * @LastEditTime: 2021-09-28 14:03:37
+ * @LastEditTime: 2021-09-30 18:18:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\module.ts
@@ -14,6 +14,9 @@ export const XLSX = require("xlsx")
 
 export const xlsx = require("node-xlsx")
 export const Excel = require("exceljs")
+// export { renderExcel } from "ejsexcel" // excel模板化插件，官网教程： https://github.com/sail-sail/ejsExcel
+
+export const ExcelTemplate = require("ejsexcel") // excel模板化插件，官网教程： https://github.com/sail-sail/ejsExcel
 export const fs = require("fs")
 export const moment = require("moment")
 export const os = require("os")

@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-05 01:33:25
- * @LastEditTime: 2021-09-30 16:59:15
+ * @LastEditTime: 2021-10-01 21:59:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\main\index.ts
@@ -129,6 +129,7 @@ class CTask extends AbsTask {
                 // res.push(createObjRes);
             }
         }
+
         // 保存属性增加记录
         XLSX_JSON.saveJsonToFile(res, __dirname, "creatProplog")
         // ?以下大量注释部分为向服务器进行单位号d的请求版本，出现同时大量请求，到时平台服务奔溃现象，故更新了新版本

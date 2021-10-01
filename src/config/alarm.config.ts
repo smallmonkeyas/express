@@ -1,47 +1,47 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 22:28:47
- * @LastEditTime: 2021-09-05 21:10:37
+ * @LastEditTime: 2021-10-01 17:07:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\factory.config.ts
  */
 
 export interface IAlarmBasicStruct {
-    alarmObjname: string;
+    alarmObjname: string
     // alarmObjDisplayName: string;
     // alarmObjDescription: string;
-    alarmParamName: string;
-    alarmParamDisplayName: string;
-    alarmParamDescription: string;
-    alarmProperityName: string;
+    alarmParamName: string
+    alarmParamDisplayName: string
+    alarmParamDescription: string
+    alarmProperityName: string
     // alarmProperityDisplayName: string;
-    alarmProperityDescription: string;
+    alarmProperityDescription: string
 }
 export interface IAlarmStruct {
-    id?: number;
-    objnameInclude: string;
-    objnameDisplaynameInclude: string;
-    epcode: string;
-    factoryType: string;
-    includeParamName: Array<string>;
-    includeParamDisplayname: Array<string>;
-    includeParamDescription: Array<string>;
-    alarmObjname: string;
-    alarmObjDisplayName: string;
-    alarmObjDescription: string;
-    alarmParamName: string;
-    alarmParamDisplayName: string;
-    alarmParamDescription: string;
-    alarmProperityName: string;
-    alarmProperityDisplayName: string;
-    alarmProperityDescription: string;
-    alarmType: number;
-    alarmTypeDescription: string;
-    alarmConfigParam: Array<string>;
-    alarmConfigParamValue: Array<number>;
-    enableStatus: boolean;
-    enableConfigparam: string;
+    id?: number
+    objnameInclude: string
+    objnameDisplaynameInclude: string
+    epcode: string
+    factoryType: string
+    includeParamName: Array<string>
+    includeParamDisplayname: Array<string>
+    includeParamDescription: Array<string>
+    alarmObjname: string
+    alarmObjDisplayName: string
+    alarmObjDescription: string
+    alarmParamName: string
+    alarmParamDisplayName: string
+    alarmParamDescription: string
+    alarmProperityName: string
+    alarmProperityDisplayName: string
+    alarmProperityDescription: string
+    alarmType: number
+    alarmTypeDescription: string
+    alarmConfigParam: Array<string>
+    alarmConfigParamValue: Array<number>
+    enableStatus: boolean
+    enableConfigparam: string
 }
 export const AlarmStruct = {
     id: Number,
@@ -60,14 +60,13 @@ export const AlarmStruct = {
     alarmParamDescription: { type: String },
     alarmProperityName: { type: String },
     alarmProperityDisplayName: { type: String },
-    alarmProperityDescription: { type: String },
     alarmType: Number,
     alarmTypeDescription: { type: String },
     alarmConfigParam: [String],
     alarmConfigParamValue: [Number],
     enableStatus: Boolean,
     enableConfigparam: { type: String }
-};
+}
 
 export const AlarmTypeDescConfig = [
     "数据缺失",
@@ -82,10 +81,10 @@ export const AlarmTypeDescConfig = [
     "去除率异常",
     "均值异常",
     "排放量异常"
-];
+]
 
-export const AlarmTypeConfig = [1, 3, 4, 6, 7, 9, 10, 11, 12];
-export const AlarmTypeDeprecated = [3, 4, 6, 7, 9, 10];
+export const AlarmTypeConfig = [1, 3, 4, 6, 7, 9, 10, 11, 12]
+export const AlarmTypeDeprecated = [3, 4, 6, 7, 9, 10]
 export const AlarmObjnameConfig = [
     "DataMissAlarm",
     "",
@@ -99,4 +98,4 @@ export const AlarmObjnameConfig = [
     "AbnormalRemovalrate",
     "DayMeanAlarm",
     "EmissionAlarm"
-];
+]
