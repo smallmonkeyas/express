@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-05 01:33:25
- * @LastEditTime: 2021-10-03 00:31:15
+ * @LastEditTime: 2021-10-03 21:50:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\main\index.ts
@@ -15,6 +15,7 @@ import {
     ruletableConfig,
     alarmtableConfig,
     IAlarmStruct,
+    rmObjectConfig,
     requesttableConfig
 } from "../config"
 import {
@@ -25,6 +26,7 @@ import {
     CAlarmTable,
     // AlarmTableRecordGenerateTask,
     CAlarmTableGenerateTask,
+    CSupOSData,
     CPlatformAlarmObject,
     // CDataMissAlarmTask,
     // CDataMiss,
@@ -49,6 +51,8 @@ class AbsTask {
     alarmTableGenerateHandler!: CAlarmTableGenerateTask
     @Inject("报警配置库")
     alarmTableHandler!: CAlarmTable
+    @Inject("supOS数据接口")
+    plantInterface!: CSupOSData
     @Inject("supOS平台报警实例与属性设置")
     platformAlarmObject!: CPlatformAlarmObject
     @Inject("报警更新任务类")
@@ -147,7 +151,15 @@ class CTask extends AbsTask {
 
         // 保存属性增加记录
         // XLSX_JSON.saveJsonToFile(res, __dirname, "creatProplog")
-
+        alarmObj.forEach(async (item: { alarmObjname: string; [prop: string]: any }) => {
+            let { alarmObjname } = item
+            if (alarmObjname) {
+                this.plantInterface.supos = rmObjectConfig(alarmObjname)
+                await this.plantInterface.delete()
+            } else {
+                throw new Error("报警对象删除：数据输入不足")
+            }
+        })
         let createObjRes =
             await this.platformAlarmObject.createAlarmObjInstanceByTemplateConfigFile(
                 alarmObj,
