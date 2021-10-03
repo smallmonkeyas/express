@@ -1,19 +1,21 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 23:03:24
- * @LastEditTime: 2021-09-13 11:56:33
+ * @LastEditTime: 2021-10-03 00:22:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\supos.config.ts
  */
-import { ISupOSConfig } from "./interface.config";
-import { properityInfo, objectInfo, properityExcludeAlarmInfo } from "./supos";
-import { netIPAddress } from "./net.config";
+import { ISupOSConfig } from "./interface.config"
+import { fs } from "../../modulejs"
+
+import { properityInfo, objectInfo, properityExcludeAlarmInfo } from "./supos"
+import { netIPAddress } from "./net.config"
 const netAddressConfig = {
     IPAddress: netIPAddress,
     Port: "8080"
-};
-const netAddress = `http://${netAddressConfig.IPAddress}:${netAddressConfig.Port}`;
+}
+const netAddress = `http://${netAddressConfig.IPAddress}:${netAddressConfig.Port}`
 
 // export const collectorUrlConfig: ISupOSConfig = {
 //     netAddress: netAddress,
@@ -49,8 +51,8 @@ export const CreatProperityConfig = function (
             // alarmPropDisplayName,
             alarmPropDescription
         )
-    };
-};
+    }
+}
 
 export const CreatProperityExcludeAlarmConfig = function (
     objectName: string,
@@ -69,14 +71,14 @@ export const CreatProperityExcludeAlarmConfig = function (
             propDescription,
             primitiveType
         )
-    };
-};
+    }
+}
 export const rmProperityConfig = function (objectName: string, propName: string) {
     return {
         netAddress: netAddress,
         netPath: `api/metadata/objects/${objectName}/properties/${propName}`
-    };
-};
+    }
+}
 
 export const CreatObjectConfig = function (
     objectName: string,
@@ -87,14 +89,14 @@ export const CreatObjectConfig = function (
         netAddress: netAddress,
         netPath: "api/metadata/objects",
         netData: objectInfo(objectName, objectDisplayName, objectDscription)
-    };
-};
+    }
+}
 export const rmObjectConfig = function (objectName: string) {
     return {
         netAddress: netAddress,
         netPath: `api/metadata/objects/${objectName}`
-    };
-};
+    }
+}
 
 export const SetPropertyValueNetConfig = function (
     objectName: string,
@@ -108,13 +110,13 @@ export const SetPropertyValueNetConfig = function (
             propName: `${propName}`,
             propValue: `${propValue}`
         }
-    };
+    }
     // response.body
     // {
     //     "result": null,
     //     "logs": "[]"
     // }
-};
+}
 export const SetPropertyValuesNetConfig = function (objectName: string, propValues: object) {
     return {
         netAddress: netAddress,
@@ -122,13 +124,13 @@ export const SetPropertyValuesNetConfig = function (objectName: string, propValu
         netData: {
             propValues: JSON.stringify(propValues).replace(/[\\""']*/g, "")
         }
-    };
+    }
     // response.body
     // {
     //     "result": null,
     //     "logs": "[]"
     // }
-};
+}
 export const GetPropertyValueNetConfig = function (objectName: string, propName: string) {
     return {
         netAddress: netAddress,
@@ -136,13 +138,13 @@ export const GetPropertyValueNetConfig = function (objectName: string, propName:
         netData: {
             propName: `${propName}`
         }
-    };
+    }
     // response.body
     // {
     //     "result": 11.0,
     //     "logs": "[]"
     // }
-};
+}
 export const GetPropertyValuesNetConfig = function (objectName: string, name: string) {
     return {
         netAddress: netAddress,
@@ -150,13 +152,13 @@ export const GetPropertyValuesNetConfig = function (objectName: string, name: st
         netData: {
             propNames: `${name}`
         }
-    };
+    }
     // response.body
     // {
     //     "result": 11.0,
     //     "logs": "[]"
     // }
-};
+}
 
 export const GetPropertyInfosNetConfig = function (
     objectName: string,
@@ -166,27 +168,58 @@ export const GetPropertyInfosNetConfig = function (
         netAddress: netAddress,
         netPath: `api/metadata/objects/${objectName}/properties`,
         netParam: netParam // ?type=own&page=1&per_page=200
-    };
+    }
     // response.body
     // {
     //     "result": 11.0,
     //     "logs": "[]"
     // }
-};
+}
+export const GetAlarmObjFileNetConfig = function (configFileDir: string, streamValue?: object) {
+    return {
+        netAddress: netAddress,
+        netPath: "api/metadata/import/task/startImportTask",
+        netData: {
+            // name: JSON.stringify({
+            file: configFileDir,
+            // file: streamValue,
+            // file: {
+            //     // value: streamValue,
+            //     value: streamValue,
+            //     // value: fs.createReadStream(configFileDir),
+            //     options: {
+            //         filename: configFileDir,
+            //         contentType: null
+            //     }
+            // },
+            type: "object",
+            skipOnError: "false"
+            // })
+            // file: JSON.stringify(streamValue),
+            // file: streamValue,
+        }
+    }
+    // response.body
+    // {
+    //     "result": 11.0,
+    //     "logs": "[]"
+    // }
+}
+
 export interface ISuposObjects {
-    objectName: string;
-    objectDisplayName: string;
-    objectDescription: string;
+    objectName: string
+    objectDisplayName: string
+    objectDescription: string
 }
 export interface ISuposProperity {
-    objectName: string;
-    objectDisplayName?: string;
-    objectDescription?: string;
-    propName?: string;
-    propDisplayName?: string;
-    propDescription?: string;
-    primitiveType?: string;
-    alarmProperityName?: string;
-    alarmProperityDisplayName?: string;
-    alarmProperityDescription?: string;
+    objectName: string
+    objectDisplayName?: string
+    objectDescription?: string
+    propName?: string
+    propDisplayName?: string
+    propDescription?: string
+    primitiveType?: string
+    alarmProperityName?: string
+    alarmProperityDisplayName?: string
+    alarmProperityDescription?: string
 }

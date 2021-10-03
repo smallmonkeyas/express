@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 20:18:53
- * @LastEditTime: 2021-09-27 17:31:12
+ * @LastEditTime: 2021-10-02 00:36:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\file.config.ts
@@ -20,13 +20,13 @@ const ruletableFileConfig = {
 const objnameTempleFileConfig = {
     filePath: `${respositoryDir}/objname`,
     // filePath: `${respositoryDir}\\ruletable`,
-    fileName: "对象实例模板",
+    fileName: "报警对象实例模板",
     fileExtension: "xlsx"
 }
-const objnameFileConfig = {
+const alarmObjFileConfig = {
     filePath: `${respositoryDir}/objname`,
     // filePath: `${respositoryDir}\\ruletable`,
-    fileName: "对象实例",
+    fileName: "报警对象实例",
     fileExtension: "xlsx"
 }
-export { ruletableFileConfig, objnameFileConfig, objnameTempleFileConfig }
+export { ruletableFileConfig, alarmObjFileConfig, objnameTempleFileConfig }

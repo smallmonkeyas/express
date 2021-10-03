@@ -2,17 +2,17 @@
 /*
  * @Author: your name
  * @Date: 2021-09-10 12:34:18
- * @LastEditTime: 2021-09-14 00:44:04
+ * @LastEditTime: 2021-10-03 01:44:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\servertable.ts
  */
 
-import "reflect-metadata";
+import "reflect-metadata"
 // import mongoose from 'mongoose';
 
-import { Container, Service, Inject } from "typedi";
-import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../dao";
+import { Container, Service, Inject } from "typedi"
+import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../dao"
 import {
     // factoryConfig,
     ruletableConfig,
@@ -31,59 +31,63 @@ import {
     AlarmTypeDeprecated,
     IServerRequestStruct,
     requesttableConfig
-} from "../config";
-import { CSingleRuleInfo } from "./rule";
-import { CRuleTable } from "./ruletable";
-import { CAlarmTable } from "./alarmtable";
-import { CVHTrendRequest, CPropertyRequest } from "./server-pitch-request";
-import { CVendorData, IVendorData } from "./vendor";
-import { CSupOSData } from "./supos";
-import { User } from "./user";
-import { request, system, XLSX_JSON, fs } from "../../modulejs";
-import { factoryCollectorTempleData } from "../respository/factory/collector";
-import { CDataMiss, CMeanAlarm, CEmissionAlarm } from "./data-anamaly";
+} from "../config"
+import { CSingleRuleInfo } from "./rule"
+import { CRuleTable } from "./ruletable"
+import { CAlarmTable } from "./alarmtable"
+import { CVHTrendRequest, CPropertyRequest } from "./server-pitch-request"
+import { CVendorData, IVendorData } from "./vendor"
+import { CSupOSData } from "./supos"
+import { User } from "./user"
+import { request, system, XLSX_JSON, fs } from "../../modulejs"
+import { factoryCollectorTempleData } from "../respository/factory/collector"
+import { CDataMiss, CMeanAlarm, CEmissionAlarm } from "./data-anamaly"
 // Container.import([CFileOperate, CSingleRuleInfo, CRuleTable, User]);
 // @Service("大库数据接口")
 // export class CVHRequest extends CVendorData {
 @Service("服务请求配置库")
 export class CServerRequestTable extends CTable {
     @Inject("大库数据接口")
-    vhRequestHandler!: CVHTrendRequest;
+    vhRequestHandler!: CVHTrendRequest
     @Inject("supOS对象属性接口")
-    propertyRequestHandler!: CPropertyRequest;
+    propertyRequestHandler!: CPropertyRequest
     @Inject("连续10分钟无数据或值为0")
-    dataMissHandler!: CDataMiss;
+    dataMissHandler!: CDataMiss
     @Inject("日数据不等于小时数据汇总")
-    meanAlarmHandler!: CMeanAlarm;
+    meanAlarmHandler!: CMeanAlarm
     @Inject("排放量不等于浓度乘以流量")
-    emissionAlarmHandler!: CEmissionAlarm;
-    // TODO:需要初始化name字段
+    emissionAlarmHandler!: CEmissionAlarm
+    // TODO:需要初始化requesttable库中name字段的所有数值，拼接objname与propname为objname.propname作为trend和vh接口的url参数的一部分
     async setName(): Promise<any> {
         await this.update({ _id: { $exists: true } }, [
             { $set: { name: { $concat: ["$objname", ".", "$propname"] } } }
-        ]);
+        ])
     }
+    //* 按照筛选条件筛选requesttable库中需要设置属性值的表记录的属性值
     async getPropValues(filterObj?: object): Promise<object> {
         let propnameValueArr = await this.select(
             { requesttype: "setPropertyValue", ...filterObj },
             ["value", "propname"]
-        );
+        )
         // console.log(propnameValueArr);
-        let propValues: { [x: string]: any } = {};
+        let propValues: { [x: string]: any } = {}
         if (!Array.isArray(propnameValueArr)) {
-            throw new Error("没有筛选出属性数据");
+            throw new Error("没有筛选出属性数据")
         }
         propnameValueArr.forEach((item: { [x: string]: any }) => {
-            let propname: string = item["propname"];
+            let propname: string = item["propname"]
             if (propname) {
-                if (!item["value"]) {
-                    throw new Error(`${propname}属性无value值`);
+                let value = item["value"]
+                if (!value) {
+                    console.log(`${propname}属性无value值`)
+                    value = [0]
+                    // throw new Error(`${propname}属性无value值`)
                 }
-                propValues[propname] = item["value"][0];
+                propValues[propname] = value[0]
             }
-        });
+        })
         // console.log("propValues", propValues);
-        return propValues;
+        return propValues
         // let propnameValueStr = JSON.stringify(propnameValueArr);
         // //console.log("propnameValueStr", propnameValueStr);
         // let propValuesStr1 = propnameValueStr.replace(
@@ -95,25 +99,25 @@ export class CServerRequestTable extends CTable {
         // // let propValues = propValuesStr1.replace(/\[/g, "{").replace(/\]/g, "}");
         // return JSON.parse(propValues);
     }
-
+    //* 设置属性值：先筛选需要设置属性值的属性和值，然后调用同时可以设置多个属性值的接口设置属性值
     async setPropValues(): Promise<any> {
-        let requesttype = "setPropertyValue";
-        let objnameArr = await this.distinct("objname", { requesttype: requesttype });
+        let requesttype = "setPropertyValue"
+        let objnameArr = await this.distinct("objname", { requesttype: requesttype })
         // console.log("objnameArr", objnameArr);
         const promises = objnameArr.map(async (item: string) => {
             // if (item !== "DataMissAlarm") {
             //     return "返回";
             // }
-            let propValues = await this.getPropValues({ objname: item, propexist: true });
+            let propValues = await this.getPropValues({ objname: item, propexist: true })
             // //console.log(name);
-            this.propertyRequestHandler.objname = item;
-            this.propertyRequestHandler.propValues = propValues;
-            return await this.propertyRequestHandler.setPropertyValues();
+            this.propertyRequestHandler.objname = item
+            this.propertyRequestHandler.propValues = propValues
+            return await this.propertyRequestHandler.setPropertyValues()
             // return await this.propertyRequestHandler.setPropertyValues(item, propValues);
-        });
-        let promiseall = await Promise.all(promises);
+        })
+        let promiseall = await Promise.all(promises)
         // return dayAvgRecord;
-        return promiseall;
+        return promiseall
     }
     // async selectName(filterObj: Object): Promise<string> {
     //     let nameObjArr = await this.select(filterObj, ["name"]);
@@ -121,15 +125,17 @@ export class CServerRequestTable extends CTable {
     //     let nameStr = nameObjStr.replace(/[{}\"\[\]:]|(name)/g, "");
     //     return nameStr;
     // }
+    //* value字段去重，情况1：字段存的值为string
     async getFieldValueStr(fieldName: string, filterObj: Object): Promise<any> {
-        let fieldObjArr = await this.select(filterObj, [fieldName]);
-        let fieldObjStr = JSON.stringify(fieldObjArr);
-        var reg = new RegExp(`[{}\\"\\[\\]:]|(${fieldName})`, "g");
+        let fieldObjArr = await this.select(filterObj, [fieldName])
+        let fieldObjStr = JSON.stringify(fieldObjArr)
+        var reg = new RegExp(`[{}\\"\\[\\]:]|(${fieldName})`, "g")
         // var reg = new RegExp('[{}"[]:]|(' + fieldName + ")", "g");
-        let fieldStr = fieldObjStr.replace(reg, "");
+        let fieldStr = fieldObjStr.replace(reg, "")
         // let fieldStr = fieldObjStr.replace(/[{}\"\[\]:]|(name)/g, "");
-        return fieldStr;
+        return fieldStr
     }
+    //* value字段去重，情况2：字段存的值为数值(数组)
     async getFieldValueArr(
         fieldName: string,
         fieldType: string,
@@ -138,37 +144,38 @@ export class CServerRequestTable extends CTable {
         // let type = ['string','number']
         // let regType: string;
 
-        let regType = fieldType === "String" ? '("|\\")' : "";
-        let fieldObjArr = await this.select(filterObj, [fieldName]);
-        let fieldObjStr = JSON.stringify(fieldObjArr);
+        let regType = fieldType === "String" ? '("|\\")' : ""
+        let fieldObjArr = await this.select(filterObj, [fieldName])
+        let fieldObjStr = JSON.stringify(fieldObjArr)
         // var reg = new RegExp(`(?<="${fieldName}("|\\"): *("|\\")).+?(?=("|\\"),)`, "g");
-        var reg = new RegExp(`(?<="${fieldName}("|\\"|'): *${regType}).+?(?=${regType}},)`, "g");
+        var reg = new RegExp(`(?<="${fieldName}("|\\"|'): *${regType}).+?(?=${regType}},)`, "g")
         // console.log(reg, fieldObjStr);
         // var reg = new RegExp(`[{}\\":]|(${fieldName})`, "g");
         // let fieldStr = fieldObjStr.replace(reg, "");
         // let fieldStr = fieldObjStr.replace(/[{}\"\[\]:]|(name)/g, "");
         // return JSON.parse(fieldStr);
-        let fieldValueArr = fieldObjStr.match(reg);
+        let fieldValueArr = fieldObjStr.match(reg)
         if (!fieldValueArr) {
-            return [];
+            return []
         }
         // console.log("fieldValueArr", fieldValueArr);
         // if ((fieldType === "Number" || fieldType === "Array") && Array.isArray(fieldValueArr)) {
         //     let fidldValueArr = fieldValueArr.map(Number);
         //     return fidldValueArr;
         // }
-        return fieldValueArr;
+        return fieldValueArr
     }
+    //* value字段去重，情况3：字段存的值为对象字符串情况
     async getFieldArrValueArr(fieldName: string, filterObj: Object): Promise<any> {
-        let fieldObjArr = await this.select(filterObj, [fieldName]);
-        let fieldObjStr = JSON.stringify(fieldObjArr);
+        let fieldObjArr = await this.select(filterObj, [fieldName])
+        let fieldObjStr = JSON.stringify(fieldObjArr)
         // var reg = new RegExp(`(?<="${fieldName}("|\\"): *("|\\")).+?(?=("|\\"),)`, "g");
         // var reg = new RegExp(`(?<="${fieldName}("|\\"|'): *("|\\")).+?(?=("|\\"|')},)`, "g");
         // //console.log(reg, fieldObjStr);
-        var reg = new RegExp(`[{}\\":]|(${fieldName})`, "g");
-        let fieldStr = fieldObjStr.replace(reg, "");
+        var reg = new RegExp(`[{}\\":]|(${fieldName})`, "g")
+        let fieldStr = fieldObjStr.replace(reg, "")
         // let fieldStr = fieldObjStr.replace(/[{}\"\[\]:]|(name)/g, "");
-        return JSON.parse(fieldStr);
+        return JSON.parse(fieldStr)
         // let fieldValueArr = fieldObjStr.match(reg);
         // return fieldValueArr;
     }
@@ -200,43 +207,46 @@ export class CServerRequestTable extends CTable {
     //     return promiseall;
     //     // return dataDayAvg;
     // }
+    //* 按照筛选条件对requesttable进行筛选并批量更新已筛选的value字段的所有记录(更新源来自用户输入的数组，所有记录与数组一一对应)
     async batchUpdateValueField(
         whereFilterObj: { requesttype?: string; [prop: string]: any },
         fieldFilter: Array<string> | null,
         fillValueArr: Array<any>,
         fillFieldName?: string
     ) {
-        let value = "value";
+        let value = "value"
         if (fillFieldName) {
-            value = fillFieldName;
+            value = fillFieldName
         }
-        const { requesttype } = whereFilterObj;
+        const { requesttype } = whereFilterObj
         if (requesttype === "trend") {
             let promises = fillValueArr.map((item) => {
                 // //console.log("item", item);
                 return this.update(
                     { propname: item[0]["name"], ...whereFilterObj },
                     { $set: { [value]: item } }
-                );
-            });
-            let promiseall = await Promise.all(promises);
+                )
+            })
+            let promiseall = await Promise.all(promises)
             // return dayAvgRecord;
-            return promiseall;
+            return promiseall
         }
-        let requestItemArr = await this.select(whereFilterObj, fieldFilter);
+        let requestItemArr = await this.select(whereFilterObj, fieldFilter)
         let promises = requestItemArr.map((item: IServerRequestStruct, index: number) => {
-            return this.update({ id: item.id }, { $set: { [value]: fillValueArr[index] } });
-        });
-        let promiseall = await Promise.all(promises);
+            return this.update({ id: item.id }, { $set: { [value]: fillValueArr[index] } })
+        })
+        let promiseall = await Promise.all(promises)
         // return dayAvgRecord;
-        return promiseall;
+        return promiseall
     }
+    //* 按照筛选条件对requesttable进行筛选并批量更新已筛选的convertvalue字段的所有记录(更新源来自用户输入的数组，所有记录与数组一一对应)
+
     async batchUpdateConvertvalueField(
         whereFilterObj: { requesttype?: string; [prop: string]: any },
         fieldFilter: Array<string> | null,
         fillValueArr: Array<any>
     ) {
-        const { requesttype } = whereFilterObj;
+        const { requesttype } = whereFilterObj
         if (requesttype === "trend") {
             let promises = fillValueArr.map((item) => {
                 // //console.log("item", item);
@@ -250,50 +260,51 @@ export class CServerRequestTable extends CTable {
                             }
                         }
                     ]
-                );
-            });
-            let promiseall = await Promise.all(promises);
+                )
+            })
+            let promiseall = await Promise.all(promises)
             // return dayAvgRecord;
-            return promiseall;
+            return promiseall
         }
-        let requestItemArr = await this.select(whereFilterObj, fieldFilter);
+        let requestItemArr = await this.select(whereFilterObj, fieldFilter)
         let promises = requestItemArr.map((item: IServerRequestStruct, index: number) => {
             return this.update(
                 { id: item.id },
                 {
                     convertvalue: `<${item.id}>${JSON.stringify(fillValueArr[index])}`
                 }
-            );
-        });
-        let promiseall = await Promise.all(promises);
+            )
+        })
+        let promiseall = await Promise.all(promises)
         // return dayAvgRecord;
-        return promiseall;
+        return promiseall
     }
+    //* 筛选并更新requesttable中value字段且为大库类型(requesttype为"day-avg","hour-cou","hour-avg")的所有记录
     async updateVHValue(requesttype: string) {
-        let objnameArr = await this.distinct("objname", { requesttype: requesttype });
+        let objnameArr = await this.distinct("objname", { requesttype: requesttype })
         const promises = objnameArr.map(async (item: string) => {
             let name = await this.getFieldValueStr("name", {
                 requesttype: requesttype,
                 objname: item
-            });
-            this.vhRequestHandler.name = name;
+            })
+            this.vhRequestHandler.name = name
             // this.vhRequestHandler.initNetParam();
-            let vhDataArr = await this.vhRequestHandler.getVhData(requesttype);
+            let vhDataArr = await this.vhRequestHandler.getVhData(requesttype)
             // //console.log("vhDataArr", vhDataArr);
             let updateValue = await this.batchUpdateValueField(
                 { requesttype: requesttype, objname: item },
                 null,
                 vhDataArr
-            );
+            )
             let updateConvertvalue = await this.batchUpdateConvertvalueField(
                 { requesttype: requesttype, objname: item },
                 null,
                 vhDataArr
-            );
+            )
 
-            return [updateValue, updateConvertvalue];
+            return [updateValue, updateConvertvalue]
             // return await Promise.all([updateValue, updateConvertvalue]);
-        });
+        })
 
         // let name = await this.getFieldValueStr("name", { requesttype: requesttype });
         // this.vhRequestHandler.name = name;
@@ -304,36 +315,37 @@ export class CServerRequestTable extends CTable {
         // let promises = requestItemArr.map((item: IServerRequestStruct, index: number) => {
         //     return this.update({ id: item.id }, { $set: { value: vhDataArr[index] } });
         // });
-        let promiseall = await Promise.all(promises);
+        let promiseall = await Promise.all(promises)
         // // return dayAvgRecord;
-        return promiseall;
+        return promiseall
     }
+    //* 筛选并更新requesttable中value字段且为trend类型(requesttype为"trend")的所有记录
     async updateTrendValue() {
-        let requesttype = "trend";
-        let objnameArr = await this.distinct("objname", { requesttype: requesttype });
+        let requesttype = "trend"
+        let objnameArr = await this.distinct("objname", { requesttype: requesttype })
         const promises = objnameArr.map(async (item: string) => {
             let name = await this.getFieldValueStr("name", {
                 requesttype: requesttype,
                 objname: item
-            });
+            })
             // //console.log(name);
-            this.vhRequestHandler.name = name;
+            this.vhRequestHandler.name = name
             // this.vhRequestHandler.initNetParam();
-            let vhDataArr = await this.vhRequestHandler.getTrendData();
+            let trendDataArr = await this.vhRequestHandler.getTrendData()
             // //console.log("vhDataArr", vhDataArr);
             let updateValue = await this.batchUpdateValueField(
                 { requesttype: requesttype, objname: item },
                 null,
-                vhDataArr
-            );
+                trendDataArr
+            )
             let updateConvertvalue = await this.batchUpdateConvertvalueField(
                 { requesttype: requesttype, objname: item },
                 null,
-                vhDataArr
-            );
+                trendDataArr
+            )
 
-            return [updateValue, updateConvertvalue];
-        });
+            return [updateValue, updateConvertvalue]
+        })
         // let name = await this.getFieldValueStr("name", { requesttype: requesttype });
         // //console.log("name", name);
         // this.vhRequestHandler.name = name;
@@ -345,15 +357,16 @@ export class CServerRequestTable extends CTable {
         // let promises = requestItemArr.map((item: IServerRequestStruct, index: number) => {
         //     return this.update({ id: item.id }, { $set: { value: vhDataArr[index] } });
         // });
-        let promiseall = await Promise.all(promises);
+        let promiseall = await Promise.all(promises)
         // // return dayAvgRecord;
-        return promiseall;
+        return promiseall
     }
 
+    //* 筛选并更新requesttable中value字段且为getPropertyValue类型(requesttype为"getPropertyValue"，即更新配置参数的值，若无值，则取配置参数的默认值)的所有记录
     async updateGetPropertyValues() {
-        let requesttype = "getPropertyValue";
+        let requesttype = "getPropertyValue"
         // TODO:筛选企业->objname
-        let objnameArr = await this.distinct("objname", { requesttype: "getPropertyValue" });
+        let objnameArr = await this.distinct("objname", { requesttype: "getPropertyValue" })
         // TODO:遍历企业依次请求每个企业的所有配置属性，需要完成以下工作：
         // todo:①筛选该企业对应的服务请求配置库的所有propname（以“,”连接）
         // todo:②getPropertyValues获取该企业所有配置属性的当前值
@@ -363,13 +376,13 @@ export class CServerRequestTable extends CTable {
             let propnamesStr = await this.getFieldValueStr("propname", {
                 objname: item,
                 requesttype: "getPropertyValue"
-            });
-            this.propertyRequestHandler.objname = item;
-            this.propertyRequestHandler.propname = propnamesStr;
-            let propValuesRes = await this.propertyRequestHandler.getPropertyValues();
-            let propValuesArr = propValuesRes.result;
+            })
+            this.propertyRequestHandler.objname = item
+            this.propertyRequestHandler.propname = propnamesStr
+            let propValuesRes = await this.propertyRequestHandler.getPropertyValues()
+            let propValuesArr = propValuesRes.result
             if (!propValuesArr) {
-                throw new Error("请检查supOS-getPropertyValues接口");
+                throw new Error("请检查supOS-getPropertyValues接口")
             }
             // let propValuesStr = JSON.stringify(propValuesArr.result);
             // let updateMid = propnamesStr.replace(/,/g, '\\":)|(');
@@ -379,21 +392,21 @@ export class CServerRequestTable extends CTable {
             //     .replace(propnamesRegexStr, "")
             //     .replace(/{/g, "[")
             //     .replace(/}/g, "]");
-            let pronameArr = propnamesStr.split(",");
-            let propertyValuesArr: Array<any> = [];
+            let pronameArr = propnamesStr.split(",")
+            let propertyValuesArr: Array<any> = []
             pronameArr.forEach((propname: string | number) => {
-                propertyValuesArr.push(propValuesArr[propname]);
-            });
+                propertyValuesArr.push(propValuesArr[propname])
+            })
             let updateValue = await this.batchUpdateValueField(
                 { requesttype: requesttype, objname: item },
                 null,
                 propertyValuesArr
-            );
+            )
 
-            return updateValue;
-        });
+            return updateValue
+        })
         // 获取
-        const promiseall = await Promise.all(promise);
+        const promiseall = await Promise.all(promise)
         // //console.log(promiseall[0]);
         // TODO:根据getProperty项的value是否为空来决定是否用dafaultvalue来填充
         // this.select({requesttype: "getPropertyValue",value:null})
@@ -402,7 +415,7 @@ export class CServerRequestTable extends CTable {
         // ]);
         await this.update({ requesttype: requesttype, value: null }, [
             { $set: { value: { $concat: ["$defaultvalue"] } } }
-        ]);
+        ])
         // await this.update({ requesttype: requesttype },
         //     [
         //         { $set: { convertvalue: { $concat: ["$defaultvalue"] } } }
@@ -521,10 +534,14 @@ export class CServerRequestTable extends CTable {
         //     }
         // ]);
         // return objnameArr;
-        return promiseall;
+        return promiseall
     }
+
+    //* 筛选并更新requesttable中value字段且为setPropertyValue类型(requesttype为"setPropertyValue")的所有记录
     async updateSetPropertyValues() {
+        // todo: 数据缺失，批量执行数据缺失任务并返回报警结果数组集合，返回的数组中元素为1则代表报警，0则正常，下面均值异常和排放量异常同
         /**
+         *
          * *功能：批量执行数据缺失任务并返回报警结果数组集合，返回的数组中元素为1则代表报警，0则正常
          * @param {hisDataArrArr:Array<Array<any>>}
          * @return {alarmResultArr:Array<number>}
@@ -533,49 +550,50 @@ export class CServerRequestTable extends CTable {
         let convertValueArr = await this.distinct("convertvalue", {
             alarmtype: 1,
             requesttype: "trend"
-        });
+        })
 
-        let convertValueArrStr = JSON.stringify(convertValueArr);
+        let convertValueArrStr = JSON.stringify(convertValueArr)
         let valueArrStr = convertValueArrStr
             .replace(/(<.*?>)/g, "")
-            .replace(/("(?=\[))|((?<=\])")|\\/g, "");
-        let valueArr = JSON.parse(valueArrStr);
-        let datamissAlarmRes = this.dataMissHandler.batchAlgorithmExec(valueArr);
+            .replace(/("(?=\[))|((?<=\])")|\\/g, "")
+        let valueArr = JSON.parse(valueArrStr)
+        let datamissAlarmRes = this.dataMissHandler.batchAlgorithmExec(valueArr)
         let updateDatamissValue = await this.batchUpdateValueField(
             { alarmtype: 1, requesttype: "setPropertyValue" },
             null,
             datamissAlarmRes
-        );
+        )
         // //console.log("valueArrStr", valueArrStr);
-        console.log("数据缺失判定结果(0正常，1报警)：", datamissAlarmRes);
-        XLSX_JSON.saveJsonToFile(datamissAlarmRes, __dirname, "datamisslog");
+        console.log("数据缺失判定结果(0正常，1报警)：", datamissAlarmRes)
+        XLSX_JSON.saveJsonToFile(convertValueArr, __dirname, "datamisslog")
         // //console.log("valueArrStr", convertValueArrStr, valueArrStr);
         // //console.log("valueArr", valueArr.length);
         // return convertValueArr;
         // return updateDatamissValue;
         // todo:均值异常
+
         let meanAlarmConvertvalueDayavg = await this.distinct("convertvalue", {
             alarmtype: 11,
             requesttype: "day-avg"
-        });
+        })
         let meanAlarmConvertvalueHouravg = await this.distinct("convertvalue", {
             alarmtype: 11,
             requesttype: "hour-avg"
-        });
+        })
         let meanAlarmConvertvalueConfig = await this.getFieldArrValueArr("value", {
             alarmtype: 11,
             mark: "configParam"
-        });
+        })
         let meanAlarmConvertvalueArr = [
             meanAlarmConvertvalueDayavg,
             meanAlarmConvertvalueHouravg,
             meanAlarmConvertvalueConfig
-        ];
-        let meanAlarmConvertvalueArrStr = JSON.stringify(meanAlarmConvertvalueArr);
+        ]
+        let meanAlarmConvertvalueArrStr = JSON.stringify(meanAlarmConvertvalueArr)
         let meanAlarmValueArrStr = meanAlarmConvertvalueArrStr
             .replace(/(<.*?>)/g, "")
-            .replace(/("(?=\[))|((?<=\])")|\\/g, "");
-        let meanAlarmValueArr = JSON.parse(meanAlarmValueArrStr);
+            .replace(/("(?=\[))|((?<=\])")|\\/g, "")
+        let meanAlarmValueArr = JSON.parse(meanAlarmValueArrStr)
         // //console.log(
         //     "meanAlarmValueArr",
         //     meanAlarmConvertvalueArr,
@@ -587,34 +605,34 @@ export class CServerRequestTable extends CTable {
             meanAlarmValueArr[0],
             meanAlarmValueArr[1],
             meanAlarmValueArr[2]
-        );
+        )
 
         let updateMeanAlarmValue = await this.batchUpdateValueField(
             { alarmtype: 11, requesttype: "setPropertyValue" },
             null,
             meanAlarmRes
-        );
-        console.log("均值异常判定结果(0正常，1报警)：", meanAlarmRes);
+        )
+        console.log("均值异常判定结果(0正常，1报警)：", meanAlarmRes)
         // return updateMeanAlarmValue;
         // todo:排放量异常
         let emissAlarmConvertvalueEmiss = await this.distinct("convertvalue", {
             alarmtype: 12,
             requesttype: "hour-cou"
-        });
+        })
         let emissAlarmConvertvalueConcentra = await this.distinct("convertvalue", {
             alarmtype: 12,
             requesttype: "hour-avg",
             mark: "concentraParam"
-        });
+        })
         let emissAlarmConvertvalueFlow = await this.distinct("convertvalue", {
             alarmtype: 12,
             requesttype: "hour-avg",
             mark: "flowParam"
-        });
+        })
         let emissAlarmConvertvalueConfig = await this.getFieldArrValueArr("value", {
             alarmtype: 12,
             mark: "configParam"
-        });
+        })
         // let emissAlarmConvertvalueConfig = await this.distinct("convertvalue", {
         //     alarmtype: 12,
         //     mark: "configParam"
@@ -636,12 +654,12 @@ export class CServerRequestTable extends CTable {
             emissAlarmConvertvalueConcentra,
             emissAlarmConvertvalueFlow,
             emissAlarmConvertvalueConfig
-        ];
-        let emissAlarmConvertvalueArrStr = JSON.stringify(emissAlarmConvertvalueArr);
+        ]
+        let emissAlarmConvertvalueArrStr = JSON.stringify(emissAlarmConvertvalueArr)
         let emissAlarmValueArrStr = emissAlarmConvertvalueArrStr
             .replace(/(<.*?>)/g, "")
-            .replace(/("(?=\[))|((?<=\])")|\\/g, "");
-        let emissAlarmValueArr = JSON.parse(emissAlarmValueArrStr);
+            .replace(/("(?=\[))|((?<=\])")|\\/g, "")
+        let emissAlarmValueArr = JSON.parse(emissAlarmValueArrStr)
         // //console.log(
         //     "meanAlarmValueArr",
         //     meanAlarmConvertvalueArr,
@@ -662,28 +680,28 @@ export class CServerRequestTable extends CTable {
             emissAlarmValueArr[1],
             emissAlarmValueArr[2],
             emissAlarmValueArr[3]
-        );
+        )
 
         let updateEmissAlarmValue = await this.batchUpdateValueField(
             { alarmtype: 12, requesttype: "setPropertyValue" },
             null,
             emissAlarmRes
-        );
-        console.log("排放量异常判定结果(0正常，1报警)：", emissAlarmRes);
-        return [updateDatamissValue, updateMeanAlarmValue, updateEmissAlarmValue];
+        )
+        console.log("排放量异常判定结果(0正常，1报警)：", emissAlarmRes)
+        return [updateDatamissValue, updateMeanAlarmValue, updateEmissAlarmValue]
         // return emissAlarmValueArr;
     }
     //* 更新属性是否存在列
     async updatePropExist() {
-        let requesttype = "setPropertyValue";
-        let objnameArr = await this.distinct("objname", { requesttype: requesttype });
+        let requesttype = "setPropertyValue"
+        let objnameArr = await this.distinct("objname", { requesttype: requesttype })
         // console.log("objnameArr", objnameArr);
         const promises = objnameArr.map(async (item: string) => {
             // if (item !== "DataMissAlarm") {
             //     return "返回";
             // }
-            this.propertyRequestHandler.objname = item;
-            let propExistList = await this.propertyRequestHandler.getPropertyList();
+            this.propertyRequestHandler.objname = item
+            let propExistList = await this.propertyRequestHandler.getPropertyList()
             // let propSetList = await this.getFieldValueArr("propname", "string", {
             //     requesttype: requesttype,
             //     objname: item
@@ -695,58 +713,59 @@ export class CServerRequestTable extends CTable {
             let propSetList = await this.getFieldValueArr("propname", "String", {
                 requesttype: requesttype,
                 objname: item
-            });
+            })
             // console.log("propSetList", propSetList);
             // console.log("propExistList", propExistList);
             let propExistArr = propSetList.map((item) => {
-                return propExistList.includes(item);
-            });
+                return propExistList.includes(item)
+            })
             // console.log("属性存在情况：", propExistArr);
             let updateExistFieldValue = await this.batchUpdateValueField(
                 { requesttype: requesttype, objname: item },
                 null,
                 propExistArr,
                 "propexist"
-            );
+            )
             // propSetList.
-            return updateExistFieldValue;
+            return updateExistFieldValue
             // return await this.propertyRequestHandler.setPropertyValues(item, propValues);
-        });
-        let promiseall = await Promise.all(promises);
+        })
+        let promiseall = await Promise.all(promises)
         // return dayAvgRecord;
-        return promiseall;
+        return promiseall
     }
+    //* 服务请求库requesttable更新总程序，为方便直接调用此方法即可
     async updateRequestTable() {
-        await this.setName(); // 增加nama字段(即表格的列)：为(对象实例.对象属性)格式
+        await this.setName() // 增加nama字段(即表格的列)：为(对象实例.对象属性)格式
         // const requestTableSel = await this.distinct("objname", { requesttype: "trend" });
         // console.log("requestTableSel", requestTableSel);
-        await this.updateVHValue("day-avg"); // 请求大库接口更新value字段中所有日均值数据(只请求均值异常和排放量异常中涉及参数对应的value)
-        await this.updateVHValue("hour-avg"); // 请求大库接口更新value字段中所有日小时均值数据(只请求均值异常和排放量异常中涉及参数对应的value)
-        await this.updateVHValue("hour-cou"); // 请求大库接口更新value字段中日累计数据(只请求排放量异常中涉及参数对应的value)
-        await this.updateTrendValue(); // 请求trend接口更新数据缺失所有记录(即表中的行)对应的value字段值
-        await this.updateGetPropertyValues(); // 获取配置参数对应的默认值和配置参数的当前值，并写值到对应的value字段；判断有无当前值，若无当前值，以默认值填充
-        let setPropertyRes = await this.updateSetPropertyValues(); //* 算法核心程序：数据缺失、均值异常、排放量异常算法执行，并得到对应的报警结果，报警结果写到value字段(只写到所有报警对象对应的记录)
+        await this.updateVHValue("day-avg") // 请求大库接口更新value字段中所有日均值数据(只请求均值异常和排放量异常中涉及参数对应的value)
+        await this.updateVHValue("hour-avg") // 请求大库接口更新value字段中所有日小时均值数据(只请求均值异常和排放量异常中涉及参数对应的value)
+        await this.updateVHValue("hour-cou") // 请求大库接口更新value字段中日累计数据(只请求排放量异常中涉及参数对应的value)
+        await this.updateTrendValue() // 请求trend接口更新数据缺失所有记录(即表中的行)对应的value字段值
+        await this.updateGetPropertyValues() // 获取配置参数对应的默认值和配置参数的当前值，并写值到对应的value字段；判断有无当前值，若无当前值，以默认值填充
+        let setPropertyRes = await this.updateSetPropertyValues() //* 算法核心程序：数据缺失、均值异常、排放量异常算法执行，并得到对应的报警结果，报警结果写到value字段(只写到所有报警对象对应的记录)
         // // let propValues = await requestTableHandler.getPropValues();
-        await this.updatePropExist(); // 判断要写到平台的报警对象是否存在，若不存在，则标记对应的报警为false，不往对应的对象属性写值
-        return setPropertyRes;
+        await this.updatePropExist() // 判断要写到平台的报警对象是否存在，若不存在，则标记对应的报警为false，不往对应的对象属性写值
+        return setPropertyRes
     }
 }
 
 @Service("服务请求库生成任务类")
 export class CServerRequestTableGenerateTask {
-    alarmRecord!: IAlarmStruct;
-    alarmTableWithEnabled!: Array<IAlarmStruct>;
-    requestTableIndex: number = 0;
-    dayAvgIndex: number = 0;
-    hourAvgIndex: number = 0;
-    hourCouIndex: number = 0;
-    trendIndex: number = 0;
-    getPropertyIndex: number = 0;
-    setPropertyIndex: number = 0;
-    serverRequestTable: Array<any> = [];
+    alarmRecord!: IAlarmStruct
+    alarmTableWithEnabled!: Array<IAlarmStruct>
+    requestTableIndex: number = 0
+    dayAvgIndex: number = 0
+    hourAvgIndex: number = 0
+    hourCouIndex: number = 0
+    trendIndex: number = 0
+    getPropertyIndex: number = 0
+    setPropertyIndex: number = 0
+    serverRequestTable: Array<any> = []
     getDayAvgRecord() {
         // ?前提：已知配置报警配置库的对应的需要请求日均值的记录=>dayAvgRecordByAlarmTable
-        let {} = this.alarmRecord;
+        let {} = this.alarmRecord
     }
     getHourAvgRecords() {}
     getHourCouRecords() {}
@@ -765,9 +784,9 @@ export class CServerRequestTableGenerateTask {
                 alarmType,
                 alarmConfigParamValue,
                 enableStatus
-            } = alarmRecord;
+            } = alarmRecord
             if (alarmType !== 1 && alarmType !== 11 && alarmType !== 12) {
-                return;
+                return
             }
             if (alarmType === 1) {
                 // 数据缺失
@@ -778,7 +797,7 @@ export class CServerRequestTableGenerateTask {
                     objname: objnameInclude,
                     propname: String(includeParamName),
                     requesttype: "trend"
-                });
+                })
             }
             if (alarmType === 11) {
                 // 均值异常
@@ -791,7 +810,7 @@ export class CServerRequestTableGenerateTask {
                     datamode: "avg",
                     mode: "day",
                     requesttype: "day-avg"
-                });
+                })
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
                     index: String(this.hourAvgIndex++),
@@ -801,7 +820,7 @@ export class CServerRequestTableGenerateTask {
                     datamode: "avg",
                     mode: "hour",
                     requesttype: "hour-avg"
-                });
+                })
             }
             if (alarmType === 12) {
                 // 排放量异常
@@ -814,7 +833,7 @@ export class CServerRequestTableGenerateTask {
                     datamode: "cou",
                     mode: "hour",
                     requesttype: "hour-cou"
-                });
+                })
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
                     index: String(this.hourAvgIndex++),
@@ -825,7 +844,7 @@ export class CServerRequestTableGenerateTask {
                     mode: "hour",
                     requesttype: "hour-avg",
                     mark: "concentraParam"
-                });
+                })
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
                     index: String(this.hourAvgIndex++),
@@ -836,7 +855,7 @@ export class CServerRequestTableGenerateTask {
                     mode: "hour",
                     requesttype: "hour-avg",
                     mark: "flowParam"
-                });
+                })
             }
             this.serverRequestTable.push({
                 id: String(this.requestTableIndex++),
@@ -847,7 +866,7 @@ export class CServerRequestTableGenerateTask {
                 requesttype: "getPropertyValue",
                 mark: "configParam",
                 defaultvalue: String(alarmConfigParamValue)
-            });
+            })
             this.serverRequestTable.push({
                 id: String(this.requestTableIndex++),
                 index: String(this.getPropertyIndex++),
@@ -857,7 +876,7 @@ export class CServerRequestTableGenerateTask {
                 requesttype: "getPropertyValue",
                 mark: "enableParam",
                 defaultvalue: String(enableStatus)
-            });
+            })
             this.serverRequestTable.push({
                 id: String(this.requestTableIndex++),
                 index: String(this.setPropertyIndex++),
@@ -866,8 +885,8 @@ export class CServerRequestTableGenerateTask {
                 propname: String(alarmParamName),
                 requesttype: "setPropertyValue",
                 mark: "alarmParam"
-            });
-        });
+            })
+        })
     }
 }
 // id?: number;
@@ -918,33 +937,33 @@ export class CServerRequestTableGenerateTask {
 // @Service("服务请求配置库")
 // export class CServerRequestTable extends CTable {}
 
-Container.import([CAlarmTable]);
+Container.import([CAlarmTable])
 async function getRequestTable() {
-    let user = Container.get<User>("用户");
-    await user.login();
+    let user = Container.get<User>("用户")
+    await user.login()
     // let authorization = `Bearer $ticket`;
     // Container.set("authorization-token", authorization); // 设置全局authorization
 
     const requestTableTaskHandler =
-        Container.get<CServerRequestTableGenerateTask>("服务请求库生成任务类");
+        Container.get<CServerRequestTableGenerateTask>("服务请求库生成任务类")
 
-    const alarmTableHandler = Container.get<CAlarmTable>("报警配置库");
-    alarmTableHandler.mongodb.conneConfig = alarmtableConfig;
-    const resConnect = await alarmTableHandler.connect();
+    const alarmTableHandler = Container.get<CAlarmTable>("报警配置库")
+    alarmTableHandler.mongodb.conneConfig = alarmtableConfig
+    const resConnect = await alarmTableHandler.connect()
     // const resDelete = await alarmTableHandler.deleteAll();
     // await alarmTableHandler.add(alarmJson);
-    const alarmTable = await alarmTableHandler.select({ enableStatus: true }, null);
-    await alarmTableHandler.disconnect();
-    requestTableTaskHandler.alarmTableWithEnabled = alarmTable;
-    requestTableTaskHandler.getServerRequestTable();
+    const alarmTable = await alarmTableHandler.select({ enableStatus: true }, null)
+    await alarmTableHandler.disconnect()
+    requestTableTaskHandler.alarmTableWithEnabled = alarmTable
+    requestTableTaskHandler.getServerRequestTable()
 
-    const requestTable = requestTableTaskHandler.serverRequestTable;
-    const requestTableHandler = Container.get<CServerRequestTable>("服务请求配置库");
-    requestTableHandler.mongodb.conneConfig = requesttableConfig;
-    await requestTableHandler.connect();
-    const resDelete = await requestTableHandler.deleteAll();
+    const requestTable = requestTableTaskHandler.serverRequestTable
+    const requestTableHandler = Container.get<CServerRequestTable>("服务请求配置库")
+    requestTableHandler.mongodb.conneConfig = requesttableConfig
+    await requestTableHandler.connect()
+    const resDelete = await requestTableHandler.deleteAll()
     //* 增加服务请求配置库
-    await requestTableHandler.add(requestTable);
+    await requestTableHandler.add(requestTable)
     //*
     // const requestTableSel = await requestTableHandler.select({ requesttype: "vh-hour-cou" }, null);
     // const requestTableSel = await requestTableHandler.select(
@@ -998,17 +1017,17 @@ async function getRequestTable() {
     // let res = await requestTableHandler.updateSetPropertyValues();
     // // // let propValues = await requestTableHandler.getPropValues();
     // let setPropExist = await requestTableHandler.updatePropExist();
-    let updateRes = await requestTableHandler.updateRequestTable();
-    console.log("请求配置库更新情况：", updateRes);
-    let setPropertyRes = await requestTableHandler.setPropValues();
+    let updateRes = await requestTableHandler.updateRequestTable()
+    console.log("请求配置库更新情况：", updateRes)
+    let setPropertyRes = await requestTableHandler.setPropValues()
 
-    await requestTableHandler.disconnect();
+    await requestTableHandler.disconnect()
     // return alarmTable;
     // return requestTableSel;
     // return namestr;
     // return requestTableSel;
     // return setPropExist;
-    return setPropertyRes;
+    return setPropertyRes
     // return propValues;
     // return res;
 }

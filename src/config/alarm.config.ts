@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 22:28:47
- * @LastEditTime: 2021-10-01 17:07:07
+ * @LastEditTime: 2021-10-03 14:31:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\factory.config.ts
@@ -60,6 +60,7 @@ export const AlarmStruct = {
     alarmParamDescription: { type: String },
     alarmProperityName: { type: String },
     alarmProperityDisplayName: { type: String },
+    alarmProperityDescription: { type: String },
     alarmType: Number,
     alarmTypeDescription: { type: String },
     alarmConfigParam: [String],

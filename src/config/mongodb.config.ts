@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:17:14
- * @LastEditTime: 2021-09-23 01:25:36
+ * @LastEditTime: 2021-10-01 23:12:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\mongodb.config.ts
@@ -11,7 +11,8 @@ import { FactoryStruct } from "./factory.config"
 import { AlarmStruct } from "./alarm.config"
 import { ServerRequestStruct } from "./server-request.config"
 // const ip = "localhost:27017"
-const ip = "mongo-solid-pollution:27017"
+const ip = "localhost:27017"
+// const ip = "mongo-solid-pollution:27017"
 const factoryConfig = {
     ip: ip,
     datasename: "workCondition_subSystem",

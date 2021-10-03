@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-05 01:33:25
- * @LastEditTime: 2021-10-01 21:59:33
+ * @LastEditTime: 2021-10-03 00:31:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\main\index.ts
@@ -105,35 +105,55 @@ class CTask extends AbsTask {
 
         // TODO: 5、获取报警配置库数据
         const alarmTable = await this.alarmTableHandler.select({ enableStatus: true }, null)
+        let objnameFilterArr = [
+            {
+                $group: {
+                    _id: "$alarmObjname",
+                    propNumInOneAlarmObj: { $sum: 1 },
+                    alarmObjname: { $first: "$alarmObjname" },
+                    alarmObjDisplayName: { $first: "$alarmObjDisplayName" },
+                    alarmObjDescription: { $first: "$alarmObjDescription" }
+                }
+            }
+        ]
+        // const res = await ruleTableHandler.distinct(fieldFilterArr);
+
+        const alarmObj = await this.alarmTableHandler.aggregate(objnameFilterArr)
+        // console.log("alarmObj", alarmObj)
         await this.alarmTableHandler.disconnect()
         // return alarmTable;
         // TODO: 6、遍历报警配置数据，完成以下任务：
         let res = []
         // todo:① 更新平台报警对象
-        for (let alarmRecord of alarmTable) {
-            if (alarmRecord.enableStatus) {
-                // console.log(alarmRecord);
-                // if (alarmRecord.alarmType !== 1) {
-                //     continue;
-                // }
-                // console.log(alarmRecord);
-                // TODO: ①创建平台报警对象
-                this.platformAlarmObject.alarmInfo = alarmRecord
-                this.platformAlarmObject.setProperityInfo()
-                // let createObjRes = await this.platformAlarmObject.rmObject();//必要时可删除对象实例
-                let createObjRes = await this.platformAlarmObject.creatObject()
-                let createPropRes = await this.platformAlarmObject.creatProperity()
-                // // console.log(createObjRes, createPropRes);
-                // console.log(createObjRes);
-                res.push(createObjRes, createPropRes)
-                // res.push(createObjRes);
-            }
-        }
+        // for (let alarmRecord of alarmTable) {
+        //     if (alarmRecord.enableStatus) {
+        //         // console.log(alarmRecord);
+        //         // if (alarmRecord.alarmType !== 1) {
+        //         //     continue;
+        //         // }
+        //         // console.log(alarmRecord);
+        //         // TODO: ①创建平台报警对象
+        //         this.platformAlarmObject.alarmInfo = alarmRecord
+        //         this.platformAlarmObject.setProperityInfo()
+        //         // let createObjRes = await this.platformAlarmObject.rmObject();//必要时可删除对象实例
+        //         let createObjRes = await this.platformAlarmObject.creatObject()
+        //         let createPropRes = await this.platformAlarmObject.creatProperity()
+        //         // // console.log(createObjRes, createPropRes);
+        //         // console.log(createObjRes);
+        //         res.push(createObjRes, createPropRes)
+        //         // res.push(createObjRes);
+        //     }
+        // }
 
         // 保存属性增加记录
-        XLSX_JSON.saveJsonToFile(res, __dirname, "creatProplog")
-        // ?以下大量注释部分为向服务器进行单位号d的请求版本，出现同时大量请求，到时平台服务奔溃现象，故更新了新版本
+        // XLSX_JSON.saveJsonToFile(res, __dirname, "creatProplog")
 
+        let createObjRes =
+            await this.platformAlarmObject.createAlarmObjInstanceByTemplateConfigFile(
+                alarmObj,
+                alarmTable
+            )
+        console.log("createObjRes", createObjRes)
         //* 我们增加了一个服务配置库来统一管理所有接口服务的请求，所有位号的数据接口请求均需经过该配置库进行筛选和批量请求
         // todo:② 基于报警配置库和平台其它信息生成服务器请求配置库，我们需要根据该请求库完成批量位号请求与报警的设置(报警对象写值请求，写值0平台不报警，写值1则报警，报警驱动由平台提供，我们只需负责创建属性、设置报警配置和完成写值即可)
         this.requestTableTaskHandler.alarmTableWithEnabled = alarmTable

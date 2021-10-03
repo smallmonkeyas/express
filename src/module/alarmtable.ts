@@ -3,16 +3,16 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-12 00:02:12
+ * @LastEditTime: 2021-10-03 14:33:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\ruletable.ts
  */
-import "reflect-metadata";
+import "reflect-metadata"
 // import mongoose from 'mongoose';
 
-import { Container, Service, Inject } from "typedi";
-import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../dao";
+import { Container, Service, Inject } from "typedi"
+import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../dao"
 import {
     factoryConfig,
     ruletableConfig,
@@ -28,16 +28,16 @@ import {
     AlarmObjnameConfig,
     AlarmTypeDescConfig,
     AlarmTypeDeprecated
-} from "../config";
-import { CSingleRuleInfo } from "./rule";
-import { CRuleTable } from "./ruletable";
-import { CVendorData, IVendorData } from "./vendor";
-import { CSupOSData } from "./supos";
-import { User } from "./user";
-import { request, system, XLSX_JSON, fs } from "../../modulejs";
-import { factoryCollectorTempleData } from "../respository/factory/collector";
+} from "../config"
+import { CSingleRuleInfo } from "./rule"
+import { CRuleTable } from "./ruletable"
+import { CVendorData, IVendorData } from "./vendor"
+import { CSupOSData } from "./supos"
+import { User } from "./user"
+import { request, system, XLSX_JSON, fs } from "../../modulejs"
+import { factoryCollectorTempleData } from "../respository/factory/collector"
 
-Container.import([CFileOperate, CSingleRuleInfo, CRuleTable, User]);
+Container.import([CFileOperate, CSingleRuleInfo, CRuleTable, User])
 // interface IFactoryCollector {
 //     id: number;
 //     objname: string;
@@ -56,11 +56,11 @@ Container.import([CFileOperate, CSingleRuleInfo, CRuleTable, User]);
 @Service("报警配置表记录（行）生成任务")
 export class AlarmTableRecordGenerateTask {
     @Inject("单规则信息")
-    singleRule!: CSingleRuleInfo;
-    ruleRecord!: IRuleStruct;
-    singleAlarm!: IAlarmStruct;
+    singleRule!: CSingleRuleInfo
+    ruleRecord!: IRuleStruct
+    singleAlarm!: IAlarmStruct
     @Inject("supOS数据接口")
-    plantInterface!: CSupOSData;
+    plantInterface!: CSupOSData
     getDefaultAlarmTableRecord(): void {
         let objnameInclude = this.singleRule.getObjnameInclude(),
             factoryName = this.singleRule.getFactoryName(),
@@ -85,7 +85,7 @@ export class AlarmTableRecordGenerateTask {
             )}_报警产生条件：${alarmCondition}`,
             alarmProperityName = `A${epcode}_${alarmType}_xxx_${includeParamName.join("_")}`,
             alarmProperityDisplayName = `配置参数_${alarmConfigParam.join("__")}`,
-            alarmProperityDescription = `使能配置参数:${enableConfigparam},报警条件：为1则触发报警`;
+            alarmProperityDescription = `使能配置参数:${enableConfigparam},报警条件：为1则触发报警`
 
         this.singleAlarm = {
             // id: this.tableIndex++,
@@ -111,17 +111,17 @@ export class AlarmTableRecordGenerateTask {
             alarmProperityName: alarmProperityName,
             alarmProperityDisplayName: alarmProperityDisplayName,
             alarmProperityDescription: alarmProperityDescription
-        };
+        }
     }
     // TODO:读取配置参数对应的对象属性是否有变化(若没值，则按默认值来)，若有变化，则更新
     async getConfigParamValue(): Promise<Array<number>> {
-        const { objnameInclude, alarmConfigParam, alarmConfigParamValue } = this.singleAlarm;
-        let configParamValue: Array<number> = [];
+        const { objnameInclude, alarmConfigParam, alarmConfigParamValue } = this.singleAlarm
+        let configParamValue: Array<number> = []
         for (let propName of alarmConfigParam) {
-            this.plantInterface.supos = GetPropertyValueNetConfig(objnameInclude, propName);
-            let res: { result: number; [prop: string]: any } = await this.plantInterface.post();
+            this.plantInterface.supos = GetPropertyValueNetConfig(objnameInclude, propName)
+            let res: { result: number; [prop: string]: any } = await this.plantInterface.post()
 
-            configParamValue.push(res.result);
+            configParamValue.push(res.result)
         }
         // alarmConfigParam.forEach(async (propName, index) => {
         //     this.plantInterface.supos = GetPropertyValueNetConfig(objnameInclude, propName);
@@ -130,30 +130,30 @@ export class AlarmTableRecordGenerateTask {
         //     configParamValue.push(res.result);
         // });
 
-        let isNumber = /(\d+,\d+)|(^\d.*\d$)/g.test(configParamValue.toString());
+        let isNumber = /(\d+,\d+)|(^\d.*\d$)/g.test(configParamValue.toString())
         if (!isNumber) {
-            return alarmConfigParamValue;
+            return alarmConfigParamValue
         }
-        return configParamValue;
+        return configParamValue
     }
     async getConfigFlagValue(): Promise<any> {
-        const { objnameInclude, enableConfigparam, enableStatus } = this.singleAlarm;
-        let configflagValue: number;
-        this.plantInterface.supos = GetPropertyValueNetConfig(objnameInclude, enableConfigparam);
-        let res: { result: number; [prop: string]: any } = await this.plantInterface.post();
+        const { objnameInclude, enableConfigparam, enableStatus } = this.singleAlarm
+        let configflagValue: number
+        this.plantInterface.supos = GetPropertyValueNetConfig(objnameInclude, enableConfigparam)
+        let res: { result: number; [prop: string]: any } = await this.plantInterface.post()
 
-        configflagValue = res.result;
+        configflagValue = res.result
         if (!configflagValue) {
-            return enableStatus;
+            return enableStatus
         }
-        return configflagValue === 1 ? true : false;
+        return configflagValue === 1 ? true : false
     }
     async getAlarmTableRecord() {
-        this.singleRule.rule = this.ruleRecord;
-        this.getDefaultAlarmTableRecord();
+        this.singleRule.rule = this.ruleRecord
+        this.getDefaultAlarmTableRecord()
         // ?暂时 this.singleAlarm.alarmConfigParamValue = await this.getConfigParamValue();
         // ?暂时 this.singleAlarm.enableStatus = await this.getConfigFlagValue();
-        return this.singleAlarm;
+        return this.singleAlarm
     }
 }
 
@@ -168,10 +168,10 @@ export class CAlarmTableGenerateTask {
     // ruleTableOperate!: CRuleTable;
     // singleAlarm!: IAlarmStruct;
     // tableIndex: number = 1;
-    ruletable!: Array<IRuleStruct>;
-    table: Array<IAlarmStruct> = [];
+    ruletable!: Array<IRuleStruct>
+    table: Array<IAlarmStruct> = []
     @Inject("报警配置表记录（行）生成任务")
-    tableRecordTask!: AlarmTableRecordGenerateTask;
+    tableRecordTask!: AlarmTableRecordGenerateTask
     async getAlarmTable(): Promise<any> {
         // let ruleTableHandler = Container.get<CRuleTable>('规则库操作类');
         // this.ruleTableOperate.mongodb.conneConfig = ruletableConfig;
@@ -183,14 +183,14 @@ export class CAlarmTableGenerateTask {
         // const ruletable = await this.ruleTableOperate.select(null, null);
         // const disconnectRes = await this.ruleTableOperate.disconnect();
         // console.log("disconnectRes", disconnectRes);
-        let ruletable = this.ruletable;
+        let ruletable = this.ruletable
         if (Array.isArray(ruletable)) {
-            let tableRecordIndex: number = 1;
+            let tableRecordIndex: number = 1
             for (let ruleRecord of ruletable) {
-                this.tableRecordTask.ruleRecord = ruleRecord;
-                let alarmRecord = await this.tableRecordTask.getAlarmTableRecord();
-                alarmRecord.id = tableRecordIndex++;
-                this.table.push(alarmRecord);
+                this.tableRecordTask.ruleRecord = ruleRecord
+                let alarmRecord = await this.tableRecordTask.getAlarmTableRecord()
+                alarmRecord.id = tableRecordIndex++
+                this.table.push(alarmRecord)
             }
         }
 
@@ -257,8 +257,8 @@ export class CAlarmTableGenerateTask {
 
 // ?报警配置库-单元测试
 const alarmTableFun = async function (alarmJson: any): Promise<any> {
-    let alarmTableHandler = Container.get<CAlarmTable>("报警配置库");
-    alarmTableHandler.mongodb.conneConfig = alarmtableConfig;
+    let alarmTableHandler = Container.get<CAlarmTable>("报警配置库")
+    alarmTableHandler.mongodb.conneConfig = alarmtableConfig
     // let ruleTableLocalHandler = Container.get<CRuleTableLocal>('规则数据表本地操作类');
 
     // ruleTableLocalHandler.file = ruletableFileConfig;
@@ -266,10 +266,10 @@ const alarmTableFun = async function (alarmJson: any): Promise<any> {
 
     // let dataRes = factoryCollectorTempleData;
     // if (dataRes.info.toLocaleLowerCase() === 'success') {
-    const resConnect = await alarmTableHandler.connect();
-    const resDelete = await alarmTableHandler.deleteAll();
-    await alarmTableHandler.add(alarmJson);
-    const res = await alarmTableHandler.select(null, null);
+    const resConnect = await alarmTableHandler.connect()
+    const resDelete = await alarmTableHandler.deleteAll()
+    await alarmTableHandler.add(alarmJson)
+    const res = await alarmTableHandler.select(null, null)
     // const res = await alarmTableHandler.select({ epcode: '3210230203000304' }, [
     //     'objname',
     //     'epcode'
@@ -294,14 +294,14 @@ const alarmTableFun = async function (alarmJson: any): Promise<any> {
                 status: { $first: "$status" }
             }
         }
-    ];
+    ]
     // const res = await ruleTableHandler.distinct(fieldFilterArr);
-    await alarmTableHandler.disconnect();
+    await alarmTableHandler.disconnect()
     // console.log('alarmTableFunRes', resDelete);
-    console.log("alarmTableFunRes", res, res.length);
+    console.log("alarmTableFunRes", res, res.length)
     // console.log('alarmTableFunRes', res, resDelete, res.length);
-    return res;
-};
+    return res
+}
 // ruleTableFun().then((item) => {
 //     console.log('ruleTable', item);
 // });
@@ -309,16 +309,22 @@ const alarmTableFun = async function (alarmJson: any): Promise<any> {
 // ? 报警配置库测试
 
 const alarmTableTest = async function () {
-    let user = Container.get<User>("用户");
-    await user.login();
-    let alarmTableHandler = Container.get<CAlarmTableGenerateTask>("报警配置表生成任务类");
-    await alarmTableHandler.getAlarmTable();
-    let alarmTable = alarmTableHandler.table;
-    // console.log("alarmTable", alarmTable);
-    return await alarmTableFun(alarmTable);
+    let user = Container.get<User>("用户")
+    await user.login()
+    let alarmTableHandler = Container.get<CAlarmTableGenerateTask>("报警配置表生成任务类")
+    let ruleTableHandler = Container.get<CRuleTable>("规则库操作类")
+    ruleTableHandler.mongodb.conneConfig = ruletableConfig
+    await ruleTableHandler.connect()
+    const ruletable = await ruleTableHandler.select(null, null)
+    await ruleTableHandler.disconnect()
+    alarmTableHandler.ruletable = ruletable
+    await alarmTableHandler.getAlarmTable()
+    let alarmTable = alarmTableHandler.table
+    // console.log("alarmTable", alarmTable)
+    return await alarmTableFun(alarmTable)
     // console.log('alarmTableFun', alarmTableHandler.table);
-};
+}
 
 // alarmTableTest().then((item) => {
-//     console.log(item);
-// });
+//     console.log(item)
+// })

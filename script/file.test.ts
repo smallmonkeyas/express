@@ -2,14 +2,14 @@
 /*
  * @Author: your name
  * @Date: 2021-09-06 21:38:49
- * @LastEditTime: 2021-09-30 20:18:22
+ * @LastEditTime: 2021-10-02 03:15:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\script\file.test.ts
  */
 
-import { path, XLSX, xlsx, fs, file, ExcelTemplate, Excel } from "../modulejs"
-import { objnameTempleFileConfig, objnameFileConfig } from "../src/config"
+import { path, XLSX, xlsx, fs, file, ExcelTemplate, Excel, stream } from "../modulejs"
+import { objnameTempleFileConfig, alarmObjFileConfig } from "../src/config"
 // const EXCEL = require("xlsx-style")
 // // let dir = __dirname;
 // // let configDir = path.resolve(process.cwd(), './');
@@ -135,25 +135,30 @@ const writeFileAsync = util.promisify(fs.writeFile)
     // 用数据源(对象)data渲染Excel模板
     // cachePath 为编译缓存路径, 对于模板文件比较大的情况, 可显著提高运行效率, 绝对路径, 若不设置, 则无缓存
     const exlBuf2 = await ExcelTemplate.renderExcel(exlBuf, data, {
-        cachePath: `${objnameFileConfig.filePath}/cache`
+        cachePath: `${alarmObjFileConfig.filePath}/cache`
     })
     // await writeFileAsync("E:/Download_Temp/Google/对象实例创建测试/对象实例信息12.xlsx", exlBuf2)
-    const fileOutDir = `${objnameFileConfig.filePath}/${objnameFileConfig.fileName}.${objnameFileConfig.fileExtension}`
+    const fileOutDir = `${alarmObjFileConfig.filePath}/${alarmObjFileConfig.fileName}.${alarmObjFileConfig.fileExtension}`
 
     // // const pathOutDir = path.resolve(__dirname, "./对象实例生成1.xlsx")
     // fs.writeFileSync(fileOutDir, exlBuf2, { type: "buffer" })
-    let fileOutDir1 = `${objnameFileConfig.filePath}/${objnameFileConfig.fileName}1.${objnameFileConfig.fileExtension}`
+    let fileOutDir1 = `${alarmObjFileConfig.filePath}/${alarmObjFileConfig.fileName}1.${alarmObjFileConfig.fileExtension}`
     // const fileR = fs.createReadStream(fileOutDir)
     // const strFileR = JSON.stringify(fileR)
     // console.log(strFileR)
-    // const fileR1 = fs.createReadStream(fileOutDir1)
+    const fileR1 = fs.createReadStream(`/${fileOutDir1}`)
+    // 创建一个bufferstream
+    var bufferStream = new stream.PassThrough()
+    // 将Buffer写入
+    bufferStream.end(exlBuf2)
     // const fileR1 = await readFileAsync(fileOutDir1)
     // fs.writeFileSync(`${objnameFileConfig.filePath}/fileOutOrigin.txt`, JSON.stringify(fileR))
     // fs.writeFileSync(`${objnameFileConfig.filePath}/fileOutTrue.txt`, JSON.stringify(fileR1))
     // console.log(new Uint8Array(exlBuf2))
     // fs.writeFileSync(fileOutDir, new Uint8Array(exlBuf2))
     // let value = fs.createReadStream(fileOutDir)
-    // console.log(value)
+    console.log("fileR1", Object.keys(fileR1))
+    console.log("bufferStream", bufferStream)
     // await writeFileAsync(fileOutDir, fileR)
     // // fs.writeFileSync(fs.readFileSync(fileOutDir))
     // console.log("对象实例信息.xlsx", fileR)
