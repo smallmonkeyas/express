@@ -7,7 +7,7 @@
  * @Description: In User Settings Edit
  * @FilePath: \express\src\respository\factory\collector.ts
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.factoryCollectorTempleData = void 0;
 exports.factoryCollectorTempleData = {
     "error": 0,

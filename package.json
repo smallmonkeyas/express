@@ -3,12 +3,23 @@
     "version": "1.0.0",
     "private": true,
     "description": "",
-    "main": "./bin/www",
+    "_1": "./bin/www",
     "target": "./bin/www",
     "_start": "hotnode ./bin/www",
+    "main": "src/service/excel-export/index.js",
+    "bin": "src/service/excel-export/index.js",
+    "pkg": {
+        "outputPath": "./.dist",
+        "///": "scripts[tmp/script/*.js]",
+        "assets": [
+            "src/**/*.json"
+        ]
+    },
     "scripts": {
+        "pkg": "pkg . --out-path=./.dist",
         "start": "ts-node ./src/main/index",
-        "build": "webpack"
+        "build": "tsc",
+        "_build": "webpack"
     },
     "author": "scx",
     "dependencies": {

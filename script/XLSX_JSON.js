@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-07-17 17:48:18
- * @LastEditTime: 2021-09-27 00:15:16
+ * @LastEditTime: 2021-10-18 17:15:41
  * @LastEditors: Please set LastEditors
  * @Description: 引用的库-excel和json数据转换库
  * @FilePath: \SolidPollutionItem\tmp\script\XLSX_JSON.js
@@ -93,12 +93,13 @@ const jsonToExcel = function (dataJson, pathFileDir, fileName) {
     }
     tmpexcelJson = dataJson
     const excelJson = tmpexcelJson.map((item) => {
-        if (!system.isJSON(item)) {
+        if (!Object.keys(item).length) {
             return { error: item }
         } else {
             return item
         }
     })
+    // console.log(excelJson)
     ws = XLSX.utils.json_to_sheet(excelJson)
     XLSX.utils.book_append_sheet(wb, ws, fileName)
     XLSX.writeFile(wb, newfileDirectory)

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-13 14:13:44
- * @LastEditTime: 2021-10-13 14:13:50
+ * @LastEditTime: 2021-10-15 16:40:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \CMHe:\files\program\docker\debian\express\compenent\flowchart\flowReuseCom1.js
@@ -12,125 +12,156 @@
 /* eslint-disable no-var */
 /* eslint-disable no-unused-vars */
 
-import React, { Component } from "react";
-import moment from "moment";
+import React, { Component } from "react"
+import moment from "moment"
 
-window.moment = moment;
+window.moment = moment
 // var layout = document.querySelector('div#Layout_f2a2f29271924e8d885e63249f7a65d4')
 // iframe
-let params = {};
+let params = {}
 window.addEventListener("message", function (event) {
-    params = JSON.parse(event.data);
-    console.log("子页面接收消息：", params);
-});
+    params = JSON.parse(event.data)
+    // console.log("子页面接收消息：", params)
+})
 
-let cookie = {};
-const now = moment();
-let factoryCollector;
+let cookie = {}
+const now = moment()
+let factoryCollector
 class CustomComp extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             factoryName: "",
             locationX: 0,
             locationY: 0
-        };
-        this.factoryRef = React.createRef();
+        }
+        this.factoryRef = React.createRef()
     }
-  componentDidMount = () => {
-      const factoryInfo = getVendor("serverapi/cfg/collector");
-      factoryInfo.then((data) => {
-          factoryCollector = convertToObj(data, "objname", "period");
-      // // console.logdata,factoryCollector)
-      });
-      cookie = getCookie();
-      // // // // console.log'cookie', cookie);
-      // 趋势y轴自适应
-      const listenObj = document.querySelector("div.wrap_36Hx4");
-      setSelectContentChangeEvt(listenObj);
-      // 全屏操作
-      document.body.onload = addEventListenerToBtn();
-      window.onbeforeunload = removeBtnObj;
-      // 定时刷新
-      initFreshData(); // 初始化-监听
-      // setInterval(intervalFreshData, 3000);
-      // 新增factoryElement元素
-      // document.querySelector(".htDivFlex").after(factoryElement);
-      /* let factoryEle = document.querySelector("#factory-element").parentNode.parentNode.parentNode;
+    openDataTag = () => {
+        // // console.log("工况标记流程图界面", {
+        //     data: {
+        //         pageDescription: this.pageDescription,
+        //         pageIndex: this.pageIndex,
+        //         epcode: this.epcodeCollector[factoryname],
+        //         factoryname: factoryname
+        //     },
+        //     event: "tag-open",
+        //     code: 1
+        // })
+        window.parent.postMessage(
+            {
+                data: {
+                    pageDescription: this.pageDescription,
+                    pageIndex: this.pageIndex,
+                    epcode: this.epcodeCollector[factoryname],
+                    factoryname: factoryname
+                },
+                event: "tag-open",
+                code: 1
+            },
+            "*"
+        )
+    }
+    componentDidMount = () => {
+        const factoryInfo = getVendor("serverapi/cfg/collector")
+        factoryInfo.then((data) => {
+            factoryCollector = convertToObj(data, "objname", "period")
+            this.epcodeCollector = convertToObj(data, "displayname", "epcode")
+            // // // console.logdata,factoryCollector)
+        })
+        cookie = getCookie()
+        // // // // // console.log'cookie', cookie);
+        // 趋势y轴自适应
+        const listenObj = document.querySelector("div.wrap_36Hx4")
+        setSelectContentChangeEvt(listenObj)
+        // 全屏操作
+        document.body.onload = addEventListenerToBtn()
+        window.onbeforeunload = removeBtnObj
+        // 定时刷新
+        initFreshData() // 初始化-监听
+        // setInterval(intervalFreshData, 3000);
+        // 新增factoryElement元素
+        // document.querySelector(".htDivFlex").after(factoryElement);
+        /* let factoryEle = document.querySelector("#factory-element").parentNode.parentNode.parentNode;
       this.factoryRef.current.style.height = '60px';
       this.factoryRef.current.style.left = '0px';
       this.factoryRef.current.style.position = 'float'
       // this.factoryRef.current.clientWidth = '100px'
 
-      // // // console.logfactoryEle,document.body.clientWidth,this.factoryRef.current.parentNode.parentNode.parentNode); */
-      // 流程图标题修改
-      const oobj = parmseToObject(); // 获取pageid传参
-      let factoryName;
-      if (!!(oobj && oobj.factoryName)) {
-      // // // console.log"factoryName", oobj.factoryName);
-          factoryName = decodeURIComponent(oobj.factoryName);
-      } else {
-          factoryName = "";
-      }
-      const setFactoryNamePromise = setFactoryName(factoryName);
-      setFactoryNamePromise.then((res) => {
-      // // console.logres);
-      });
-      // iframe
-      if (window.parent) {
-          let pageIndex = 1;
-          let pageDescription = '';
-          let btn = document.querySelectorAll('button');
-          for (let i = 1; i < btn.length; i ++) {
-              if (btn[i].style.color == "rgb(0, 255, 255)") {
-                  pageIndex = i
-                  pageDescription = btn[i].innerText
-                  break;
-              }
-          }
-          window.parent.postMessage(
-              {
-                  pageDescription: pageDescription,
-                  pageIndex: pageIndex,
-                  event: "flow-open",
-                  code: 1
-              },
-              "*"
-          );
-      }
-  };
+      // // // // console.logfactoryEle,document.body.clientWidth,this.factoryRef.current.parentNode.parentNode.parentNode); */
+        // 流程图标题修改
+        const oobj = parmseToObject() // 获取pageid传参
+        let factoryName
+        if (!!(oobj && oobj.factoryName)) {
+            // // // // console.log"factoryName", oobj.factoryName);
+            factoryName = decodeURIComponent(oobj.factoryName)
+        } else {
+            factoryName = ""
+        }
+        // this.factoryName = factoryName
+        const setFactoryNamePromise = setFactoryName(factoryName)
+        setFactoryNamePromise.then((res) => {
+            // // // console.logres);
+        })
+        // iframe
+        if (window.parent) {
+            let pageIndex = 1
+            let pageDescription = ""
+            let btn = document.querySelectorAll("button")
+            for (let i = 1; i < btn.length; i++) {
+                if (btn[i].innerText == "工况标记") {
+                    btn[i].addEventListener("click", this.openDataTag)
+                    // break;
+                }
+                if (btn[i].style.color == "rgb(0, 255, 255)") {
+                    this.pageIndex = i
+                    this.pageDescription = btn[i].innerText
+                    //   break;
+                }
+            }
 
-  render() {
-      const { factoryName, locationX, locationY } = this.state;
-      return (
-          <div
-              id="factory-element"
-              ref={this.factoryRef}
-              style={{
-                  position: "absolute",
-                  left: locationX,
-                  top: locationY,
-                  zIndex: 111,
-                  fontSize: "40px",
-                  color: "white",
-                  width: "800px",
-                  height: "100px",
-                  backgroundColor: "#0F203E"
-              }}
-          >
-              {factoryName}
-          </div>
-      );
-  }
+            window.parent.postMessage(
+                {
+                    data: { pageDescription: this.pageDescription, pageIndex: this.pageIndex },
+                    event: "flow-open",
+                    code: 1
+                },
+                "*"
+            )
+        }
+    }
+
+    render() {
+        const { factoryName, locationX, locationY } = this.state
+        return (
+            <div
+                id='factory-element'
+                ref={this.factoryRef}
+                style={{
+                    position: "absolute",
+                    left: locationX,
+                    top: locationY,
+                    zIndex: 111,
+                    fontSize: "40px",
+                    color: "white",
+                    width: "800px",
+                    height: "100px",
+                    backgroundColor: "#0F203E"
+                }}
+            >
+                {factoryName}
+            </div>
+        )
+    }
 }
 
-export default CustomComp;
+export default CustomComp
 
 /**
  *
  */
 // 客户端为IE11浏览器时不支持ES6脚本
-let css;
+let css
 const cssInnerHTML = `
       .tooltip {
         position: relative;
@@ -180,88 +211,88 @@ const cssInnerHTML = `
         visibility: visible;
         opacity: 1;
       }
-      `;
+      `
 // document.getElementsByTagName("head")[0].appendChild(css);
 // ! 全屏按钮操作
 const toggleFullscreen = function () {
-    const element = document.documentElement;
+    const element = document.documentElement
     const isFull = !!(
         document.webkitIsFullScreen ||
-    document.mozFullScreen ||
-    document.msFullscreenElement ||
-    document.fullscreenElement
-    ); // ! document.webkitIsFullScreen都为true。因此用!!
+        document.mozFullScreen ||
+        document.msFullscreenElement ||
+        document.fullscreenElement
+    ) // ! document.webkitIsFullScreen都为true。因此用!!
 
     // elem.call(document)
     if (!isFull) {
         const fullElem =
-      element.requestFullScreen || // W3C
-      element.webkitRequestFullScreen || // Chrome等
-      element.mozRequestFullScreen || // FireFox
-      element.msRequestFullScreen; // IE11;
-        //   // // // console.log'fullElem',fullElem)
-        fullElem.call(element);
+            element.requestFullScreen || // W3C
+            element.webkitRequestFullScreen || // Chrome等
+            element.mozRequestFullScreen || // FireFox
+            element.msRequestFullScreen // IE11;
+        //   // // // // console.log'fullElem',fullElem)
+        fullElem.call(element)
 
-    // document.documentElement.requestFullscreen();
+        // document.documentElement.requestFullscreen();
     } else {
-    // 判断各种浏览器，找到正确的方法
+        // 判断各种浏览器，找到正确的方法
         const exitfullElem =
-      document.exitFullscreen || // W3C
-      document.mozCancelFullScreen || // Chrome等
-      document.webkitExitFullscreen || // FireFox
-      document.webkitExitFullscreen; // IE11
-        //   // // // console.log'exitfullElem',exitfullElem)
+            document.exitFullscreen || // W3C
+            document.mozCancelFullScreen || // Chrome等
+            document.webkitExitFullscreen || // FireFox
+            document.webkitExitFullscreen // IE11
+        //   // // // // console.log'exitfullElem',exitfullElem)
         // if (document.exitFullscreen) {
         // document.exitFullscreen();
-        exitfullElem.call(document);
-    // }
+        exitfullElem.call(document)
+        // }
     }
-};
+}
 
 const addTooltipText = function (item) {
-    // // // // console.logitem);
-    const sapnTooltipText = document.createElement("span");
+    // // // // // console.logitem);
+    const sapnTooltipText = document.createElement("span")
     if (!document.fullscreenElement) {
-        sapnTooltipText.innerText = "进入全屏";
+        sapnTooltipText.innerText = "进入全屏"
     } else if (document.exitFullscreen) {
-        sapnTooltipText.innerText = "退出全屏";
+        sapnTooltipText.innerText = "退出全屏"
     }
-    sapnTooltipText.className = "tooltiptext";
-    item.parentNode.appendChild(sapnTooltipText);
-    item.parentNode.className = "tooltip";
-};
+    sapnTooltipText.className = "tooltiptext"
+    item.parentNode.appendChild(sapnTooltipText)
+    item.parentNode.className = "tooltip"
+}
 const toggleToolTipText = function (item) {
-    const sapnTooltipText = document.querySelector("span.tooltiptext");
-    // // // // console.log'hoverText', sapnTooltipText);
+    const sapnTooltipText = document.querySelector("span.tooltiptext")
+    // // // // // console.log'hoverText', sapnTooltipText);
     const isFull = !!(
         document.webkitIsFullScreen ||
-    document.mozFullScreen ||
-    document.msFullscreenElement ||
-    document.fullscreenElement
-    ); // ! document.webkitIsFullScreen都为true。因此用!!
+        document.mozFullScreen ||
+        document.msFullscreenElement ||
+        document.fullscreenElement
+    ) // ! document.webkitIsFullScreen都为true。因此用!!
     if (!isFull) {
-        sapnTooltipText.innerText = "进入全屏";
+        sapnTooltipText.innerText = "进入全屏"
     } else {
-    // if (document.exitFullscreen) {
-        sapnTooltipText.innerText = "退出全屏";
-    // }
+        // if (document.exitFullscreen) {
+        sapnTooltipText.innerText = "退出全屏"
+        // }
     }
-};
+}
 const addEventListenerToBtn = function () {
-    // // // // console.log'页面加载完成');
-    const btnObj = document.querySelector("button.ant-btn.printHidden") || {};
+    // // // // // console.log'页面加载完成');
+    const btnObj = document.querySelector("button.ant-btn.printHidden") || {}
     if (btnObj !== {}) {
-        addTooltipText(btnObj);
-        btnObj.addEventListener("click", toggleFullscreen);
-        btnObj.addEventListener("mouseover", toggleToolTipText);
+        addTooltipText(btnObj)
+        btnObj.addEventListener("click", toggleFullscreen)
+        btnObj.addEventListener("mouseover", toggleToolTipText)
     }
-    css = document.createElement("style");
-    css.innerHTML = cssInnerHTML;
-    document.getElementsByTagName("head")[0].appendChild(css);
-};
+    css = document.createElement("style")
+    css.innerHTML = cssInnerHTML
+    document.getElementsByTagName("head")[0].appendChild(css)
+}
 const removeBtnObj = function () {
-    css.remove();
-};
+    css.remove()
+}
 /** **************************************************************************************** */
 /**
  * * 数据刷新模块
@@ -269,233 +300,217 @@ const removeBtnObj = function () {
 
 // ! 定时刷新数据与采集数据
 const intervalFreshData = async function () {
-    let dataProperityPArr, objname;
+    let dataProperityPArr, objname
     while (true) {
-        const x = await delayXms(200);
-        const dataLinkObj = document.querySelector(".datalink-tooltip .properties");
-        dataProperityPArr = dataLinkObj.querySelectorAll("p");
-        const objName = dataProperityPArr[0].lastChild.textContent;
-        const propName = dataProperityPArr[2].lastChild.textContent;
+        const x = await delayXms(200)
+        const dataLinkObj = document.querySelector(".datalink-tooltip .properties")
+        dataProperityPArr = dataLinkObj.querySelectorAll("p")
+        const objName = dataProperityPArr[0].lastChild.textContent
+        const propName = dataProperityPArr[2].lastChild.textContent
         if (propName && objName) {
-            objname = objName;
-            break;
+            objname = objName
+            // this.objname = objname
+            break
         }
     }
-    let period;
+    let period
     if (!!factoryCollector) {
-        period = factoryCollector[objname];
+        period = factoryCollector[objname]
     }
 
-    // // // // // console.log'objName',objName);
-    // // // // // console.log'propName',propName);
-    // // // // // console.log'propName===',propName==='')
+    // // // // // // console.log'objName',objName);
+    // // // // // // console.log'propName',propName);
+    // // // // // // console.log'propName===',propName==='')
 
-    const freshData = await renderFreshData(dataProperityPArr);
+    const freshData = await renderFreshData(dataProperityPArr)
     //   renderFreshDataPromise.then(renderFreshData => {
-    //   // // // console.log'renderFreshData',renderFreshData)
+    //   // // // // console.log'renderFreshData',renderFreshData)
     // 更新最后一次数据更新时间
-    dataProperityPArr[6].innerHTML = `<span>最后更新时间：</span><br>${freshData.lastTimeStr}`;
+    dataProperityPArr[6].innerHTML = `<span>最后更新时间：</span><br>${freshData.lastTimeStr}`
     // //   更新当前时间
     // dataProperityPArr[7].innerHTML = `<span>当前时间：</span><br>${utc2beijing(
     //   new Date()
     // )}`;
     // 数据刷新频率
-    dataProperityPArr[8].innerHTML = `<span>刷新频率：</span><br>${freshData.fzRangeStr}`;
+    dataProperityPArr[8].innerHTML = `<span>刷新频率：</span><br>${freshData.fzRangeStr}`
     if (!!period) {
-        dataProperityPArr[9].innerHTML = `<span>采集频率：</span><br>${period}`;
+        dataProperityPArr[9].innerHTML = `<span>采集频率：</span><br>${period}`
     } else {
-        dataProperityPArr[9].innerHTML = `<span>采集频率：</span><br>————`;
+        dataProperityPArr[9].innerHTML = `<span>采集频率：</span><br>————`
     }
 
-    return true;
+    return true
     //   });
-};
+}
 async function renderFreshData(dataTooltipPArr) {
-    const dataProperityPArr = dataTooltipPArr;
-    const objName = dataProperityPArr[0].lastChild.textContent;
-    const propName = dataProperityPArr[2].lastChild.textContent;
+    const dataProperityPArr = dataTooltipPArr
+    const objName = dataProperityPArr[0].lastChild.textContent
+    const propName = dataProperityPArr[2].lastChild.textContent
     // getPropertyLastVQTValue获取数据源最后一次有效的数据信息
-    const propertyLastHisDataRes = await getPropertyLastVQTValue(
-        objName,
-        propName
-    );
-    const res = propertyLastHisDataRes;
-    let originVQTTime = 0;
-    //   // // // console.log'res', res);
-    const isActive = res.code === "200" ? !!res.result.tags : false;
-    if (!isActive)
-    {return {
-        lastTimeStr: "——",
-        fzRangeStr: "——"
-    };}
+    const propertyLastHisDataRes = await getPropertyLastVQTValue(objName, propName)
+    const res = propertyLastHisDataRes
+    let originVQTTime = 0
+    //   // // // // console.log'res', res);
+    const isActive = res.code === "200" ? !!res.result.tags : false
+    if (!isActive) {
+        return {
+            lastTimeStr: "——",
+            fzRangeStr: "——"
+        }
+    }
 
     originVQTTime =
-    res.result.tags.quality === "0" && res.result.tags.originalTime > 0
-        ? res.result.tags.originalTime
-        : res.result.tags.status === "0" && res.result.tags.serverTime > 0
+        res.result.tags.quality === "0" && res.result.tags.originalTime > 0
+            ? res.result.tags.originalTime
+            : res.result.tags.status === "0" && res.result.tags.serverTime > 0
             ? res.result.tags.serverTime
-            : 0;
+            : 0
 
-    // // // // console.log'propertyLastHisDataPromiseRes', res);
+    // // // // // console.log'propertyLastHisDataPromiseRes', res);
 
     // TODO: 获取数据刷新频率
-    const startTime = moment(now).subtract(12, "days").utc().format();
-    const endTime = moment(now).utc().format();
-    const limit = 100;
-    const fzRange = await getSinglePropFz(
-        objName,
-        propName,
-        startTime,
-        endTime,
-        limit
-    );
-    // // console.log'fzRange',fzRange)
-    if (!fzRange)
-    {return {
-        lastTimeStr: "——",
-        fzRangeStr: "——"
-    };}
-    // // // // console.logfzRange);
-    let fzRangeStr = "";
-    if (
-        fzRange.minFz === -Infinity ||
-    fzRange.minFz === Infinity ||
-    isNaN(fzRange.minFz)
-    ) {
-        fzRangeStr = "——";
+    const startTime = moment(now).subtract(12, "days").utc().format()
+    const endTime = moment(now).utc().format()
+    const limit = 100
+    const fzRange = await getSinglePropFz(objName, propName, startTime, endTime, limit)
+    // // // console.log'fzRange',fzRange)
+    if (!fzRange) {
+        return {
+            lastTimeStr: "——",
+            fzRangeStr: "——"
+        }
+    }
+    // // // // // console.logfzRange);
+    let fzRangeStr = ""
+    if (fzRange.minFz === -Infinity || fzRange.minFz === Infinity || isNaN(fzRange.minFz)) {
+        fzRangeStr = "——"
     } else {
         fzRangeStr =
-      fzRange.maxFz === fzRange.minFz
-          ? ` ${fzRange.minFz} 秒`
-          : ` ${fzRange.minFz} ~ ${fzRange.maxFz} 秒`;
+            fzRange.maxFz === fzRange.minFz
+                ? ` ${fzRange.minFz} 秒`
+                : ` ${fzRange.minFz} ~ ${fzRange.maxFz} 秒`
     }
 
     // TODO: 最后一次数据刷新时间
-    const lastTime = await getLastFreshTime(objName, propName, originVQTTime);
-    let lastTimeStr;
+    const lastTime = await getLastFreshTime(objName, propName, originVQTTime)
+    let lastTimeStr
     if (!lastTime) {
-        lastTimeStr = "——";
+        lastTimeStr = "——"
     } else {
-        lastTimeStr = moment(lastTime).format("YYYY-MM-DD HH:mm:ss");
+        lastTimeStr = moment(lastTime).format("YYYY-MM-DD HH:mm:ss")
     }
     return {
         lastTimeStr: lastTimeStr,
         fzRangeStr: fzRangeStr
-    };
+    }
 }
 async function getLastFreshTime(objName, propName, originVQTTime) {
-    // // // // console.log'getLastFreshTime', originVQTTime);
-    const nowTime = new Date().getTime();
-    const VQTnowTimeDiff = nowTime - originVQTTime;
-    let lastTime;
+    // // // // // console.log'getLastFreshTime', originVQTTime);
+    const nowTime = new Date().getTime()
+    const VQTnowTimeDiff = nowTime - originVQTTime
+    let lastTime
     if (VQTnowTimeDiff / 1000 > 30 * 60) {
-        lastTime = originVQTTime;
-        return lastTime;
+        lastTime = originVQTTime
+        return lastTime
     }
 
     // 数据刷新频率
-    let startTime = moment(originVQTTime).utc().format();
-    let endTime = moment().utc().format();
-    let limit = VQTnowTimeDiff / 1000;
+    let startTime = moment(originVQTTime).utc().format()
+    let endTime = moment().utc().format()
+    let limit = VQTnowTimeDiff / 1000
     if (VQTnowTimeDiff < 0) {
-    // 数据刷新频率
-        startTime = moment().subtract(1, "hours").utc().format();
-        endTime = moment().utc().format();
-        limit = 3600;
+        // 数据刷新频率
+        startTime = moment().subtract(1, "hours").utc().format()
+        endTime = moment().utc().format()
+        limit = 3600
     }
 
-    const fzRange = await getSinglePropFz(
-        objName,
-        propName,
-        startTime,
-        endTime,
-        limit
-    );
-    if (!fzRange) {return false;}
-    lastTime = fzRange.hisData.pop().time;
-    const lastTimeOffset = moment(lastTime).add(334, "seconds");
-    const nowMoment = moment();
+    const fzRange = await getSinglePropFz(objName, propName, startTime, endTime, limit)
+    if (!fzRange) {
+        return false
+    }
+    lastTime = fzRange.hisData.pop().time
+    const lastTimeOffset = moment(lastTime).add(334, "seconds")
+    const nowMoment = moment()
     const lastFreshTime =
-    lastTimeOffset > nowMoment ? nowMoment.valueOf() : lastTimeOffset.valueOf();
-    return lastFreshTime;
+        lastTimeOffset > nowMoment ? nowMoment.valueOf() : lastTimeOffset.valueOf()
+    return lastFreshTime
 }
 
 // ! 数据刷新初始化
 const initFreshData = function () {
     // 删除数据源无关属性
-    const dataLinkObj = document.querySelector(".datalink-tooltip .properties");
-    const dataProperityPArr = dataLinkObj.querySelectorAll("p");
-    // // // // console.log'dataProperityArr', dataProperityPArr);
-    // // // // console.log'datalink-tooltip', dataLinkObj);
+    const dataLinkObj = document.querySelector(".datalink-tooltip .properties")
+    const dataProperityPArr = dataLinkObj.querySelectorAll("p")
+    // // // // // console.log'dataProperityArr', dataProperityPArr);
+    // // // // // console.log'datalink-tooltip', dataLinkObj);
 
-    for (let ii = 0; ii < 3; ii ++) {
-        dataProperityPArr[ii].style.display = "none";
+    for (let ii = 0; ii < 3; ii++) {
+        dataProperityPArr[ii].style.display = "none"
     }
     // 添加数据刷新时间
-    const freshTimeElement = document.createElement("p");
-    const freshTimeStr = "<span>最后更新时间：</span><br>";
+    const freshTimeElement = document.createElement("p")
+    const freshTimeStr = "<span>最后更新时间：</span><br>"
 
-    freshTimeElement.innerHTML = freshTimeStr;
+    freshTimeElement.innerHTML = freshTimeStr
 
     // var parser = new DOMParser();
     // var lastFreshTime=parser.parseFromString(lastFreshTimeStr, "text/html");
 
-    dataProperityPArr[5].after(freshTimeElement);
-    // // // // console.log'lastFreshTime', freshTimeElement);
-    const nowTimeElement = document.createElement("p");
-    const nowTimeStr = "<span>当前时间：</span><br>";
+    dataProperityPArr[5].after(freshTimeElement)
+    // // // // // console.log'lastFreshTime', freshTimeElement);
+    const nowTimeElement = document.createElement("p")
+    const nowTimeStr = "<span>当前时间：</span><br>"
 
-    nowTimeElement.innerHTML = nowTimeStr;
-    freshTimeElement.after(nowTimeElement);
-    const fzElement = document.createElement("p");
-    const fzElementStr = "<span>刷新频率：</span><br>";
+    nowTimeElement.innerHTML = nowTimeStr
+    freshTimeElement.after(nowTimeElement)
+    const fzElement = document.createElement("p")
+    const fzElementStr = "<span>刷新频率：</span><br>"
 
-    fzElement.innerHTML = fzElementStr;
-    nowTimeElement.after(fzElement);
+    fzElement.innerHTML = fzElementStr
+    nowTimeElement.after(fzElement)
 
-    const collectorElement = document.createElement("p");
-    const collectElementStr = "<span>采集频率：</span><br>";
+    const collectorElement = document.createElement("p")
+    const collectElementStr = "<span>采集频率：</span><br>"
 
-    collectorElement.innerHTML = collectElementStr;
-    fzElement.after(collectorElement);
+    collectorElement.innerHTML = collectElementStr
+    fzElement.after(collectorElement)
 
-    addDataLinkListen();
+    addDataLinkListen()
     // 	setSelectContentChangeEvt(dataProperityPArr[2]);
-};
-let timer1s;
-let timer3s;
+}
+let timer1s
+let timer3s
 // TODO: 设置数据源监听事件-监听鼠标移入、移出事件
 const setIntervalfunc = function (func, xms) {
-    func();
-    return setInterval(func, xms);
-};
+    func()
+    return setInterval(func, xms)
+}
 const freshNowTime = function () {
-    const dataLinkObj = document.querySelector(".datalink-tooltip .properties");
-    const dataProperityPArr = dataLinkObj.querySelectorAll("p");
+    const dataLinkObj = document.querySelector(".datalink-tooltip .properties")
+    const dataProperityPArr = dataLinkObj.querySelectorAll("p")
     //   更新当前时间
-    dataProperityPArr[7].innerHTML = `<span>当前时间：</span><br>${utc2beijing(
-        new Date()
-    )}`;
-};
+    dataProperityPArr[7].innerHTML = `<span>当前时间：</span><br>${utc2beijing(new Date())}`
+}
 
 function addDataLinkListen() {
     //   const dataLinkObj = document.querySelector('.datalink-tooltip .properties');
     //   const dataProperityPArr = dataLinkObj.querySelectorAll('p');
-    const listenObjArr = document.querySelectorAll(".draw_g6CsK img");
-    // // // // console.log'addDataLinkListen',dataProperityPArr,listenObjArr)
-    // document.querySelectorAll('.draw_g6CsK img').forEach(function(item){item.onclick=function(){// // // // console.log'也是哦')}})
+    const listenObjArr = document.querySelectorAll(".draw_g6CsK img")
+    // // // // // console.log'addDataLinkListen',dataProperityPArr,listenObjArr)
+    // document.querySelectorAll('.draw_g6CsK img').forEach(function(item){item.onclick=function(){// // // // // console.log'也是哦')}})
     listenObjArr.forEach((item, index) => {
         listenObjArr[index].onmouseover = function () {
-            timer1s = setIntervalfunc(freshNowTime, 1000);
-            timer3s = setIntervalfunc(intervalFreshData, 5000);
-            // // // // console.log'');
-        };
+            timer1s = setIntervalfunc(freshNowTime, 1000)
+            timer3s = setIntervalfunc(intervalFreshData, 5000)
+            // // // // // console.log'');
+        }
         listenObjArr[index].onmouseout = function () {
-            clearInterval(timer1s);
-            clearInterval(timer3s);
-            // // // // console.log);
-        };
-    });
+            clearInterval(timer1s)
+            clearInterval(timer3s)
+            // // // // // console.log);
+        }
+    })
 }
 // 监听事件
 // var config,observer;
@@ -506,7 +521,7 @@ function addDataLinkListen() {
 //     // 2.创建一个观察器实例并传入回调函数
 //     observer = new MutationObserver(callback);
 //     // 3.选择需要观察变动的节点
-//     // // // // console.logobserver)
+//     // // // // // console.logobserver)
 //     // 4.以上述配置开始观察目标节点
 //     observer.observe(listenObj, config);
 //   }
@@ -518,9 +533,9 @@ function addDataLinkListen() {
 //         var dataProperityPArr = dataLinkObj.querySelectorAll('p')
 //         var objName = dataProperityPArr[0].lastChild.textContent
 //         var propName = dataProperityPArr[2].lastChild.textContent
-//         // // // // console.log'objName',objName);
-//         // // // // console.log'propName',propName);
-//         // // // // console.log'propName===',propName==='')
+//         // // // // // console.log'objName',objName);
+//         // // // // // console.log'propName',propName);
+//         // // // // // console.log'propName===',propName==='')
 //         if(propName===''||objName==='')return
 //         const propertyLastHisDataPromise = getPropertyLastVQTValue(objName,propName)
 //     	//更新最后一次刷新时间
@@ -530,7 +545,7 @@ function addDataLinkListen() {
 //     	        if(res.result.time){
 //     	            dataProperityPArr[6].innerHTML='<span>最后更新时间：</span><br>'+utc2beijing(res.result.time)
 //     	        }
-//     	        // // // // console.log'propertyLastHisDataPromiseRes',utc2beijing(res.result.time))
+//     	        // // // // // console.log'propertyLastHisDataPromiseRes',utc2beijing(res.result.time))
 //     	    }
 
 //     	})
@@ -549,7 +564,7 @@ function addDataLinkListen() {
  */
 
 function getPropertiesHistoryService(inputsParam) {
-    return new Promise((resolve) => {});
+    return new Promise((resolve) => {})
 }
 // 获取单属性历史
 
@@ -568,52 +583,56 @@ async function getSinglePropFz(objName, propName, startTime, endTime, limit) {
         startTime: startTime,
         endTime: endTime,
         limit: limit
-    };
+    }
     // const requestOptions = getRequestOptions(cookie);
-    const historyData = await fetchGetHistory(dataInfo);
-    if (!historyData) {return false;}
-    const arrTimeDiff = await getTimeDiff(historyData);
+    const historyData = await fetchGetHistory(dataInfo)
+    if (!historyData) {
+        return false
+    }
+    const arrTimeDiff = await getTimeDiff(historyData)
 
     const fzMinMax = {
         minFz: Math.min(...arrTimeDiff) / 1000,
         maxFz: Math.max(...arrTimeDiff) / 1000,
         hisData: historyData.list
-    };
-    // // console.log"fzMinMax", fzMinMax);
-    return fzMinMax;
+    }
+    // // // console.log"fzMinMax", fzMinMax);
+    return fzMinMax
 }
 async function getTimeDiff(historyData) {
-    // // // // console.log'historyData', historyData);
-    const hisDataObj = historyData.list;
-    // // console.log'hisDataObj',hisDataObj)
-    const arrTime = [];
+    // // // // // console.log'historyData', historyData);
+    const hisDataObj = historyData.list
+    // // // console.log'hisDataObj',hisDataObj)
+    const arrTime = []
     hisDataObj.forEach((item) => {
-        const timestamp = new Date(item.time).getTime();
-        arrTime.push(timestamp);
-    });
-    // // // // console.logarrTime);
-    const arrTimePop = [...arrTime];
-    const arrTimeDiff = [];
-    arrTimePop.pop();
+        const timestamp = new Date(item.time).getTime()
+        arrTime.push(timestamp)
+    })
+    // // // // // console.logarrTime);
+    const arrTimePop = [...arrTime]
+    const arrTimeDiff = []
+    arrTimePop.pop()
 
     arrTimePop.forEach((item, index) => {
-    // // // // console.logindex, item);
-        arrTimeDiff.push(arrTime[index + 1] - item);
-    });
-    let diffTime = [];
+        // // // // // console.logindex, item);
+        arrTimeDiff.push(arrTime[index + 1] - item)
+    })
+    let diffTime = []
     arrTimeDiff.forEach((item) => {
-        if (item > 1000 * 60 * 30) {return;}
-        diffTime.push(item);
-    });
-    // // console.logdiffTime, arrTimeDiff);
+        if (item > 1000 * 60 * 30) {
+            return
+        }
+        diffTime.push(item)
+    })
+    // // // console.logdiffTime, arrTimeDiff);
     // // 开头添加0后删除最后一位
     // arrTime.unshift(0)
     // arrTime.pop();
     // const arrTimeShiftRight = arrTime;
-    // // // // // console.log'arrTimeShiftRight',arrTimeShiftRight)
+    // // // // // // console.log'arrTimeShiftRight',arrTimeShiftRight)
     // const arrTimeDiff =
-    // // // // console.logarrTimeDiff);
-    return diffTime;
+    // // // // // console.logarrTimeDiff);
+    return diffTime
 }
 // Array.prototype.max = function(){
 //     return Math.max.apply({},this)
@@ -626,14 +645,11 @@ async function getTimeDiff(historyData) {
  */
 
 async function getRequestOptions(dataInfo) {
-    const { objName, propName, startTime, endTime, limit } = dataInfo;
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${cookie.suposTicket}`);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append(
-        "Cookie",
-        `vertx-web.session=${cookie["vertx-web.session"]}`
-    );
+    const { objName, propName, startTime, endTime, limit } = dataInfo
+    var myHeaders = new Headers()
+    myHeaders.append("Authorization", `Bearer ${cookie.suposTicket}`)
+    myHeaders.append("Content-Type", "application/json")
+    myHeaders.append("Cookie", `vertx-web.session=${cookie["vertx-web.session"]}`)
 
     var rawObj = {
         list: [
@@ -650,179 +666,182 @@ async function getRequestOptions(dataInfo) {
                 }
             }
         ]
-    };
-    var raw = JSON.stringify(rawObj);
+    }
+    var raw = JSON.stringify(rawObj)
     var requestOptions = {
         method: "POST",
         headers: myHeaders,
         body: raw,
         redirect: "follow"
-    };
-    return requestOptions;
+    }
+    return requestOptions
 }
 
 async function fetchGetHistory(dataInfo) {
-    const { objName, propName, startTime, endTime, limit } = dataInfo;
-    const requestOptions = await getRequestOptions(dataInfo);
+    const { objName, propName, startTime, endTime, limit } = dataInfo
+    const requestOptions = await getRequestOptions(dataInfo)
     const response = await fetch(
         `http://${window.location.hostname}:8080/api/compose/manage/objectdata/batchQuery`,
         requestOptions
-    );
-    const result = await response.text();
-    const hisData = JSON.parse(result);
-    return hisData[`${objName}.${propName}`];
+    )
+    const result = await response.text()
+    const hisData = JSON.parse(result)
+    return hisData[`${objName}.${propName}`]
 }
 
 // fetch("http://10.32.203.157:8080/api/compose/manage/objectdata/batchQuery", requestOptions)
 //   .then(response => response.text())
-//   .then(result => // // // // console.logJSON.parse(result)))
-//   .catch(error => // // // // console.log'error', error));
+//   .then(result => // // // // // console.logJSON.parse(result)))
+//   .catch(error => // // // // // console.log'error', error));
 
 // setTimeout(()=>{
 //     var listenObj = document.querySelector('div.wrap_36Hx4')
-//     // // // // console.log'listenObj',listenObj)
+//     // // // // // console.log'listenObj',listenObj)
 //     setSelectContentChangeEvt(listenObj);
 // },1000)
 
 // TODO: 趋势y轴自适应
 // 事件监听
-var config;
-var observer;
+var config
+var observer
 function setSelectContentChangeEvt(listenObj) {
     /** **内容改变的监听配置 */
     // 1.观察器的配置（需要观察什么变动）
-    config = { childList: true, subtree: true };
+    config = { childList: true, subtree: true }
     // 2.创建一个观察器实例并传入回调函数
-    observer = new MutationObserver(callback);
+    observer = new MutationObserver(callback)
     // 3.选择需要观察变动的节点
-    // // // console.logobserver);
+    // // // // console.logobserver);
     // 4.以上述配置开始观察目标节点
-    observer.observe(listenObj, config);
+    observer.observe(listenObj, config)
 }
 
 function callback(mutationsList, observer) {
     setTimeout(() => {
-        var listenObj = document.querySelectorAll("div.trendChart");
-        if (listenObj.length === 0) {return;}
+        var listenObj = document.querySelectorAll("div.trendChart")
+        if (listenObj.length === 0) {
+            return
+        }
         listenObj.forEach((item) => {
-            const o = item.id.split("_");
-            const id = o[0];
+            const o = item.id.split("_")
+            const id = o[0]
             var trendChartWarning = scriptUtil.getRegisterReactDom(
                 // 'htDiv-kgxmbs3m0-10672'
                 id
-            );
-            trendChartWarning.setCurrentConfig("extra->isYAxisCustom", true);
-        });
-    // observer.disconnect();
-    // // 重新观察目标节点
-    // listenObj = document.querySelector('div.wrap_36Hx4')
-    // observer.observe(listenObj, config);
-    }, 500);
+            )
+            trendChartWarning.setCurrentConfig("extra->isYAxisCustom", true)
+        })
+        // observer.disconnect();
+        // // 重新观察目标节点
+        // listenObj = document.querySelector('div.wrap_36Hx4')
+        // observer.observe(listenObj, config);
+    }, 500)
 }
-
+let factoryname
 // !设置企业名称关键函数
 async function setFactoryName(factoryName) {
-    const objName = "factoryTemplemte";
-    const propName = "factoryName";
-    const propValue = factoryName;
+    const objName = "factoryTemplemte"
+    const propName = "factoryName"
+    const propValue = factoryName
     if (factoryName !== "") {
-        const setPropertyValueRes = await setPropertyValue(
-            objName,
-            propName,
-            propValue
-        );
+        const setPropertyValueRes = await setPropertyValue(objName, propName, propValue)
     }
-    const currUrlHref = getUrl();
-    // // // console.log"getUrl1()", getUrl1());
+    const currUrlHref = getUrl()
+    // // // // console.log"getUrl1()", getUrl1());
     if (
         !(
-            currUrlHref ===
-      "http://10.32.203.157:8080/#/runtime-fullscreen/runtime-fullscreen/Page_3a71670ecde8486b90b26fddb93ce6eb"
+            (
+                currUrlHref ===
+                "http://10.32.203.157:8080/#/runtime-fullscreen/runtime-fullscreen/Page_9ceb85c969524354935f4c93017dc7e1"
+            )
+            // "http://10.32.203.157:8080/#/runtime-fullscreen/runtime-fullscreen/Page_3a71670ecde8486b90b26fddb93ce6eb"
         )
-    )
-    {return "不需改变企业名称";}
-    const getPropertyValueRes = await getPropertyValue(objName, propName);
-    const facArr = document.querySelectorAll(
-        ".labelContent_2A4Q7,.labelContent_middle_CeyZZ"
-    );
+    ) {
+        return "不需改变企业名称"
+    }
+    const getPropertyValueRes = await getPropertyValue(objName, propName)
+    const facArr = document.querySelectorAll(".labelContent_2A4Q7,.labelContent_middle_CeyZZ")
     if (getPropertyValueRes.code === "200" && facArr.length > 0) {
-    // // // console.log"getPropertyValueRes", getPropertyValueRes);
-    // const facArr = document.querySelectorAll(
-    //   ".labelContent_2A4Q7,.labelContent_top_1ihD9"
-    // );
+        // // // // console.log"getPropertyValueRes", getPropertyValueRes);
+        // const facArr = document.querySelectorAll(
+        //   ".labelContent_2A4Q7,.labelContent_top_1ihD9"
+        // );
         facArr.forEach((item) => {
-            item.innerText = getPropertyValueRes.result;
-        });
-        return "改变企业名称成功";
+            item.innerText = getPropertyValueRes.result
+        })
+        factoryname = getPropertyValueRes.result
+        return "改变企业名称成功"
     } else {
-        return "未改变企业名称";
+        return "未改变企业名称"
     }
 
     // return getPropertyValue;
 }
 // ! 添加企业div并覆盖到原先位置上
 function renderFactoryElement() {
-    const factoryElement = document.createElement("div");
-    const factoryElementStr = "<span>  </span><br>";
+    const factoryElement = document.createElement("div")
+    const factoryElementStr = "<span>  </span><br>"
 
-    factoryElement.innerHTML = factoryElementStr;
-    document.querySelector(".htDivFlex").after(factoryElement);
+    factoryElement.innerHTML = factoryElementStr
+    document.querySelector(".htDivFlex").after(factoryElement)
 }
 
 //* 获取页面url（hash）,若有父页面，获取父页面hash
 function getUrl() {
-    var url = "";
+    var url = ""
     try {
-        url = window.top.document.location.href;
+        url = window.top.document.location.href
     } catch (M) {
         if (window.parent) {
             try {
-                url = window.parent.document.location.href;
+                url = window.parent.document.location.href
             } catch (L) {
-                url = "";
+                url = ""
             }
         }
     }
     if (url === "") {
-        url = document.location.href;
+        url = document.location.href
     }
-    return url;
+    return url
 }
 
 //* 通用函数
 function getUrl1() {
-    var url = "";
+    var url = ""
     try {
-        url = window.top.document.location;
+        url = window.top.document.location
     } catch (M) {
         if (window.parent) {
             try {
-                url = window.parent.document.location;
+                url = window.parent.document.location
             } catch (L) {
-                url = "";
+                url = ""
             }
         }
     }
     if (url === "") {
-        url = document.location;
+        url = document.location
     }
-    return url;
+    return url
 }
 
 /*
  *流程图传参获取
  */
 const parmseToObject = function () {
-    let parmse = window.location.search;
-    if (!parmse) {return {};}
-    parmse = parmse.replace(/\?/, "").split("&");
-    const obj = {};
+    let parmse = window.location.search
+    if (!parmse) {
+        return {}
+    }
+    parmse = parmse.replace(/\?/, "").split("&")
+    const obj = {}
     parmse.forEach((item) => {
-        const o = item.split("=");
-        obj[o[0]] = o[1];
-    });
-    return obj;
-};
+        const o = item.split("=")
+        obj[o[0]] = o[1]
+    })
+    return obj
+}
 
 //* 往factoryTemplemte实例下的factoryName属性写值
 
@@ -836,13 +855,13 @@ function setPropertyValue(objName, propName, propValue) {
                 params: { propName: propName, propValue: propValue }
             },
             (res) => {
-                resolve(res);
+                resolve(res)
                 // result = res;
-                // // // // // console.log'res',res)
+                // // // // // // console.log'res',res)
                 // result = res
             }
-        );
-    });
+        )
+    })
 }
 
 //* 往factoryTemplemte实例下的factoryName属性读值
@@ -857,55 +876,55 @@ function getPropertyValue(objName, propName) {
                 params: { propName: propName }
             },
             (res) => {
-                resolve(res);
+                resolve(res)
                 // result = res;
-                // // // // // console.log'res',res)
+                // // // // // // console.log'res',res)
                 // result = res
             }
-        );
-    });
+        )
+    })
 }
 
 // TODO: 获取Authorization
 // TODO: 获取cookie
 var getCookie = function (name) {
     // 获取当前所有cookie
-    var strCookies = document.cookie;
+    var strCookies = document.cookie
     // 截取变成cookie数组
-    var array = strCookies.replace(/ /g, "").split(";");
+    var array = strCookies.replace(/ /g, "").split(";")
     // var array = strCookies.split('; ');
-    // // // // console.logarray);
+    // // // // // console.logarray);
     // 循环每个cookie
-    const cookieObj = {};
+    const cookieObj = {}
     array.forEach((item) => {
-        const o = item.split("=");
-        cookieObj[o[0]] = o[1];
-    });
+        const o = item.split("=")
+        cookieObj[o[0]] = o[1]
+    })
     // for (var i = 0; i < array.length; i++) {
     //     // 将cookie截取成两部分
     //     var item = array[i].split("=");
-    //     // // // // // console.logitem)
+    //     // // // // // // console.logitem)
     //     // 判断cookie的name 是否相等
     //     if (item[0] === name) {
     //         return item[1];
     //     }
     // }
-    return cookieObj;
-};
+    return cookieObj
+}
 
 // 时间转换utc->YYYY-MM-DD HH:mm:ss
 // var utc_datetime = "2017-03-31T08:02:06Z";
 function utc2beijing(dateForm) {
     if (dateForm === "") {
-    // 解决deteForm为空传1970-01-01 00:00:00
-        return "";
+        // 解决deteForm为空传1970-01-01 00:00:00
+        return ""
     }
-    const dateee = new Date(dateForm).toJSON();
+    const dateee = new Date(dateForm).toJSON()
     const date = new Date(Number(new Date(dateee)) + 8 * 3600 * 1000)
         .toISOString()
         .replace(/T/g, " ")
-        .replace(/\.[\d]{3}Z/, "");
-    return date;
+        .replace(/\.[\d]{3}Z/, "")
+    return date
 }
 // 获取最新数据及刷新时间
 function getPropertyLastVQTValue(objName, propName) {
@@ -919,21 +938,21 @@ function getPropertyLastVQTValue(objName, propName) {
                 params: { propName }
             },
             (res) => {
-                resolve(res);
+                resolve(res)
                 // result = res;
-                // // // // // console.log'res',res)
+                // // // // // // console.log'res',res)
                 // result = res
             }
-        );
-    });
+        )
+    })
 }
 // 延时200ms
 function delayXms(x, X) {
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve(x);
-        }, X);
-    });
+            resolve(x)
+        }, X)
+    })
 }
 
 //* 获取采集器数据
@@ -942,30 +961,30 @@ const getVendor = async function (urlpath) {
     let requestOptions = {
         method: "GET",
         redirect: "follow"
-    };
+    }
 
     const response = await fetch(
         "http://10.32.203.157:8999/serverapi/cfg/collector",
         requestOptions
-    );
-    const result = await response.text();
-    const httpResultJson = JSON.parse(result);
+    )
+    const result = await response.text()
+    const httpResultJson = JSON.parse(result)
     if (httpResultJson.info === "Success") {
-        return httpResultJson.data;
+        return httpResultJson.data
     }
-    return false;
-};
+    return false
+}
 
 //* 截取数据中两个关键参数，分别作为对象的键和对
 const convertToObj = function (data, key, value) {
-    let obj = {};
+    let obj = {}
     data.forEach((item) => {
         let period = item[value]
             .replace(/s/g, "秒")
             .replace(/m/g, "分钟")
             .replace(/h/g, "小时")
-            .replace(/d/g, "天");
-        obj[item[key]] = period;
-    });
-    return obj;
-};
+            .replace(/d/g, "天")
+        obj[item[key]] = period
+    })
+    return obj
+}

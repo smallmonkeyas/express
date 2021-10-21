@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-10 12:34:18
- * @LastEditTime: 2021-10-03 01:44:01
+ * @LastEditTime: 2021-10-13 16:49:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\servertable.ts
@@ -792,6 +792,7 @@ export class CServerRequestTableGenerateTask {
                 // 数据缺失
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
+                    id_number: this.requestTableIndex++,
                     index: String(this.trendIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -803,6 +804,7 @@ export class CServerRequestTableGenerateTask {
                 // 均值异常
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
+                    id_number: this.requestTableIndex++,
                     index: String(this.dayAvgIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -813,6 +815,7 @@ export class CServerRequestTableGenerateTask {
                 })
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
+                    id_number: this.requestTableIndex++,
                     index: String(this.hourAvgIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -826,6 +829,7 @@ export class CServerRequestTableGenerateTask {
                 // 排放量异常
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
+                    id_number: this.requestTableIndex++,
                     index: String(this.hourCouIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -836,6 +840,7 @@ export class CServerRequestTableGenerateTask {
                 })
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
+                    id_number: this.requestTableIndex++,
                     index: String(this.hourAvgIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -847,6 +852,7 @@ export class CServerRequestTableGenerateTask {
                 })
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
+                    id_number: this.requestTableIndex++,
                     index: String(this.hourAvgIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -859,6 +865,7 @@ export class CServerRequestTableGenerateTask {
             }
             this.serverRequestTable.push({
                 id: String(this.requestTableIndex++),
+                id_number: this.requestTableIndex++,
                 index: String(this.getPropertyIndex++),
                 alarmtype: alarmType,
                 objname: objnameInclude,
@@ -869,6 +876,7 @@ export class CServerRequestTableGenerateTask {
             })
             this.serverRequestTable.push({
                 id: String(this.requestTableIndex++),
+                id_number: this.requestTableIndex++,
                 index: String(this.getPropertyIndex++),
                 alarmtype: alarmType,
                 objname: objnameInclude,
@@ -879,6 +887,7 @@ export class CServerRequestTableGenerateTask {
             })
             this.serverRequestTable.push({
                 id: String(this.requestTableIndex++),
+                id_number: this.requestTableIndex++,
                 index: String(this.setPropertyIndex++),
                 alarmtype: alarmType,
                 objname: alarmObjname,

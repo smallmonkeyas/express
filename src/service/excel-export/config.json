@@ -1,0 +1,64 @@
+{
+    "linked": true,
+    "_linked": "是否需要连接内网:y(yes)/n(no)",
+    "request-collection": ["realtime-alarm", "history-alarm"],
+    "realtime-alarm": {
+        "method": "GET",
+        "_method": "方法有：GET,POST,DELETE,PUT等",
+        "no-post-data": true,
+        "post-data": {},
+        "http-request-option": {
+            "netAddress": "http://10.32.203.157:8080",
+            "netPath": "api/runtime/objects/alert/current",
+            "netParam": {
+                "keyWord": "",
+                "priority": "1%2C2%2C3%2C4%2C5%2C6%2C7%2C8%2C9%2C10"
+            }
+        },
+
+        "http-request-return": {
+            "templete": { "list": [] },
+            "date-set": {
+                "enabled": true,
+                "format": "YYYY-MM-DD HH:mm:ss",
+                "params": ["startDatatimestamp"]
+            }
+        },
+        "export": {
+            "extension-name": "xlsx",
+            "outDir": "./realtime-alarm",
+            "fileName": "实时报警表"
+        }
+    },
+    "history-alarm": {
+        "method": "GET",
+        "_method": "方法有：GET,POST,DELETE,PUT等",
+        "no-post-data": true,
+        "post-data": {},
+        "http-request-option": {
+            "netAddress": "http://10.32.203.157:8080",
+            "netPath": "api/runtime/objects/alert/history",
+            "netParam": {
+                "startTime": "2021-09-18 00:00:01",
+                "endTime": "2021-10-18 00:00:01",
+                "keyWord": "",
+                "pageSize": 2000,
+                "pageIndex": 1,
+                "priority": "1%2C2%2C3%2C4%2C5%2C6%2C7%2C8%2C9%2C10"
+            }
+        },
+        "http-request-return": {
+            "templete": { "list": [] },
+            "date-set": {
+                "enabled": true,
+                "format": "YYYY-MM-DD HH:mm:ss",
+                "params": ["startDatatimestamp", "disappearedDatatimestamp"]
+            }
+        },
+        "export": {
+            "extension-name": "xlsx",
+            "outDir": "./history-alarm",
+            "fileName": "历史报警表"
+        }
+    }
+}

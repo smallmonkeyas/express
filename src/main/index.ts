@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-05 01:33:25
- * @LastEditTime: 2021-10-03 21:50:50
+ * @LastEditTime: 2021-10-19 00:21:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\main\index.ts
@@ -150,22 +150,24 @@ class CTask extends AbsTask {
         // }
 
         // 保存属性增加记录
+        // ?报警对象添加主程序
         // XLSX_JSON.saveJsonToFile(res, __dirname, "creatProplog")
-        alarmObj.forEach(async (item: { alarmObjname: string; [prop: string]: any }) => {
-            let { alarmObjname } = item
-            if (alarmObjname) {
-                this.plantInterface.supos = rmObjectConfig(alarmObjname)
-                await this.plantInterface.delete()
-            } else {
-                throw new Error("报警对象删除：数据输入不足")
-            }
-        })
-        let createObjRes =
-            await this.platformAlarmObject.createAlarmObjInstanceByTemplateConfigFile(
-                alarmObj,
-                alarmTable
-            )
-        console.log("createObjRes", createObjRes)
+        // alarmObj.forEach(async (item: { alarmObjname: string; [prop: string]: any }) => {
+        //     let { alarmObjname } = item
+        //     if (alarmObjname) {
+        //         this.plantInterface.supos = rmObjectConfig(alarmObjname)
+        //         await this.plantInterface.delete()
+        //     } else {
+        //         throw new Error("报警对象删除：数据输入不足")
+        //     }
+        // })
+
+        // let createObjRes =
+        //     await this.platformAlarmObject.createAlarmObjInstanceByTemplateConfigFile(
+        //         alarmObj,
+        //         alarmTable
+        //     )
+        // console.log("createObjRes", createObjRes)
         //* 我们增加了一个服务配置库来统一管理所有接口服务的请求，所有位号的数据接口请求均需经过该配置库进行筛选和批量请求
         // todo:② 基于报警配置库和平台其它信息生成服务器请求配置库，我们需要根据该请求库完成批量位号请求与报警的设置(报警对象写值请求，写值0平台不报警，写值1则报警，报警驱动由平台提供，我们只需负责创建属性、设置报警配置和完成写值即可)
         this.requestTableTaskHandler.alarmTableWithEnabled = alarmTable
@@ -195,6 +197,9 @@ class CTask extends AbsTask {
 const test = async function () {
     let user = Container.get<User>("用户")
     await user.login()
+    // if (loginRes.error) {
+    //     throw new Error(loginRes.error)
+    // }
     let res = []
     for (let i = 0; i < 1; i++) {
         await user.login()

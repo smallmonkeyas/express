@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 22:28:47
- * @LastEditTime: 2021-10-03 14:31:23
+ * @LastEditTime: 2021-10-07 22:13:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\factory.config.ts
@@ -67,6 +67,38 @@ export const AlarmStruct = {
     alarmConfigParamValue: [Number],
     enableStatus: Boolean,
     enableConfigparam: { type: String }
+}
+export interface IAlarmRuntimeStruct {
+    id?: string
+    objname: string
+    propname: string
+    propexist: boolean
+    name: string
+    // datamode: string
+    // mode: string
+    requesttype: string
+    mark: string
+    alarmtype: string
+    index: string
+    value: Array<any>
+    alarmnumber: number
+    starttime: Date
+}
+export const AlarmRuntimeStruct = {
+    id: String,
+    objname: { type: String },
+    propname: { type: String },
+    propexist: { type: Boolean },
+    name: { type: String },
+    // datamode: { type: String },
+    // mode: { type: String },
+    requesttype: { type: String },
+    mark: { type: String },
+    alarmtype: { type: String },
+    index: { type: String },
+    value: [],
+    alarmnumber: { type: Number, max: 30, min: 0, default: 0 },
+    starttime: { type: Date, dafault: Date.now }
 }
 
 export const AlarmTypeDescConfig = [

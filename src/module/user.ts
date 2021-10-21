@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 13:49:10
- * @LastEditTime: 2021-10-18 23:55:00
+ * @LastEditTime: 2021-10-19 00:20:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\module\user.ts
@@ -14,7 +14,7 @@ import { CSupOSData } from "./supos"
 // TODO: 用户登录
 @Service("用户")
 export class User {
-    login() {
+    login(): Promise<any> {
         var options = {
             method: "POST",
             url: `${loginConfig.netAddress}/${loginConfig.netPath}`,
@@ -27,7 +27,8 @@ export class User {
         return new Promise(function (resolve, reject) {
             request(options, function (error: any, response: { body: string }) {
                 if (error) {
-                    resolve({ error: error })
+                    // resolve({ error: error })
+                    throw new Error(error)
                 }
                 const result = JSON.parse(response.body)
                 let authorization = `Bearer ${result.ticket}`

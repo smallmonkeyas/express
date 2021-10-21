@@ -1,20 +1,21 @@
 /*
  * @Author: your name
  * @Date: 2021-09-10 10:10:18
- * @LastEditTime: 2021-09-13 15:45:29
+ * @LastEditTime: 2021-10-13 16:48:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \express\src\config\server-request.config.ts
  */
 
 export interface IServerRequestStruct {
-    id?: string;
-    objname: string;
+    id?: string
+    id_number?: number
+    objname: string
     // objnameDisplaynameInclude: string;
     // epcode: string;
     // factoryType: string;
-    propname: string;
-    propexist: boolean;
+    propname: string
+    propexist: boolean
     // includeParamDisplayname: Array<string>;
     // includeParamDescription: Array<string>;
     // alarmObjname: string;
@@ -32,17 +33,17 @@ export interface IServerRequestStruct {
     // alarmConfigParamValue: Array<number>;
     // enableStatus: boolean;
     // enableConfigparam: string;
-    name: string;
-    datamode: string;
-    mode: string;
-    requesttype: string;
-    mark: string;
-    alarmtype: string;
-    index: string;
+    name: string
+    datamode: string
+    mode: string
+    requesttype: string
+    mark: string
+    alarmtype: string
+    index: string
     // value: any;
-    value: Array<any>;
-    defaultvalue: string;
-    convertvalue: string;
+    value: Array<any>
+    defaultvalue: string
+    convertvalue: string
 }
 // export const RuleStruct = {
 //     id: {},
@@ -62,7 +63,8 @@ export interface IServerRequestStruct {
 //     SetFlagValue: {}
 // };
 export const ServerRequestStruct = {
-    id: String,
+    id: { type: String },
+    id_number: { type: Number },
     objname: { type: String },
     // objnameDisplaynameInclude: { type: String },
     // epcode: { type: String },
@@ -106,4 +108,4 @@ export const ServerRequestStruct = {
     ],
     defaultvalue: { type: String },
     convertvalue: { type: String }
-};
+}
