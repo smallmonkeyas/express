@@ -112,3 +112,6 @@ dist
 
 #config
 **/**/config/user.config.ts
+
+# py
+py
