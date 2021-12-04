@@ -3,10 +3,10 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-10-03 14:33:16
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-03 00:03:13
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\module\ruletable.ts
+ * @FilePath     : /express/src/module/alarmtable.ts
  */
 import "reflect-metadata"
 // import mongoose from 'mongoose';
@@ -80,12 +80,12 @@ export class AlarmTableRecordGenerateTask {
             alarmObjDescription = AlarmTypeDescConfig[alarmType - 1],
             alarmParamName = `${objnameInclude}__${includeParamName.join("__")}`,
             alarmParamDisplayName = `${factoryName}_涉及参数_${includeParamDescription.join("__")}`,
-            alarmParamDescription = `${factoryName}_涉及参数_${includeParamDescription.join(
+            alarmParamDescription = `企业:${factoryName};涉及参数:${includeParamDescription.join(
                 "_"
-            )}_报警产生条件：${alarmCondition}`,
+            )};报警产生条件:${alarmCondition};使能配置参数:${enableConfigparam};报警条件：属性值为1则触发报警`,
             alarmProperityName = `A${epcode}_${alarmType}_xxx_${includeParamName.join("_")}`,
             alarmProperityDisplayName = `配置参数_${alarmConfigParam.join("__")}`,
-            alarmProperityDescription = `使能配置参数:${enableConfigparam},报警条件：为1则触发报警`
+            alarmProperityDescription = `${AlarmTypeDescConfig[alarmType - 1]}`
 
         this.singleAlarm = {
             // id: this.tableIndex++,
