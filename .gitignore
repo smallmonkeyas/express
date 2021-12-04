@@ -115,3 +115,9 @@ dist
 
 # py
 py
+
+#file history
+.history
+
+#src-service
+src/service/excel-export/

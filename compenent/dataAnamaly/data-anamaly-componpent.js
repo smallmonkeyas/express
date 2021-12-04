@@ -1,14 +1,15 @@
+/*
+ * @Author: your name
+ * @Date: 2021-11-13 16:30:47
+ * @LastEditTime : 2021-12-04 14:28:46
+ * @LastEditors  : Chengxin Sun
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath     : /express/compenent/dataAnamaly/data-anamaly-componpent.js
+ */
 /* eslint-disable indent */
 /* eslint-disable no-use-before-define */
 // @ts-nocheck
-/*
- * @Author: your name
- * @Date: 2021-10-19 21:52:59
- * @LastEditTime: 2021-11-13 16:21:23
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \express\compenent\dataAnamaly\data-anamalyCom1019.jsx
- */
+
 /* eslint-disable max-len */
 
 
@@ -113,7 +114,7 @@ const anamalyTableHeader = [
     "位号名称",
     "异常位号",
     "管理状态",
-    "异常等级",
+    // "异常等级",
     "确认时间"
     //   '确认人员',
 ]
@@ -136,11 +137,12 @@ const anamalyTableHeaderParamName = [
     "sourceshowname",
     "sourcename",
     "processingstatic",
-    "priority",
+    // "priority",
     "confirmtime"
     //   'confirmuser',
 ]
-const anamalyTableHeaderWidth = [80, 170, 120, 220, 120, 120, 80, 170]
+const anamalyTableHeaderWidth = [80, 170, 120, 220, 120, 120, 170]
+// const anamalyTableHeaderWidth = [80, 170, 120, 220, 120, 120, 80, 170]
 // const anamalyTableHeaderWidth = [80, 170, 120, 150, 120, 120, 80, 170, 80];
 const columns = []
 // columns.push({
@@ -750,7 +752,7 @@ function traceDataAnamalyParamHistoryPicInit() {
         },
 
         title: {
-            text: "数据异动监测图",
+            text: "数据异常监测图",
             style: {
                 color: "#FFFFFF",
                 "font-family": "Microsoft YaHei",
@@ -919,7 +921,7 @@ class AnamalyDetectChartTab extends Component {
                     render: (text, record) => (
                         <span>
                             {moment(moment.utc(record.starttime).valueOf()).format(
-                                "YYYY-MM-DD HH:mm:ss"
+                                "YYYY-MM-DD HH时"
                             )}
                         </span>
                     )
@@ -1513,7 +1515,7 @@ class AnamalyDetectChartTab extends Component {
             this.arrFilterSelect = [
                 ...this.staticFilterRef.current.rcSelect.state.value,
                 // ...this.equipmentFilterRef.current.rcSelect.state.value,
-                ...this.levelFilterRef.current.rcSelect.state.value,
+                // ...this.levelFilterRef.current.rcSelect.state.value,
                 ...this.anamalyCatagoryFilterRef.current.rcSelect.state.value
             ]
             let type = alarmTypeArr
@@ -1526,7 +1528,7 @@ class AnamalyDetectChartTab extends Component {
                 staticFilter: this.staticFilterRef.current.rcSelect.state.value[0],
                 // equipmentFilter: this.equipmentFilterRef.current.rcSelect.state
                 //   .value[0],
-                levelFilter: this.levelFilterRef.current.rcSelect.state.value[0],
+                // levelFilter: this.levelFilterRef.current.rcSelect.state.value[0],
                 anamalyCatagoryFilter:
                     this.anamalyCatagoryFilterRef.current.rcSelect.state.value[0],
                 anamalyTypeFilter: type
@@ -1820,17 +1822,18 @@ class AnamalyDetectChartTab extends Component {
          */
         const statisTableFilterContainer = (
             <div id='statisTableFilterContainer'>
-                <div id='static-filter' className='table-filter'>
-                    {staticFilterSelect}
-                </div>
+                
                 {/* <div id="equipment-filter" className="table-filter">
           {equipmentFilterSelect}
         </div> */}
-                <div id='level-filter' className='table-filter'>
+                {/* <div id='level-filter' className='table-filter'>
                     {levelFilterSelect}
-                </div>
+                </div> */}
                 <div id='anamaly-catagory-filter' className='table-filter'>
                     {anamalyCatagoryFilterSelect}
+                </div>
+                <div id='static-filter' className='table-filter'>
+                    {staticFilterSelect}
                 </div>
             </div>
         )
@@ -3596,7 +3599,8 @@ text.highcharts-title{
 }
 #statisTableFilterContainer{
     display:flex;
-    width: 345px;
+    /* width: 345px; */
+    width: 230px;
     height: 28px;
     flex-direction: row;
     flex-wrap: nowrap;

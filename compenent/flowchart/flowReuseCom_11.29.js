@@ -1,12 +1,11 @@
 /*
  * @Author: your name
- * @Date: 2021-10-31 20:05:19
- * @LastEditTime: 2021-11-04 20:32:45
- * @LastEditors: Please set LastEditors
+ * @Date: 2021-10-13 14:13:44
+ * @LastEditTime : 2021-11-29 14:05:40
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\compenent\flowchart\flowReuseComp.js
+ * @FilePath     : /express/compenent/flowchart/flowReuseCom_11.29.js
  */
-
 /* eslint-disable no-use-before-define */
 /* eslint-disable object-shorthand */
 /* eslint-disable vars-on-top */
@@ -15,13 +14,53 @@
 
 import React, { Component } from "react"
 import moment from "moment"
+// import { is } from "cheerio/lib/api/traversing"
 
 window.moment = moment
 // var layout = document.querySelector('div#Layout_f2a2f29271924e8d885e63249f7a65d4')
 // iframe
+// let datalinks = Object.keys(
+//     // @ts-ignore
+//     window.dataLinks[Object.keys(window.dataLinks)[0]]._dataModel.htAnimDataMap
+// )
+// let dataLinks = JSON.parse(JSON.stringify(datalinks).replace(/:/g, "."))
+// if(window.parent){
+//     window.parent.postMessage(
+//         {
+//             data: {
+//                 dataLinks: dataLinks
+//             },
+//             event: "flow-open",
+//             code: 1
+//         },
+//         "*"
+//     )
+//     console.log("dataLinks",dataLinks)
+
+// }
+
+//判断是否可以JSON化
+const isJSON = function (str) {
+    if (typeof str === "string") {
+        try {
+            var obj = JSON.parse(str)
+            if (typeof obj === "object" && obj) {
+                return true
+            } else {
+                return false
+            }
+        } catch (e) {
+            return false
+        }
+    }
+}
+// @ts-ignore
 let params = {}
 window.addEventListener("message", function (event) {
-    params = JSON.parse(event.data)
+    if (isJSON(event.data)) {
+        params = JSON.parse(event.data)
+    }
+
     // console.log("子页面接收消息：", params)
 })
 
@@ -103,21 +142,41 @@ class CustomComp extends Component {
         // this.factoryName = factoryName
         const setFactoryNamePromise = setFactoryName(factoryName)
         // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         setFactoryNamePromise.then((res) => {
             // // // console.logres);
         })
+
+        //*datalinks
+        // @ts-ignore
+
+        // @ts-ignore
+        
+        let datalinks = Object.keys(
+            // @ts-ignore
+            window.dataLinks[Object.keys(window.dataLinks)[0]]._dataModel.htAnimDataMap
+        )
+        let dataLinks = JSON.parse(JSON.stringify(datalinks).replace(/:/g, "."))
+        // console.log('datalinksArr',JSON.parse(JSON.stringify(datalinks).replace(/:/g,".")))
+
         // iframe
         if (window.parent) {
-            // // @ts-ignore
-            // let pageIndex = 1
-            // // @ts-ignore
-            // let pageDescription = ""
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
+            let pageIndex = 1
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
+            let pageDescription = ""
             let btn = document.querySelectorAll("button")
-            let factoryType = "非火电厂"
             for (let i = 1; i < btn.length; i++) {
                 if (btn[i].innerText == "工况标记") {
                     btn[i].addEventListener("click", this.openDataTag)
-                    factoryType = "火电厂"
                     // break;
                 }
                 if (btn[i].style.color == "rgb(0, 255, 255)") {
@@ -126,16 +185,19 @@ class CustomComp extends Component {
                     //   break;
                 }
             }
-            if (factoryType === "火电厂") {
-                window.parent.postMessage(
-                    {
-                        data: { pageDescription: this.pageDescription, pageIndex: this.pageIndex },
-                        event: "flow-open",
-                        code: 1
+
+            window.parent.postMessage(
+                {
+                    data: {
+                        pageDescription: this.pageDescription,
+                        pageIndex: this.pageIndex,
+                        dataLinks: dataLinks
                     },
-                    "*"
-                )
-            }
+                    event: "flow-open",
+                    code: 1
+                },
+                "*"
+            )
         }
     }
 
@@ -227,6 +289,7 @@ const toggleFullscreen = function () {
     const isFull = !!(
         // @ts-ignore
         (
+            // @ts-ignore
             document.webkitIsFullScreen ||
             // @ts-ignore
             document.mozFullScreen ||
@@ -282,12 +345,16 @@ const addTooltipText = function (item) {
     item.parentNode.className = "tooltip"
 }
 // @ts-ignore
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 const toggleToolTipText = function (item) {
     const sapnTooltipText = document.querySelector("span.tooltiptext")
     // // // // // console.log'hoverText', sapnTooltipText);
     const isFull = !!(
         // @ts-ignore
         (
+            // @ts-ignore
             document.webkitIsFullScreen ||
             // @ts-ignore
             document.mozFullScreen ||
@@ -332,6 +399,9 @@ const removeBtnObj = function () {
 const intervalFreshData = async function () {
     let dataProperityPArr, objname
     while (true) {
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         // @ts-ignore
         const x = await delayXms(200)
         const dataLinkObj = document.querySelector(".datalink-tooltip .properties")
@@ -531,6 +601,9 @@ function addDataLinkListen() {
     // // // // // console.log'addDataLinkListen',dataProperityPArr,listenObjArr)
     // document.querySelectorAll('.draw_g6CsK img').forEach(function(item){item.onclick=function(){// // // // // console.log'也是哦')}})
     // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     listenObjArr.forEach((item, index) => {
         // @ts-ignore
         listenObjArr[index].onmouseover = function () {
@@ -598,7 +671,13 @@ function addDataLinkListen() {
  */
 
 // @ts-ignore
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 function getPropertiesHistoryService(inputsParam) {
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     // @ts-ignore
     return new Promise((resolve) => {})
 }
@@ -715,6 +794,9 @@ async function getRequestOptions(dataInfo) {
 
 async function fetchGetHistory(dataInfo) {
     // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     const { objName, propName, startTime, endTime, limit } = dataInfo
     const requestOptions = await getRequestOptions(dataInfo)
     const response = await fetch(
@@ -723,8 +805,12 @@ async function fetchGetHistory(dataInfo) {
         requestOptions
     )
     const result = await response.text()
-    const hisData = JSON.parse(result)
-    return hisData[`${objName}.${propName}`]
+    if (isJSON(result)) {
+        const hisData = JSON.parse(result)
+        return hisData[`${objName}.${propName}`]
+    } else {
+        return false
+    }
 }
 
 // fetch("http://10.32.203.157:8080/api/compose/manage/objectdata/batchQuery", requestOptions)
@@ -754,6 +840,9 @@ function setSelectContentChangeEvt(listenObj) {
     observer.observe(listenObj, config)
 }
 
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 // @ts-ignore
 function callback(mutationsList, observer) {
     setTimeout(() => {
@@ -785,13 +874,14 @@ async function setFactoryName(factoryName) {
     const propValue = factoryName
     if (factoryName !== "") {
         // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         const setPropertyValueRes = await setPropertyValue(objName, propName, propValue)
     }
     const currUrlHref = getUrl()
-    console.log(
-        "setFactoryName",
-        factoryName,
-        currUrlHref,
+    // // // // console.log"getUrl1()", getUrl1());
+    if (
         !(
             (
                 currUrlHref ===
@@ -799,14 +889,10 @@ async function setFactoryName(factoryName) {
             )
             // "http://10.32.203.157:8080/#/runtime-fullscreen/runtime-fullscreen/Page_3a71670ecde8486b90b26fddb93ce6eb"
         )
-    )
-    // // // // console.log"getUrl1()", getUrl1());
-    if (!currUrlHref.includes("Page_9ceb85c969524354935f4c93017dc7e1")) {
+    ) {
         return "不需改变企业名称"
     }
-    console.log("获取企业名称：", objName, propName)
     const getPropertyValueRes = await getPropertyValue(objName, propName)
-    console.log("获取企业名称：", getPropertyValueRes, objName, propName)
     const facArr = document.querySelectorAll(".labelContent_2A4Q7,.labelContent_middle_CeyZZ")
     if (getPropertyValueRes.code === "200" && facArr.length > 0) {
         // // // // console.log"getPropertyValueRes", getPropertyValueRes);
@@ -826,6 +912,9 @@ async function setFactoryName(factoryName) {
     // return getPropertyValue;
 }
 // ! 添加企业div并覆盖到原先位置上
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 // @ts-ignore
 function renderFactoryElement() {
     const factoryElement = document.createElement("div")
@@ -856,6 +945,9 @@ function getUrl() {
 }
 
 //* 通用函数
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 // @ts-ignore
 function getUrl1() {
     var url = ""
@@ -945,6 +1037,9 @@ function getPropertyValue(objName, propName) {
 // TODO: 获取Authorization
 // TODO: 获取cookie
 // @ts-ignore
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 var getCookie = function (name) {
     // 获取当前所有cookie
     var strCookies = document.cookie
@@ -1017,6 +1112,9 @@ function delayXms(x, X) {
 //* 获取采集器数据
 
 // @ts-ignore
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 const getVendor = async function (urlpath) {
     let requestOptions = {
         method: "GET",
@@ -1029,10 +1127,13 @@ const getVendor = async function (urlpath) {
         requestOptions
     )
     const result = await response.text()
-    const httpResultJson = JSON.parse(result)
-    if (httpResultJson.info === "Success") {
-        return httpResultJson.data
+    if (isJSON(result)) {
+        const httpResultJson = JSON.parse(result)
+        if (httpResultJson.info === "Success") {
+            return httpResultJson.data
+        }
     }
+
     return false
 }
 

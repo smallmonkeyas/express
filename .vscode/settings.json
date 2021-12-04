@@ -14,5 +14,18 @@
         "source.fixAll.eslint": true
     },
     "emmet.excludeLanguages": ["markdown", "typescript"],
-    "auto-close-tag.disableOnLanguage": ["typescript"]
+    "auto-close-tag.disableOnLanguage": ["typescript"],
+    "[javascript]": {
+        "editor.formatOnSave": false
+    },
+    // 文件头部注释 快捷键：window：ctrl+alt+i,mac：ctrl+cmd+i
+  "fileheader.customMade": {
+    "Author":"Chengxin Sun",
+    "Date": "Do not edit", // 文件创建时间(不变)
+    "LastEditors": "Chengxin Sun", // 文件最后编辑者
+    "LastEditTime": "Do not edit", // 文件最后编辑时间
+    "Description":"Do not edit",
+    "FilePath": "Do not edit" // 文件在项目中的相对路径 自动更新
+  }
+  // 不填写对应属性即关闭对应功能
 }
