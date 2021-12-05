@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 22:28:47
- * @LastEditTime: 2021-10-07 22:13:57
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-05 21:43:51
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\config\factory.config.ts
+ * @FilePath     : /express/src/config/alarm.config.ts
  */
 
 export interface IAlarmBasicStruct {
@@ -21,6 +21,7 @@ export interface IAlarmBasicStruct {
 export interface IAlarmStruct {
     id?: number
     objnameInclude: string
+    ruleConfigObjname: string
     objnameDisplaynameInclude: string
     epcode: string
     factoryType: string
@@ -46,6 +47,7 @@ export interface IAlarmStruct {
 export const AlarmStruct = {
     id: Number,
     objnameInclude: { type: String },
+    ruleConfigObjname: { type: String },
     objnameDisplaynameInclude: { type: String },
     epcode: { type: String },
     factoryType: { type: String },

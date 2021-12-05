@@ -3,7 +3,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime : 2021-12-03 00:03:13
+ * @LastEditTime : 2021-12-05 21:50:34
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/module/alarmtable.ts
@@ -63,6 +63,7 @@ export class AlarmTableRecordGenerateTask {
     plantInterface!: CSupOSData
     getDefaultAlarmTableRecord(): void {
         let objnameInclude = this.singleRule.getObjnameInclude(),
+            ruleConfigObjname = this.singleRule.getRuleConfigObjName(),
             factoryName = this.singleRule.getFactoryName(),
             epcode = this.singleRule.getEpcode(),
             factoryType = this.singleRule.getFactoryType(),
@@ -90,6 +91,7 @@ export class AlarmTableRecordGenerateTask {
         this.singleAlarm = {
             // id: this.tableIndex++,
             objnameInclude: objnameInclude,
+            ruleConfigObjname: ruleConfigObjname,
             objnameDisplaynameInclude: factoryName,
             epcode: epcode,
             factoryType: factoryType,
@@ -115,10 +117,11 @@ export class AlarmTableRecordGenerateTask {
     }
     // TODO:读取配置参数对应的对象属性是否有变化(若没值，则按默认值来)，若有变化，则更新
     async getConfigParamValue(): Promise<Array<number>> {
-        const { objnameInclude, alarmConfigParam, alarmConfigParamValue } = this.singleAlarm
+        const { objnameInclude, alarmConfigParam, alarmConfigParamValue, ruleConfigObjname } =
+            this.singleAlarm
         let configParamValue: Array<number> = []
         for (let propName of alarmConfigParam) {
-            this.plantInterface.supos = GetPropertyValueNetConfig(objnameInclude, propName)
+            this.plantInterface.supos = GetPropertyValueNetConfig(ruleConfigObjname, propName)
             let res: { result: number; [prop: string]: any } = await this.plantInterface.post()
 
             configParamValue.push(res.result)
@@ -137,9 +140,11 @@ export class AlarmTableRecordGenerateTask {
         return configParamValue
     }
     async getConfigFlagValue(): Promise<any> {
-        const { objnameInclude, enableConfigparam, enableStatus } = this.singleAlarm
+        const { objnameInclude, enableConfigparam, enableStatus, ruleConfigObjname } =
+            this.singleAlarm
         let configflagValue: number
-        this.plantInterface.supos = GetPropertyValueNetConfig(objnameInclude, enableConfigparam)
+        this.plantInterface.supos = GetPropertyValueNetConfig(ruleConfigObjname, enableConfigparam)
+        // this.plantInterface.supos = GetPropertyValueNetConfig(objnameInclude, enableConfigparam)
         let res: { result: number; [prop: string]: any } = await this.plantInterface.post()
 
         configflagValue = res.result
@@ -151,8 +156,8 @@ export class AlarmTableRecordGenerateTask {
     async getAlarmTableRecord() {
         this.singleRule.rule = this.ruleRecord
         this.getDefaultAlarmTableRecord()
-        // ?暂时 this.singleAlarm.alarmConfigParamValue = await this.getConfigParamValue();
-        // ?暂时 this.singleAlarm.enableStatus = await this.getConfigFlagValue();
+        this.singleAlarm.alarmConfigParamValue = await this.getConfigParamValue()
+        this.singleAlarm.enableStatus = await this.getConfigFlagValue()
         return this.singleAlarm
     }
 }
