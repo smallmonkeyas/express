@@ -120,4 +120,5 @@ py
 .history
 
 #src-service
-src/service/excel-export/
+src/service/**/*.xlsx
+src/service/**/*.json
