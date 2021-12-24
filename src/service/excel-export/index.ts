@@ -2,10 +2,10 @@
 /*
  * @Author: your name
  * @Date: 2021-10-18 12:55:41
- * @LastEditTime: 2021-10-19 00:35:22
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-20 10:52:01
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\service\excel-export\index.ts
+ * @FilePath     : /express/src/service/excel-export/index.ts
  */
 import { fs, file, path, system, XLSX_JSON, moment, readlineSync } from "../../../modulejs"
 import {
@@ -16,8 +16,8 @@ import {
 import "reflect-metadata"
 import { Container, Service, Inject } from "typedi"
 Container.import([CSupOSData, User])
-let basicPath = path.resolve(process.cwd(), "./")
-// let basicPath = path.resolve(__dirname, "./")
+// let basicPath = path.resolve(process.cwd(), "./")
+let basicPath = path.resolve(__dirname, "./")
 console.log("basicPath", basicPath)
 const test = async function () {
     let config = JSON.parse(fs.readFileSync(`${basicPath}/config.json`))
@@ -127,7 +127,7 @@ test()
     .then((item) => {
         console.log("json转换xlsx格式成功")
         // process.stdin.pause()
-        var userName = readlineSync.question("please enter any key for exporting ")
+        // var userName = readlineSync.question("please enter any key for exporting ")
         // XLSX_JSON.saveJsonToFile(item, __dirname, "reslog")
     })
     .catch((e) => {

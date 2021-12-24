@@ -2,16 +2,16 @@
 /*
  * @Author: your name
  * @Date: 2021-09-10 00:44:38
- * @LastEditTime: 2021-09-13 23:15:02
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-24 15:27:15
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\module\server-request.ts
+ * @FilePath     : /express/src/module/server-pitch-request.ts
  */
-import "reflect-metadata";
+import "reflect-metadata"
 // import mongoose from 'mongoose';
 
-import { Container, Service, Inject } from "typedi";
-import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../dao";
+import { Container, Service, Inject } from "typedi"
+import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../dao"
 import {
     factoryConfig,
     ruletableConfig,
@@ -32,14 +32,14 @@ import {
     AlarmObjnameConfig,
     AlarmTypeDescConfig,
     AlarmTypeDeprecated
-} from "../config";
-import { CSingleRuleInfo } from "./rule";
-import { CRuleTable } from "./ruletable";
-import { CVendorData, IVendorData } from "./vendor";
-import { CSupOSData } from "./supos";
-import { User } from "./user";
-import { request, system, XLSX_JSON, fs, moment } from "../../modulejs";
-import { factoryCollectorTempleData } from "../respository/factory/collector";
+} from "../config"
+import { CSingleRuleInfo } from "./rule"
+import { CRuleTable } from "./ruletable"
+import { CVendorData, IVendorData } from "./vendor"
+import { CSupOSData } from "./supos"
+import { User } from "./user"
+import { request, system, XLSX_JSON, fs, moment } from "../../modulejs"
+import { factoryCollectorTempleData } from "../respository/factory/collector"
 
 // interface IVHRequest {
 //     getDayAvg(): Promise<any>;
@@ -56,22 +56,22 @@ import { factoryCollectorTempleData } from "../respository/factory/collector";
 //         netPath: "serverapi/data/vh/history",
 //         netParam: netParam
 interface INetParamType {
-    name: string;
-    begintime: string;
-    endtime: string;
-    mode?: string;
-    datamode?: string;
+    name: string
+    begintime: string
+    endtime: string
+    mode?: string
+    datamode?: string
 }
 @Service("大库数据接口")
 export class CVHTrendRequest extends CVendorData {
     // netConfig!: IVendorConfig;
     // vendorApi!: CVendorData;
-    name!: string;
+    name!: string
     // dayAvgData!: Array<any>;
     // hourAvgData!: Array<any>;
     // hourCouData!: Array<any>;
     // vhData!: Array<any>;
-    netParam!: INetParamType;
+    netParam!: INetParamType
     // initNetParam() {
     //     let beginTime = moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss"),
     //         endTime = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -115,51 +115,51 @@ export class CVHTrendRequest extends CVendorData {
     //     }
     // }
     async getVhData(requesttype: string): Promise<any> {
-        let [mode, datamode] = requesttype.split("-");
-        let timediff = datamode === "cou" ? 1 : 24;
+        let [mode, datamode] = requesttype.split("-")
+        let timediff = datamode === "cou" ? 1 : 24
         let beginTime = moment().subtract(timediff, "hours").format("YYYY-MM-DD HH:mm:ss"),
-            endTime = moment().format("YYYY-MM-DD HH:mm:ss");
+            endTime = moment().format("YYYY-MM-DD HH:mm:ss")
         this.netParam = {
             name: this.name,
             begintime: beginTime,
             endtime: endTime,
             mode: mode,
             datamode: datamode
-        };
+        }
         // this.initNetParam();
         // await this.getDayAvg();
         // await this.getHourAvg();
         // await this.getHourCou();
         // this.netParam.mode = "hour";
         // this.netParam.datamode = "avg";
-        this.vendor = vhConfig(this.netParam);
-        let vhDataRes = await this.get();
+        this.vendor = vhConfig(this.netParam)
+        let vhDataRes = await this.get()
         if (vhDataRes.info.toLocaleLowerCase() === "success") {
-            return vhDataRes.data;
+            return vhDataRes.data
         } else {
-            return false;
+            return false
         }
     }
     async getTrendData(): Promise<any> {
         let beginTime = moment().subtract(10, "minutes").format("YYYY-MM-DD HH:mm:ss"),
-            endTime = moment().format("YYYY-MM-DD HH:mm:ss");
+            endTime = moment().format("YYYY-MM-DD HH:mm:ss")
         this.netParam = {
             name: this.name,
             begintime: beginTime,
             endtime: endTime
-        };
+        }
         // this.initNetParam();
         // await this.getDayAvg();
         // await this.getHourAvg();
         // await this.getHourCou();
         // this.netParam.mode = "hour";
         // this.netParam.datamode = "avg";
-        this.vendor = trendConfig(this.netParam);
-        let trendDataRes = await this.get();
+        this.vendor = trendConfig(this.netParam)
+        let trendDataRes = await this.get()
         if (trendDataRes.info.toLocaleLowerCase() === "success") {
-            return trendDataRes.data;
+            return trendDataRes.data
         } else {
-            return false;
+            return false
         }
     }
 }
@@ -169,13 +169,13 @@ export class CVHTrendRequest extends CVendorData {
 // }
 @Service("supOS对象属性接口")
 export class CPropertyRequest extends CSupOSData {
-    objname!: string;
-    propname!: string;
-    propValues!: object;
+    objname!: string
+    propname!: string
+    propValues!: object
     // propertyNetParam!: { type: string; page: number; per_page: number };
     async getPropertyValues(): Promise<any> {
-        this.supos = GetPropertyValuesNetConfig(this.objname, this.propname);
-        let res = await this.post();
+        this.supos = GetPropertyValuesNetConfig(this.objname, this.propname)
+        let res = await this.post()
 
         // alarmConfigParam.forEach(async (propName, index) => {
         //     this.plantInterface.supos = GetPropertyValueNetConfig(objnameInclude, propName);
@@ -188,35 +188,35 @@ export class CPropertyRequest extends CSupOSData {
         // if (!isNumber) {
         //     return alarmConfigParamValue;
         // }
-        return res;
+        return res
     }
     async setPropertyValues(): Promise<any> {
-        let objname = this.objname;
-        let propValues = JSON.parse(JSON.stringify(this.propValues));
-        this.supos = SetPropertyValuesNetConfig(objname, propValues);
-        let res = await this.post();
-        return res;
+        let objname = this.objname
+        let propValues = JSON.parse(JSON.stringify(this.propValues))
+        this.supos = SetPropertyValuesNetConfig(objname, propValues)
+        let res = await this.post()
+        return res
     }
     async getPropertyInfos(objname: string, page: number, per_page: number): Promise<any> {
         //*
 
-        let netParam = { page: page, per_page: per_page, type: "own" };
-        this.supos = GetPropertyInfosNetConfig(objname, netParam);
-        return await this.get();
+        let netParam = { page: page, per_page: per_page, type: "own" }
+        this.supos = GetPropertyInfosNetConfig(objname, netParam)
+        return await this.get()
     }
-    async getPropertyList(): Promise<any> {
-        let propList = [];
-        let objname = this.objname;
-        let page = 1;
-        let per_page = 3000;
+    async getPropertyInfoList(): Promise<any> {
+        let propList = []
+        let objname = this.objname
+        let page = 1
+        let per_page = 3000
 
-        let onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page);
+        let onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page)
         if (!onePageProperitiesObj.list) {
-            throw new Error(`查询${objname}属性失败，错误信息：${onePageProperitiesObj}`);
+            throw new Error(`查询${objname}属性失败，错误信息：${onePageProperitiesObj}`)
         }
         // //console.log("onePageProperitiesObj", onePageProperitiesObj);
-        propList.push(...onePageProperitiesObj.list);
-        const pageSum = Math.ceil(onePageProperitiesObj.pagination.total / per_page);
+        propList.push(...onePageProperitiesObj.list)
+        const pageSum = Math.ceil(onePageProperitiesObj.pagination.total / per_page)
         // ?方式1:Promise.all
         // let together = new Array(pageSum + 1).fill(null);
         // const promise = together.map((item, index) => {
@@ -225,21 +225,49 @@ export class CPropertyRequest extends CSupOSData {
         // const promiseall = await Promise.all(promise);
         // ?方式2：await
         for (let index = 2; index < pageSum + 1; index++) {
-            page = index;
+            page = index
             // this.supos = GetPropertyInfosNetConfig(objname, netParam);
-            onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page);
-            propList.push(...onePageProperitiesObj.list);
+            onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page)
+            propList.push(...onePageProperitiesObj.list)
         }
-        let propListStr = JSON.stringify(propList);
+        return propList
+    }
+    async getPropertyList(): Promise<any> {
+        let propList = []
+        let objname = this.objname
+        let page = 1
+        let per_page = 3000
+
+        let onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page)
+        if (!onePageProperitiesObj.list) {
+            throw new Error(`查询${objname}属性失败，错误信息：${onePageProperitiesObj}`)
+        }
+        // //console.log("onePageProperitiesObj", onePageProperitiesObj);
+        propList.push(...onePageProperitiesObj.list)
+        const pageSum = Math.ceil(onePageProperitiesObj.pagination.total / per_page)
+        // ?方式1:Promise.all
+        // let together = new Array(pageSum + 1).fill(null);
+        // const promise = together.map((item, index) => {
+        //     return this.getPropertyInfos(objName, index + 1, perPage);
+        // });
+        // const promiseall = await Promise.all(promise);
+        // ?方式2：await
+        for (let index = 2; index < pageSum + 1; index++) {
+            page = index
+            // this.supos = GetPropertyInfosNetConfig(objname, netParam);
+            onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page)
+            propList.push(...onePageProperitiesObj.list)
+        }
+        let propListStr = JSON.stringify(propList)
         // let propNameArr = propListStr.match(
         //     /(?<="name("|\"): *)((?!Double|Integer|String|Float|Long|Boolean|DataStruct).)+?(?=("|\"),)/g
         // );
         let propNameArr = propListStr.match(
             /(?<="name("|\\"|'): *("|\\"))((?!Double|Integer|String|Float|Long|Boolean|DataStruct).)+?(?=("|\\"|'),)/g
             // /(?<="name("|\"): *)((?!Double|Integer|String|Float|Long|Boolean|DataStruct).)+?(?=("|\"),)/g
-        );
+        )
         // console.log("propNameArr", propNameArr, propListStr);
-        return propNameArr;
+        return propNameArr
     }
 }
 

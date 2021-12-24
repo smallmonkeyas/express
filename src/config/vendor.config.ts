@@ -1,29 +1,29 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:17:14
- * @LastEditTime: 2021-09-05 14:29:31
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-20 06:45:40
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\config\mongodb.config.ts
+ * @FilePath     : /express/src/config/vendor.config.ts
  */
 // export interface IVendorConfig {
 //     netAddress: string; // 10.32.203.157:8999
 //     netPath?: string; // serverapi/data/rtd
 //     method?: string; // ? epcode=320400010005&mode=1
 // }
-import { IVendorConfig } from "./interface.config";
-import { netIPAddress } from "./net.config";
+import { IVendorConfig } from "./interface.config"
+import { netIPAddress } from "./net.config"
 
 const netAddressConfig = {
     IPAddress: netIPAddress,
     Port: "8999"
-};
-const netAddress = `http://${netAddressConfig.IPAddress}:${netAddressConfig.Port}`;
+}
+const netAddress = `http://${netAddressConfig.IPAddress}:${netAddressConfig.Port}`
 
 export const collectorUrlConfig: IVendorConfig = {
     netAddress: netAddress,
     netPath: "serverapi/cfg/collector"
-};
+}
 
 export const trendConfig = function (netParam: object) {
     return {
@@ -32,8 +32,8 @@ export const trendConfig = function (netParam: object) {
         netParam: netParam
         // ? netParam->{ epcode: epcode, name: name, begintime: begintime, endtime: endtime } -> epcode=320400010005&mode=1
         // netData?: Object;
-    };
-};
+    }
+}
 
 export const vhConfig = function (netParam: object) {
     return {
@@ -49,5 +49,14 @@ export const vhConfig = function (netParam: object) {
          * count：数据个数，可以不传
          *  begintime：查询开始时间 endtime：查询结束时间
          */
-    };
-};
+    }
+}
+
+// !企业监测因子接口
+export const cfgFactorConfig = function (netParam?: object) {
+    return {
+        netAddress: netAddress,
+        netPath: "serverapi/cfg/factor",
+        netParam: netParam
+    }
+}

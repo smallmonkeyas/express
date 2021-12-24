@@ -2,10 +2,10 @@
 /*
  * @Author: your name
  * @Date: 2021-09-10 12:34:18
- * @LastEditTime: 2021-10-13 16:49:58
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-20 12:22:21
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\config\servertable.ts
+ * @FilePath     : /express/src/module/requesttable.ts
  */
 
 import "reflect-metadata"
@@ -332,6 +332,9 @@ export class CServerRequestTable extends CTable {
             this.vhRequestHandler.name = name
             // this.vhRequestHandler.initNetParam();
             let trendDataArr = await this.vhRequestHandler.getTrendData()
+            if (!trendDataArr) {
+                return false
+            }
             // //console.log("vhDataArr", vhDataArr);
             let updateValue = await this.batchUpdateValueField(
                 { requesttype: requesttype, objname: item },
@@ -785,14 +788,14 @@ export class CServerRequestTableGenerateTask {
                 alarmConfigParamValue,
                 enableStatus
             } = alarmRecord
-            if (alarmType !== 1 && alarmType !== 11 && alarmType !== 12) {
+            if (alarmType !== 1 && alarmType !== 4 && alarmType !== 11 && alarmType !== 12) {
                 return
             }
             if (alarmType === 1) {
                 // 数据缺失
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
-                    id_number: this.requestTableIndex++,
+                    id_number: this.requestTableIndex,
                     index: String(this.trendIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -800,11 +803,24 @@ export class CServerRequestTableGenerateTask {
                     requesttype: "trend"
                 })
             }
+            // ! 数据恒值
+            if (alarmType === 4) {
+                // 数据恒值
+                this.serverRequestTable.push({
+                    id: String(this.requestTableIndex++),
+                    id_number: this.requestTableIndex,
+                    index: String(this.trendIndex++),
+                    alarmtype: alarmType,
+                    objname: objnameInclude,
+                    propname: String(includeParamName),
+                    requesttype: "trend-"
+                })
+            }
             if (alarmType === 11) {
                 // 均值异常
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
-                    id_number: this.requestTableIndex++,
+                    id_number: this.requestTableIndex,
                     index: String(this.dayAvgIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -815,7 +831,7 @@ export class CServerRequestTableGenerateTask {
                 })
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
-                    id_number: this.requestTableIndex++,
+                    id_number: this.requestTableIndex,
                     index: String(this.hourAvgIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -829,7 +845,7 @@ export class CServerRequestTableGenerateTask {
                 // 排放量异常
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
-                    id_number: this.requestTableIndex++,
+                    id_number: this.requestTableIndex,
                     index: String(this.hourCouIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -840,7 +856,7 @@ export class CServerRequestTableGenerateTask {
                 })
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
-                    id_number: this.requestTableIndex++,
+                    id_number: this.requestTableIndex,
                     index: String(this.hourAvgIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -852,7 +868,7 @@ export class CServerRequestTableGenerateTask {
                 })
                 this.serverRequestTable.push({
                     id: String(this.requestTableIndex++),
-                    id_number: this.requestTableIndex++,
+                    id_number: this.requestTableIndex,
                     index: String(this.hourAvgIndex++),
                     alarmtype: alarmType,
                     objname: objnameInclude,
@@ -865,7 +881,7 @@ export class CServerRequestTableGenerateTask {
             }
             this.serverRequestTable.push({
                 id: String(this.requestTableIndex++),
-                id_number: this.requestTableIndex++,
+                id_number: this.requestTableIndex,
                 index: String(this.getPropertyIndex++),
                 alarmtype: alarmType,
                 objname: objnameInclude,
@@ -876,7 +892,7 @@ export class CServerRequestTableGenerateTask {
             })
             this.serverRequestTable.push({
                 id: String(this.requestTableIndex++),
-                id_number: this.requestTableIndex++,
+                id_number: this.requestTableIndex,
                 index: String(this.getPropertyIndex++),
                 alarmtype: alarmType,
                 objname: objnameInclude,
@@ -887,7 +903,7 @@ export class CServerRequestTableGenerateTask {
             })
             this.serverRequestTable.push({
                 id: String(this.requestTableIndex++),
-                id_number: this.requestTableIndex++,
+                id_number: this.requestTableIndex,
                 index: String(this.setPropertyIndex++),
                 alarmtype: alarmType,
                 objname: alarmObjname,
@@ -957,7 +973,8 @@ async function getRequestTable() {
         Container.get<CServerRequestTableGenerateTask>("服务请求库生成任务类")
 
     const alarmTableHandler = Container.get<CAlarmTable>("报警配置库")
-    alarmTableHandler.mongodb.conneConfig = alarmtableConfig
+    alarmTableHandler.conneConfig = alarmtableConfig
+    // alarmTableHandler.mongodb.conneConfig = alarmtableConfig
     const resConnect = await alarmTableHandler.connect()
     // const resDelete = await alarmTableHandler.deleteAll();
     // await alarmTableHandler.add(alarmJson);
@@ -968,7 +985,7 @@ async function getRequestTable() {
 
     const requestTable = requestTableTaskHandler.serverRequestTable
     const requestTableHandler = Container.get<CServerRequestTable>("服务请求配置库")
-    requestTableHandler.mongodb.conneConfig = requesttableConfig
+    requestTableHandler.conneConfig = requesttableConfig
     await requestTableHandler.connect()
     const resDelete = await requestTableHandler.deleteAll()
     //* 增加服务请求配置库

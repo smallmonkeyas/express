@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 20:18:53
- * @LastEditTime: 2021-10-02 00:36:54
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-21 01:49:45
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\config\file.config.ts
+ * @FilePath     : /express/src/config/file.config.ts
  */
 import { path } from "../../modulejs"
 // let dir = __dirname;
@@ -29,4 +29,22 @@ const alarmObjFileConfig = {
     fileName: "报警对象实例",
     fileExtension: "xlsx"
 }
-export { ruletableFileConfig, alarmObjFileConfig, objnameTempleFileConfig }
+const historyTempleFileConfig = {
+    filePath: `${respositoryDir}/history`,
+    // filePath: `${respositoryDir}\\ruletable`,
+    fileName: "历史数据模板",
+    fileExtension: "xlsx"
+}
+const historyDataFileConfig = {
+    filePath: `${respositoryDir}/history`,
+    // filePath: `${respositoryDir}\\ruletable`,
+    fileName: "",
+    fileExtension: "xlsx"
+}
+export {
+    ruletableFileConfig,
+    alarmObjFileConfig,
+    objnameTempleFileConfig,
+    historyTempleFileConfig,
+    historyDataFileConfig
+}

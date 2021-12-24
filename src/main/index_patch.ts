@@ -91,7 +91,7 @@ class CTask extends AbsTask {
         await this.ruleTableHandler.connect()
         await this.ruleTableHandler.deleteAll()
         await this.ruleTableHandler.add(ruleJson)
-        // 考虑的规则表不一定准确，可以利用数据库操作很方便的做必要的修改工作，这也是将规则表存到数据库的一个原因
+        // 考虑规则表不一定准确，可以利用数据库操作很方便的做必要的修改工作，这也是将规则表存到数据库的一个原因
         await this.ruleTableHandler.update({ ruleType: "恒值异常" }, { ruleType: "数据恒值" })
         // 接收ts-node命令行传参，通过传过来的参数筛选规则库中id在一定范围的规则
         let argv: Array<number> = process.argv.slice(2).map(Number)

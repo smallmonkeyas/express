@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2021-07-24 21:50:12
- * @LastEditTime: 2021-09-08 15:07:12
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-23 02:34:19
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \SolidPollutionItem\tmp\script\file.js
+ * @FilePath     : /express/script/file.js
  */
 
 var request = require("request");
@@ -144,9 +144,19 @@ const get = function () {
     }
     return filesPath;
 };
-
+let mkDirsSync = function (dirname) {
+    if (fs.existsSync(dirname)) {
+        return true
+    } else {
+        if (mkDirsSync(path.dirname(dirname))) {
+            fs.mkdirSync(dirname)
+            return true
+        }
+    }
+}
 module.exports = {
     creatdir,
+    mkDirsSync,
     rmdir,
     rmFileSync,
     writeFile,

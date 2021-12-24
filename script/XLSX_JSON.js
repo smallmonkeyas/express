@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2021-07-17 17:48:18
- * @LastEditTime: 2021-10-18 17:15:41
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-20 21:18:42
+ * @LastEditors  : Chengxin Sun
  * @Description: 引用的库-excel和json数据转换库
- * @FilePath: \SolidPollutionItem\tmp\script\XLSX_JSON.js
+ * @FilePath     : /express/script/XLSX_JSON.js
  */
 
 var request = require("request")
@@ -100,6 +100,7 @@ const jsonToExcel = function (dataJson, pathFileDir, fileName) {
         }
     })
     // console.log(excelJson)
+    // console.log('excelJson', excelJson[0])
     ws = XLSX.utils.json_to_sheet(excelJson)
     XLSX.utils.book_append_sheet(wb, ws, fileName)
     XLSX.writeFile(wb, newfileDirectory)

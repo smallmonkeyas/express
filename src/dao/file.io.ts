@@ -1,15 +1,15 @@
 /*
  * @Author: your name
  * @Date: 2021-08-31 18:58:52
- * @LastEditTime: 2021-09-08 17:58:22
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-23 02:35:02
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\dao\file.io.ts
+ * @FilePath     : /express/src/dao/file.io.ts
  */
-import { IFile, ruletableFileConfig } from "../config";
-import { file as files, path, system } from "../../modulejs";
-import { Container, Service, Inject } from "typedi";
-import "reflect-metadata";
+import { IFile, ruletableFileConfig } from "../config"
+import { file as files, path, system } from "../../modulejs"
+import { Container, Service, Inject } from "typedi"
+import "reflect-metadata"
 // ! 文件操作接口
 // namespace Reflect {
 //     let file!: IFile;
@@ -239,72 +239,73 @@ import "reflect-metadata";
 // }
 
 export interface IFileOperate {
-    creatDir(): void;
-    creatFile(): void;
-    rmDir(): void;
-    rmFile(): void;
+    creatDir(): void
+    creatFile(): void
+    rmDir(): void
+    rmFile(): void
 }
 @Service("本地文件操作操作类")
 export class CFileOperate implements IFileOperate {
-    file!: IFile;
-    fileContent!: string;
+    file!: IFile
+    fileContent!: string
     constructor(file: IFile) {
-        this.file = file;
+        this.file = file
     }
     creatDir() {
-        files.creatdir(this.file.filePath);
+        files.mkDirsSync(this.file.filePath)
+        // files.creatdir(this.file.filePath);
     }
     async creatFile() {
-        let fileFullName = `${this.file.filePath}/${this.file.fileName}`;
+        let fileFullName = `${this.file.filePath}/${this.file.fileName}`
         // let fileFullName = `${this.file.filePath}\\${this.file.fileName}`;
         // let res: boolean;
         if (this.file.fileExtension) {
-            fileFullName = `${fileFullName}.${this.file.fileExtension}`;
+            fileFullName = `${fileFullName}.${this.file.fileExtension}`
         }
         if (this.file.fileCode) {
-            return await files.writeFile(fileFullName, "", this.file.fileCode);
+            return await files.writeFile(fileFullName, "", this.file.fileCode)
         } else {
-            return await files.writeFile(fileFullName, "");
+            return await files.writeFile(fileFullName, "")
         }
     }
     async writeFile(): Promise<any> {
         // let file = JSON.parse(JSON.stringify(this.file));
-        let file = { ...this.file };
+        let file = { ...this.file }
 
-        let fileContent = this.fileContent;
-        await system.delayms(1);
-        await system.delayus(1);
+        let fileContent = this.fileContent
+        await system.delayms(1)
+        await system.delayus(1)
 
-        let fileFullName = `${file.filePath}/${file.fileName}`;
+        let fileFullName = `${file.filePath}/${file.fileName}`
         // let fileFullName = `${file.filePath}\\${file.fileName}`;
         // let res: boolean;
         if (file.fileExtension) {
-            fileFullName = `${fileFullName}.${file.fileExtension}`;
+            fileFullName = `${fileFullName}.${file.fileExtension}`
         }
-        let content;
+        let content
         if (!fileContent) {
-            content = "";
+            content = ""
         } else {
-            content = fileContent;
+            content = fileContent
         }
         // await system.delayus(1);
         if (file.fileCode) {
-            return await files.writeFile(fileFullName, content, file.fileCode);
+            return await files.writeFile(fileFullName, content, file.fileCode)
         } else {
-            return await files.writeFile(fileFullName, content);
+            return await files.writeFile(fileFullName, content)
         }
     }
     async rmFile() {
-        let fileFullName = `${this.file.filePath}/${this.file.fileName}`;
+        let fileFullName = `${this.file.filePath}/${this.file.fileName}`
         // let fileFullName = `${this.file.filePath}\\${this.file.fileName}`;
         // let res: boolean;
         if (this.file.fileExtension) {
-            fileFullName = `${fileFullName}.${this.file.fileExtension}`;
+            fileFullName = `${fileFullName}.${this.file.fileExtension}`
         }
-        return await files.rmFileSync(fileFullName);
+        return await files.rmFileSync(fileFullName)
     }
     async rmDir() {
-        files.rmdir(this.file.filePath);
+        files.rmdir(this.file.filePath)
     }
 }
 /** ************************ */

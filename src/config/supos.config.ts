@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 23:03:24
- * @LastEditTime: 2021-10-03 00:22:55
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-21 14:43:32
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\config\supos.config.ts
+ * @FilePath     : /express/src/config/supos.config.ts
  */
 import { ISupOSConfig } from "./interface.config"
 import { fs } from "../../modulejs"
@@ -204,6 +204,41 @@ export const GetAlarmObjFileNetConfig = function (configFileDir: string, streamV
     //     "result": 11.0,
     //     "logs": "[]"
     // }
+}
+
+// ! 历史数据接口配置
+export const batchQueryConfig = function (
+    dataSources: string | Array<string>,
+    beginTime: string,
+    endTime: string,
+    aggrType?: string,
+    limit?: number
+) {
+    if (!Array.isArray(dataSources)) {
+        dataSources = dataSources.split(",")
+    }
+    let list = dataSources.map((item) => {
+        return {
+            dataSource: item,
+            type: "Property",
+            // "type": "Object",
+            filters: {
+                minDate: beginTime,
+                maxDate: endTime,
+                aggrType: aggrType ? aggrType : "",
+                group: "",
+                isHistory: true,
+                limit: limit ? limit : 10000
+            }
+        }
+    })
+    return {
+        netAddress: netAddress,
+        netPath: "api/compose/manage/objectdata/batchQuery",
+        netData: {
+            list: list
+        }
+    }
 }
 
 export interface ISuposObjects {

@@ -1,15 +1,17 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:17:14
- * @LastEditTime: 2021-10-01 23:12:59
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-20 00:47:53
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\config\mongodb.config.ts
+ * @FilePath     : /express/src/config/mongodb.config.ts
  */
 import { RuleStruct } from "./rule.config"
 import { FactoryStruct } from "./factory.config"
 import { AlarmStruct } from "./alarm.config"
 import { ServerRequestStruct } from "./server-request.config"
+import { HistorySuposStruct } from "./history.config"
+import { FactorStruct } from "./factor.config"
 // const ip = "localhost:27017"
 const ip = "localhost:27017"
 // const ip = "mongo-solid-pollution:27017"
@@ -39,6 +41,21 @@ const requesttableConfig = {
     collectionname: "Requesttable",
     schema: ServerRequestStruct
 }
+
+const factortableConfig = {
+    ip: ip,
+    datasename: "workCondition_subSystem",
+    collectionname: "Factortable",
+    schema: FactorStruct
+}
+
+const suposHistorytableConfig = {
+    ip: ip,
+    datasename: "historyDB",
+    collectionname: "Historytable",
+    schema: HistorySuposStruct
+}
+
 // {
 //     id: { String, Number },
 //     name: { type: String },
@@ -56,7 +73,14 @@ const requesttableConfig = {
 //     SetValue: { String, Number },
 //     SetFlagValue: { String, Number }
 // }
-export { factoryConfig, ruletableConfig, alarmtableConfig, requesttableConfig }
+export {
+    factoryConfig,
+    ruletableConfig,
+    alarmtableConfig,
+    requesttableConfig,
+    factortableConfig,
+    suposHistorytableConfig
+}
 
 // export interface ImongodbConfig {
 //     ip: string;

@@ -2,16 +2,16 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime: 2021-09-11 13:14:06
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-23 00:33:59
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\module\factorytable.ts
+ * @FilePath     : /express/src/dao/table.ts
  */
-import "reflect-metadata";
-import mongoose from "mongoose";
+import "reflect-metadata"
+import mongoose from "mongoose"
 
-import { Container, Service, Inject } from "typedi";
-import { IDatabase, IMongDB, CMongoDB, CMongoose } from ".";
+import { Container, Service, Inject } from "typedi"
+import { IDatabase, IMongDB, CMongoDB, CMongoose } from "."
 // import {
 //     factoryConfig,
 //     ruletableConfig,
@@ -20,10 +20,10 @@ import { IDatabase, IMongDB, CMongoDB, CMongoose } from ".";
 //     IFile,
 //     IVendorConfig
 // } from '../config';
-import { CVendorData, IVendorData } from "../module/vendor";
+import { CVendorData, IVendorData } from "../module/vendor"
 // import { request, system } from '../../modulejs';
 // import { factoryCollectorTempleData } from '../respository/factory/collector';
-Container.import([CMongoDB, CMongoose, CVendorData]);
+Container.import([CMongoDB, CMongoose, CVendorData])
 // interface IFactoryCollector {
 //     id: number;
 //     objname: string;
@@ -41,48 +41,65 @@ interface ITable extends IDatabase {}
 // class CFactory {}
 @Service()
 export class CTable extends CMongoDB implements ITable {
-    @Inject("mongodb操作类")
-    mongodb!: CMongoDB;
-    async connect(): Promise<any> {
-        // this.mongodb.conneConfig = factoryConfig;
-        return await this.mongodb.connect();
-        // this.mongodb.instantiateDatabase = new mongoose.Mongoose();
-    }
-    async disconnect(): Promise<any> {
-        return await this.mongodb.disconnect();
-    }
-    async add(dataArr: Array<Object>): Promise<any> {
-        // let mongodbInstance = Container.get<IMongDB>('mongodb类');
-        // return mongodbInstance.add(dataArr);
-        return await this.mongodb.add(dataArr);
-    }
-    async delete(filterObj: Object): Promise<any> {
-        // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
-        return await this.mongodb.delete(filterObj);
-    }
-    async update(filterObj: Object, newItem: Object | Array<any>, options?: Object): Promise<any> {
-        // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
-        // return mongodbInstance.update(filterObj, newItem);
-        return await this.mongodb.update(filterObj, newItem);
-    }
-    async select(whereFilterObj: Object | null, projection: Array<string> | null): Promise<any> {
-        // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
-        // return mongodbInstance.select(whereFilterObj, projection);
-        return await this.mongodb.select(whereFilterObj, projection);
-    }
+    // @Inject("mongodb操作类")
+    // mongodb!: CMongoDB
+    // async connect(): Promise<any> {
+    //     // this.mongodb.conneConfig = factoryConfig;
+    //     return await this.connect()
+    //     // return await this.mongodb.connect()
+    //     // this.mongodb.instantiateDatabase = new mongoose.Mongoose();
+    // }
+    // async disconnect(): Promise<any> {
+    //     return await this.disconnect()
+    //     // return await this.mongodb.disconnect()
+    // }
+    // async add(dataArr: Array<Object>): Promise<any> {
+    //     // let mongodbInstance = Container.get<IMongDB>('mongodb类');
+    //     // return mongodbInstance.add(dataArr);
+    //     return await this.add(dataArr)
+    //     // ? return await this.mongodb.add(dataArr)
+    // }
+    // async delete(filterObj: Object): Promise<any> {
+    //     // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
+    //     return await this.delete(filterObj)
+    //     // ? return await this.mongodb.delete(filterObj)
+    // }
+    // async update(filterObj: Object, newItem: Object | Array<any>, options?: Object): Promise<any> {
+    //     // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
+    //     // return mongodbInstance.update(filterObj, newItem);
+    //     return await this.update(filterObj, newItem)
+    //     // return await this.mongodb.update(filterObj, newItem)
+    // }
+    // async select(whereFilterObj: Object | null, projection: Array<string> | null): Promise<any> {
+    //     // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
+    //     // return mongodbInstance.select(whereFilterObj, projection);
+    //     return await this.select(whereFilterObj, projection)
+    //     // return await this.mongodb.select(whereFilterObj, projection)
+    // }
     async deleteAll(): Promise<any> {
         // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
         // return mongodbInstance.delete({ _id: 0 });
-        return await this.mongodb.delete({ _id: 0 });
+        return await this.delete({ _id: 0 })
+        // return await this.mongodb.delete({ _id: 0 })
     }
-    async aggregate(projection: Array<object>): Promise<any> {
-        // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
-        // return mongodbInstance.select(whereFilterObj, projection);
-        return await this.mongodb.aggregate(projection);
+    async deleteCollectionsContent(collections: Array<string>): Promise<any> {
+        for (let collection of collections) {
+            this.convertCollectionTo(collection.toLocaleUpperCase())
+            await this.deleteAll()
+        }
+        return await this.deleteAll()
     }
-    async distinct(fieldFilter: string, query: object): Promise<any> {
-        return await this.mongodb.distinct(fieldFilter, query);
-    }
+
+    // async aggregate(projection: Array<object>): Promise<any> {
+    //     // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
+    //     // return mongodbInstance.select(whereFilterObj, projection);
+    //     return await this.aggregate(projection)
+    //     // return await this.mongodb.aggregate(projection)
+    // }
+    // async distinct(fieldFilter: string, query?: object): Promise<any> {
+    //     return await this.distinct(fieldFilter, query)
+    //     // return await this.mongodb.distinct(fieldFilter, query)
+    // }
 }
 // //* 企业数据本地持久化类
 // class CFactoryTablePersistent {

@@ -3,7 +3,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime : 2021-12-05 21:50:34
+ * @LastEditTime : 2021-12-20 12:19:38
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/module/alarmtable.ts
@@ -263,7 +263,8 @@ export class CAlarmTableGenerateTask {
 // ?报警配置库-单元测试
 const alarmTableFun = async function (alarmJson: any): Promise<any> {
     let alarmTableHandler = Container.get<CAlarmTable>("报警配置库")
-    alarmTableHandler.mongodb.conneConfig = alarmtableConfig
+    alarmTableHandler.conneConfig = alarmtableConfig
+    // alarmTableHandler.mongodb.conneConfig = alarmtableConfig
     // let ruleTableLocalHandler = Container.get<CRuleTableLocal>('规则数据表本地操作类');
 
     // ruleTableLocalHandler.file = ruletableFileConfig;
@@ -318,7 +319,8 @@ const alarmTableTest = async function () {
     await user.login()
     let alarmTableHandler = Container.get<CAlarmTableGenerateTask>("报警配置表生成任务类")
     let ruleTableHandler = Container.get<CRuleTable>("规则库操作类")
-    ruleTableHandler.mongodb.conneConfig = ruletableConfig
+    ruleTableHandler.conneConfig = ruletableConfig
+    // ruleTableHandler.mongodb.conneConfig = ruletableConfig
     await ruleTableHandler.connect()
     const ruletable = await ruleTableHandler.select(null, null)
     await ruleTableHandler.disconnect()

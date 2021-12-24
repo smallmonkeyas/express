@@ -2,10 +2,10 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:00:34
- * @LastEditTime: 2021-10-03 00:39:20
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2021-12-23 20:42:16
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\module\properity.ts
+ * @FilePath     : /express/src/module/supos.ts
  */
 
 import { request, unirest, system, ExcelTemplate, Excel, fs, stream } from "../../modulejs"
@@ -69,7 +69,7 @@ export class CSupOSData implements ISupOSData {
             method: "GET",
             url: url,
             headers: {
-                Authorization: this.authorizationToken,
+                Authorization: Container.get("authorization-token"),
                 "Content-Type": "application/json",
                 Cookie: "vertx-web.session=79b80599135734456f355ba9d47a5ac8"
             }
@@ -99,6 +99,7 @@ export class CSupOSData implements ISupOSData {
         })
     }
     post(): Promise<any> {
+        Container.import([User])
         let supos = JSON.parse(JSON.stringify(this.supos))
         // let arguments = args;
         // const ip = this.ip;
@@ -127,7 +128,7 @@ export class CSupOSData implements ISupOSData {
             method: "POST",
             url: url,
             headers: {
-                Authorization: this.authorizationToken,
+                Authorization: Container.get("authorization-token"),
                 "Content-Type": "application/json",
                 Cookie: "vertx-web.session=79b80599135734456f355ba9d47a5ac8"
             },
@@ -136,13 +137,20 @@ export class CSupOSData implements ISupOSData {
             // })
             body: JSON.stringify(supos.netData)
         }
+        let authorization = this.authorizationToken
         return new Promise(function (resolve, reject) {
-            // console.log("options", supos, options);
+            // console.log("options", supos, options)
             request(options, function (error: any, response: { body: string }) {
                 // let res: IVendorResponseConfig;
                 // if (error) {
                 //     throw new Error(error);
                 // }
+                console.log(
+                    "this.authorizationToken",
+                    authorization,
+                    "User.token:",
+                    Container.get("authorization-token")
+                )
                 if (error) {
                     resolve(error)
                 }
@@ -186,7 +194,7 @@ export class CSupOSData implements ISupOSData {
             url = `${supos.netAddress}/${supos.netPath}?${params}`
         }
         let header = {
-            Authorization: this.authorizationToken,
+            Authorization: Container.get("authorization-token"),
             Cookie: "vertx-web.session=5102a8ff0d1c27d4224e4bf794e65123"
         }
         const { file, ...args } = supos.netData
@@ -242,7 +250,7 @@ export class CSupOSData implements ISupOSData {
             method: "POST",
             url: url,
             headers: {
-                Authorization: this.authorizationToken,
+                Authorization: Container.get("authorization-token"),
                 // "Content-Type": "application/json",
                 Cookie: "vertx-web.session=79b80599135734456f355ba9d47a5ac8"
             },
@@ -306,7 +314,7 @@ export class CSupOSData implements ISupOSData {
             method: "DELETE",
             url: url,
             headers: {
-                Authorization: this.authorizationToken,
+                Authorization: Container.get("authorization-token"),
                 // "Content-Type": "application/json",
                 Cookie: "vertx-web.session=79b80599135734456f355ba9d47a5ac8"
             }
