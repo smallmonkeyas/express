@@ -1,30 +1,41 @@
 /*
  * @Author: your name
  * @Date: 2021-07-17 17:48:18
- * @LastEditTime : 2021-12-20 21:18:42
+ * @LastEditTime : 2021-12-24 22:28:29
  * @LastEditors  : Chengxin Sun
  * @Description: 引用的库-excel和json数据转换库
  * @FilePath     : /express/script/XLSX_JSON.js
  */
 
+// @ts-ignore
 var request = require("request")
 // var request = require("request");
 const XLSX = require("xlsx")
+// @ts-ignore
 const xlsx = require("node-xlsx")
+// @ts-ignore
 const EXCEL = require("xlsx-style")
 
 var fs = require("fs")
+// @ts-ignore
 var moment = require("moment")
+// @ts-ignore
 var os = require("os")
 var path = require("path") /* nodejs自带的模块*/
+// @ts-ignore
 var cheerio = require("cheerio")
+// @ts-ignore
 const jsdom = require("jsdom")
+// @ts-ignore
 const json2xls = require("json2xls")
 const csv2json = require("csv2json")
 const csv = require("csvtojson")
+// @ts-ignore
 const wxm = require("wxmnode") // 微信
+// @ts-ignore
 var system = require("./system")
 
+// @ts-ignore
 const creatFolder = function (filePath) {
     if (!fs.existsSync(filePath)) {
         fs.mkdirSync(filePath)
@@ -121,9 +132,12 @@ const jsonsToOneExcel = function (dataJsonArr, pathFileDir, fileName) {
         mkDirsSync(pathFileDir)
     }
     dataJsonArr.forEach((item) => {
+        // @ts-ignore
         let param = item
+        // @ts-ignore
         excelJson = param[Object.keys(param)]
         ws = XLSX.utils.json_to_sheet(excelJson)
+        // @ts-ignore
         XLSX.utils.book_append_sheet(wb, ws, Object.keys(param))
     })
     XLSX.writeFile(wb, newfileDirectory) // 直接定义死文件名
@@ -136,6 +150,7 @@ const readJsonFile = function (pathFileDir, fileName) {
     if (fs.existsSync(jsonfileDirectory)) {
         var fileFactoryResult = fs.readFileSync(jsonfileDirectory)
         if (fileFactoryResult.length > 0) {
+            // @ts-ignore
             return JSON.parse(fileFactoryResult)
         }
     } else {
@@ -154,6 +169,7 @@ const jsonfileToExcel = function (pathFileDir, fileName) {
     if (fs.existsSync(jsonfileDirectory)) {
         var fileFactoryResult = fs.readFileSync(jsonfileDirectory)
         if (fileFactoryResult.length > 0) {
+            // @ts-ignore
             var fileFactoryJson = JSON.parse(fileFactoryResult)
             excelToJsonArr = fileFactoryJson.list
             let xls = json2xls(excelToJsonArr)
@@ -175,6 +191,7 @@ const readcsvFile = function (pathFileDir, fileName) {
     // var basicDir = `${pathFileDir}\\${fileName}`;
     var jsonfileDirectory = `${basicDir}.csv`
     if (fs.existsSync(jsonfileDirectory)) {
+        // @ts-ignore
         var fileFactoryResult = fs.readFileSync(jsonfileDirectory)
         // if (fileFactoryResult.length > 0) {
         //   return JSON.parse(fileFactoryResult);
@@ -191,6 +208,7 @@ const csvToJson = function (pathFileDir, fileName) {
     // var basicDir = `${pathFileDir}\\${fileName}`;
     var csvfileDirectory = `${basicDir}.csv`
     var jsonfileDirectory = `${basicDir}.json`
+    // @ts-ignore
     return new Promise(function (resolve, reject) {
         fs.createReadStream(csvfileDirectory)
             .pipe(
@@ -200,6 +218,7 @@ const csvToJson = function (pathFileDir, fileName) {
                 })
             )
             .pipe(
+                // @ts-ignore
                 (function () {
                     fs.createWriteStream(jsonfileDirectory)
                     resolve(1)
@@ -211,6 +230,7 @@ const csvToExcel = async function (pathFileDir, fileName) {
     var basicDir = `${pathFileDir}/${fileName}`
     // var basicDir = `${pathFileDir}\\${fileName}`;
     var csvfileDirectory = `${basicDir}.csv`
+    // @ts-ignore
     var jsonfileDirectory = `${basicDir}.json`
     const jsonArray = await csv().fromFile(csvfileDirectory)
     return jsonArray
