@@ -122,3 +122,6 @@ py
 #src-service
 src/service/**/*.xlsx
 src/service/**/*.json
+
+#src-respository
+src/respository

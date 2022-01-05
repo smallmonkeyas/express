@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 23:03:24
- * @LastEditTime : 2021-12-21 14:43:32
+ * @LastEditTime : 2021-12-29 00:27:59
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/config/supos.config.ts
@@ -162,12 +162,36 @@ export const GetPropertyValuesNetConfig = function (objectName: string, name: st
 
 export const GetPropertyInfosNetConfig = function (
     objectName: string,
-    netParam: { type: string; page: number; per_page: number }
+    netParam: { type: string; page: number; per_page: number; propName?: string }
 ) {
     return {
         netAddress: netAddress,
         netPath: `api/metadata/objects/${objectName}/properties`,
         netParam: netParam // ?type=own&page=1&per_page=200
+    }
+    // response.body
+    // {
+    //     "result": 11.0,
+    //     "logs": "[]"
+    // }
+}
+
+export const GetObjectInfosNetConfig = function (netParam: {
+    page: number
+    per_page: number
+    keyWord?: string
+}) {
+    return {
+        netAddress: netAddress,
+        netPath: "api/metadata/search/objects",
+        netParam: {
+            ...netParam,
+            resultType: false,
+            visible: true,
+            systemProperty: false,
+            remote: true
+        }
+        // ?type=own&page=1&per_page=200...
     }
     // response.body
     // {
@@ -205,7 +229,15 @@ export const GetAlarmObjFileNetConfig = function (configFileDir: string, streamV
     //     "logs": "[]"
     // }
 }
-
+export const propertyBatchQuery = function (list: Array<string>) {
+    return {
+        netAddress: netAddress,
+        netPath: "api/compose/manage/objectdata/propertyBatchQuery",
+        netData: {
+            list: list
+        }
+    }
+}
 // ! 历史数据接口配置
 export const batchQueryConfig = function (
     dataSources: string | Array<string>,

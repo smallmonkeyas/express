@@ -3,7 +3,7 @@
  * @Author       : Chengxin Sun
  * @Date         : 2021-12-04 23:24:04
  * @LastEditors  : Chengxin Sun
- * @LastEditTime : 2021-12-05 23:32:12
+ * @LastEditTime : 2021-12-25 23:04:45
  * @Description  : Do not edit
  * @FilePath     : /express/src/main/index_patch.ts
  * @github-name  : scxmonkeyas
@@ -76,7 +76,8 @@ class CTask extends AbsTask {
         // !该程序关键在于报警配置库与服务请求配置库的构建，我们报警对象的创建由报警配置库来完成，依据报警配置库又接着构建服务器接口请求配置库，用于管理所有位号的批量请求和报警对象的写值工作
         // TODO: 1、读取规则文件，该规则文件由一个个按照固定模板的表格组成，只需将所有规则文件放置到同一目录下即可
         // let ruleTableHandler = Container.get<CRuleTable>('规则库操作类');
-        this.ruleTableHandler.mongodb.conneConfig = ruletableConfig
+        this.ruleTableHandler.conneConfig = ruletableConfig
+        // this.ruleTableHandler.mongodb.conneConfig = ruletableConfig
         // let ruleTableLocalHandler = Container.get<CRuleTableLocal>('规则数据表本地操作类');
 
         this.ruleTableLocalHandler.file = ruletableFileConfig
@@ -123,7 +124,7 @@ class CTask extends AbsTask {
         // return alarmConfigTableJson;
         // TODO: 4、保存到报警配置库
         // // let alarmTableHandler = Container.get<CAlarmTable>("报警配置库");
-        this.alarmTableHandler.mongodb.conneConfig = alarmtableConfig
+        this.alarmTableHandler.conneConfig = alarmtableConfig
         await this.alarmTableHandler.connect()
         await this.alarmTableHandler.deleteAll()
         await this.alarmTableHandler.add(alarmConfigTableJson)
@@ -196,7 +197,7 @@ class CTask extends AbsTask {
 
         const requestTable = this.requestTableTaskHandler.serverRequestTable
         // const requestTableHandler = Container.get<CServerRequestTable>("服务请求配置库");
-        this.requestTableHandler.mongodb.conneConfig = requesttableConfig
+        this.requestTableHandler.conneConfig = requesttableConfig
         await this.requestTableHandler.connect()
         const resDelete = await this.requestTableHandler.deleteAll()
         //* 增加服务请求配置库

@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:11:34
- * @LastEditTime : 2021-12-22 05:07:58
+ * @LastEditTime : 2021-12-26 00:57:54
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/dao/mongoose.io.ts
@@ -79,7 +79,7 @@ export class CMongoDB implements IMongDB {
     }
     async delete(filterObj: Object): Promise<any> {
         // var modelCollection = _.cloneDeep(this.modelCollection)
-        return await this.modelCollection.deleteMany(Object)
+        return await this.modelCollection.deleteMany(filterObj)
     }
     async update(filterObj: Object, newItem: Object | Array<any>): Promise<any> {
         // let modelCollection = JSON.parse(JSON.stringify(this.modelCollection))

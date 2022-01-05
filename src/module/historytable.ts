@@ -3,7 +3,7 @@
  * @Author       : Chengxin Sun
  * @Date         : 2021-12-20 02:45:08
  * @LastEditors  : Chengxin Sun
- * @LastEditTime : 2021-12-24 16:13:16
+ * @LastEditTime : 2022-01-03 21:01:05
  * @Description  : Do not edit
  * @FilePath     : /express/src/module/historytable.ts
  * @github-name  : scxmonkeyas
@@ -74,6 +74,13 @@ export class CSuposHistoryTable extends CTable {
     fileHandler!: CFileOperate
     @Inject("supOS对象属性接口")
     propertyHandler!: CPropertyRequest
+    factoryInfo!: {
+        epcodeFinished: string[]
+        // factoryFinished: string[]
+        currFactory: string
+    }
+    factorTotal!: number
+    factorCurrTotal!: number
     async getObjectFactors(objList: Array<string>): Promise<any> {
         let factorInfoList = []
         for (let objname of objList) {
@@ -94,6 +101,25 @@ export class CSuposHistoryTable extends CTable {
             }
         }
         return factorInfoList
+    }
+    // !注意此处keyWord必须为正则表达式
+    async getSystemObject(regexKeyWord?: RegExp): Promise<any> {
+        let objList = []
+        let objInfoList = await this.propertyHandler.getObjectInfoList()
+        if (regexKeyWord) {
+            for (let objInfo of objInfoList) {
+                if (regexKeyWord.test(objInfo.name)) {
+                    objList.push(objInfo.name)
+                    // objList.push({ objname: objInfo.name, displayname: objInfo.showName })
+                }
+            }
+        } else {
+            for (let objInfo of objInfoList) {
+                objList.push(objInfo.name)
+            }
+        }
+
+        return objList
     }
     async batchQuery(names: Array<string>, startTime: string, endTime: string): Promise<any> {
         this.suposHandler.supos = batchQueryConfig(
@@ -327,7 +353,10 @@ export class CSuposHistoryTable extends CTable {
         //     )
         // })
         // const promiseall = await Promise.all(promises)
+        this.factorTotal = names.length
+        this.factorCurrTotal = 0
         for (let i = 0; i < factorSlice.length; i++) {
+            this.factorCurrTotal += factorSlice[i].length
             await this.addCompliantHistoryData(
                 factorSlice[i],
                 startTime,
@@ -371,7 +400,9 @@ export class CSuposHistoryTable extends CTable {
         //* 先选监测因子，然后按照时间区间进行请求
         let requestNum = timeSelect.length - 1
         console.log(
-            "当前请求监测因子个数：",
+            `企业索引:${this.factoryInfo.epcodeFinished.length + 1}`,
+            `当前企业:${this.factoryInfo.currFactory}`,
+            "当前请求监测因子个数:",
             names.length,
             "时间范围",
             `${timeSelect[0]}-->>${timeSelect[requestNum]}`
@@ -424,8 +455,10 @@ export class CSuposHistoryTable extends CTable {
                     await this.add(propertyHisCompliantData)
                     console.log(
                         "成功",
+                        `企业索引:${this.factoryInfo.epcodeFinished.length + 1}`,
+                        `因子统计(当前-${names.length}/已完成-${this.factorCurrTotal}/${this.factorTotal})`,
                         item,
-                        "请求到数据量：",
+                        "请求数据量:",
                         propertyHisCompliantData.length,
                         timeSelect[ii],
                         timeSelect[ii + 1]
@@ -434,6 +467,8 @@ export class CSuposHistoryTable extends CTable {
                     removeFactorslist = [...removeFactorslist, item]
                     console.log(
                         "出错",
+                        `企业索引:${this.factoryInfo.epcodeFinished.length + 1}`,
+                        `因子统计(当前-${names.length}/已完成-${this.factorCurrTotal}/${this.factorTotal})`,
                         item,
                         Object.keys(resHis).length,
                         Object.keys(resHis),
@@ -458,12 +493,20 @@ export class CSuposHistoryTable extends CTable {
         if (names.length === 0) {
             return {}
         }
-        let resHis = await this.batchQuery(names, startTime, endTime)
+        let resHis: { [prop: string]: any } = await this.batchQuery(names, startTime, endTime)
         // if (resHis) {
         let currentFactorRes: Array<string> = Object.keys(resHis)
-        while (currentFactorRes.includes("message") || currentFactorRes.includes("errors")) {
+        while (
+            currentFactorRes.includes("message") ||
+            currentFactorRes.includes("errors") ||
+            currentFactorRes.includes("errno")
+        ) {
             system.delayms(1000)
-            console.log("getWhileHisdata-currentFactor", resHis)
+            console.log(
+                `getWhileHisdata-currentFactor--因子长度：${names.length}-${names[0]}-${startTime}~${endTime}`,
+                `因子统计(当前-${names.length}/已完成-${this.factorCurrTotal}/${this.factorTotal})`,
+                resHis
+            )
             // if (resHis["message"] === "401") {
             let user = Container.get<User>("用户")
             const authLoginRes = await user.login()
@@ -471,6 +514,10 @@ export class CSuposHistoryTable extends CTable {
 
             resHis = await this.batchQuery(names, startTime, endTime)
             currentFactorRes = Object.keys(resHis)
+            if (currentFactorRes.includes("errors") && Array.isArray(resHis.errors)) {
+                resHis = {}
+                break
+            }
             // }
             // continue
         }
@@ -480,11 +527,23 @@ export class CSuposHistoryTable extends CTable {
             !currentFactorRes.includes(item) && arr.push(item)
             return arr
         }, [])
-        let resMissHis = await this.batchQuery(factorMiss, startTime, endTime)
+        let resMissHis: { [prop: string]: any } = await this.batchQuery(
+            factorMiss,
+            startTime,
+            endTime
+        )
         let missFactorRes: Array<string> = Object.keys(resMissHis)
-        while (missFactorRes.includes("message") || missFactorRes.includes("errors")) {
+        while (
+            missFactorRes.includes("message") ||
+            missFactorRes.includes("errors") ||
+            missFactorRes.includes("errno")
+        ) {
             system.delayms(1000)
-            console.log("getWhileHisdata-missFactor", resMissHis)
+            console.log(
+                `getWhileHisdata-missFactor-因子长度：${names.length} ${names[0]}-${startTime}~${endTime}`,
+                `因子统计(当前-${names.length}/已完成-${this.factorCurrTotal}/${this.factorTotal})`,
+                resMissHis
+            )
             // if (resHis["message"] === "401") {
             let user = Container.get<User>("用户")
             const authLoginRes = await user.login()
@@ -492,6 +551,10 @@ export class CSuposHistoryTable extends CTable {
 
             resMissHis = await this.batchQuery(factorMiss, startTime, endTime)
             missFactorRes = Object.keys(resMissHis)
+            if (missFactorRes.includes("errors") && Array.isArray(resMissHis.errors)) {
+                resMissHis = {}
+                break
+            }
             // }
             // continue
         }
@@ -501,11 +564,12 @@ export class CSuposHistoryTable extends CTable {
     //* 通过模板文件导出历史数据
     async exportHistoryDataByTemplete(
         factorhisdatas: Array<any>,
-        factorInfo: IFactorStruct
+        factorInfo: { [prop: string]: any }
     ): Promise<any> {
+        let timeRange = factorInfo.timeRange.replace(/[\？\?\*\\\/:|<>\"]{1,}/g, "_")
         const templateConfigFileDir = `${historyTempleFileConfig.filePath}/${historyTempleFileConfig.fileName}.${historyTempleFileConfig.fileExtension}`
         // eslint-disable-next-line max-len
-        const historyDataOutFilePath = `${historyTempleFileConfig.filePath}/data/${factorInfo.displayname}/`
+        const historyDataOutFilePath = `${historyTempleFileConfig.filePath}/data/${timeRange}/${factorInfo.factoryIndexStr}_${factorInfo.displayname}/`
         const historyDataOutFileDir = `${historyDataOutFilePath}/${factorInfo.description}.${historyTempleFileConfig.fileExtension}`
         files.mkDirsSync(historyDataOutFilePath)
         // todo: 读取配置文件模板文件

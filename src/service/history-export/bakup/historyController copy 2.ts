@@ -2,9 +2,9 @@
  * @Author       : Chengxin Sun
  * @Date         : 2021-12-20 01:49:15
  * @LastEditors  : Chengxin Sun
- * @LastEditTime : 2021-12-24 01:03:50
+ * @LastEditTime : 2021-12-31 14:26:08
  * @Description  : Do not edit
- * @FilePath     : /express/src/service/history-export/historyController.ts
+ * @FilePath     : /express/src/service/history-export/bakup/historyController copy 2.ts
  * @github-name  : scxmonkeyas
  */
 /* eslint-disable space-unary-ops */
@@ -16,8 +16,8 @@ import "reflect-metadata"
 import { Container, Service, Inject } from "typedi"
 // import mongoose from 'mongoose';
 
-import { fs, file, path, system, XLSX_JSON, moment, readlineSync } from "../../../modulejs"
-import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../../dao"
+import { fs, file, path, system, XLSX_JSON, moment, readlineSync } from "../../../../modulejs"
+import { IDatabase, IMongDB, CMongoDB, CMongoose, CFileOperate, CTable } from "../../../dao"
 import {
     factoryConfig,
     ImongodbConfig,
@@ -30,7 +30,7 @@ import {
     IFactorStruct,
     cfgFactorConfig,
     batchQueryConfig
-} from "../../config"
+} from "../../../config"
 import {
     CVendorData,
     IVendorData,
@@ -39,7 +39,7 @@ import {
     CSuposHistoryTable,
     CFactorTable,
     CFactorySiteTable
-} from "../../module"
+} from "../../../module"
 
 Container.import([CSupOSData, User, CMongoDB, CTable])
 let basicPath = path.resolve(process.cwd(), "./")

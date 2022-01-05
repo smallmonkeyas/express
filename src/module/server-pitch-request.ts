@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-10 00:44:38
- * @LastEditTime : 2021-12-24 15:27:15
+ * @LastEditTime : 2021-12-29 22:46:14
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/module/server-pitch-request.ts
@@ -26,12 +26,14 @@ import {
     GetPropertyValuesNetConfig,
     GetPropertyInfosNetConfig,
     SetPropertyValuesNetConfig,
+    GetObjectInfosNetConfig,
     IRuleStruct,
     IAlarmStruct,
     alarmtableConfig,
     AlarmObjnameConfig,
     AlarmTypeDescConfig,
-    AlarmTypeDeprecated
+    AlarmTypeDeprecated,
+    propertyBatchQuery
 } from "../config"
 import { CSingleRuleInfo } from "./rule"
 import { CRuleTable } from "./ruletable"
@@ -197,22 +199,86 @@ export class CPropertyRequest extends CSupOSData {
         let res = await this.post()
         return res
     }
-    async getPropertyInfos(objname: string, page: number, per_page: number): Promise<any> {
+    async getObjectInfos(page: number, per_page: number, keyWord?: string): Promise<any> {
+        let netParam = { page: page, per_page: per_page, keyWord: keyWord }
+        this.supos = GetObjectInfosNetConfig(netParam)
+        return await this.get()
+    }
+    async getObjectInfoList(keyWord?: string): Promise<any> {
+        let objList = []
+        let page = 1
+        let per_page = 200
+
+        let onePageObjectsObj = await this.getObjectInfos(page, per_page, keyWord)
+        if (!onePageObjectsObj.list) {
+            throw new Error(`查询对象实例失败，错误信息：${onePageObjectsObj}`)
+        }
+        // //console.log("onePageProperitiesObj", onePageProperitiesObj);
+        objList.push(...onePageObjectsObj.list)
+        const pageSum = Math.ceil(
+            onePageObjectsObj.pagination.total / onePageObjectsObj.pagination.pageSize
+        )
+        // ?方式1:Promise.all
+        // let together = new Array(pageSum + 1).fill(null);
+        // const promise = together.map((item, index) => {
+        //     return this.getPropertyInfos(objName, index + 1, perPage);
+        // });
+        // const promiseall = await Promise.all(promise);
+        // ?方式2：await
+        for (let index = 2; index < pageSum + 1; index++) {
+            page = index
+            // this.supos = GetPropertyInfosNetConfig(objname, netParam);
+            onePageObjectsObj = await this.getObjectInfos(page, per_page, keyWord)
+            objList.push(...onePageObjectsObj.list)
+        }
+        return objList
+    }
+    /**
+     *
+     * @param {list->["GK_CZ_JT_DEWS.E101F1","GK_CZ_GD_GXHB.G40111"]}
+     * @returns {"GK_CZ_JT_DEWS.E101F1": {"minValue": 0,"maxValue": 1000,...},"GK_320900000003:P_EPCODE":{}}
+     */
+    async propertyBatchQuery(list: Array<string>): Promise<any> {
+        let listStrity = JSON.stringify(list)
+        listStrity.replace(/\./, ":")
+        let lists = JSON.parse(listStrity)
+        this.supos = propertyBatchQuery(lists)
+        let resPropertyList = await this.post()
+        let resPropertyListStr = JSON.stringify(resPropertyList)
+        lists.forEach((prop: string, index: number) => {
+            resPropertyListStr.replace(lists[index], list[index])
+        })
+        return JSON.parse(resPropertyListStr)
+    }
+    async getPropertyInfos(
+        objname: string,
+        page: number,
+        per_page: number,
+        propName?: string
+    ): Promise<any> {
         //*
 
-        let netParam = { page: page, per_page: per_page, type: "own" }
+        let netParam = { page: page, per_page: per_page, type: "own", propName: propName }
         this.supos = GetPropertyInfosNetConfig(objname, netParam)
         return await this.get()
     }
-    async getPropertyInfoList(): Promise<any> {
+
+    async getPropertyInfoList(propName?: string): Promise<any> {
         let propList = []
         let objname = this.objname
         let page = 1
         let per_page = 3000
+        let num = 0
+        let onePageProperitiesObj
+        while (num++ < 20) {
+            onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page, propName)
+            if (onePageProperitiesObj.list) {
+                break
+            }
+        }
 
-        let onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page)
         if (!onePageProperitiesObj.list) {
-            throw new Error(`查询${objname}属性失败，错误信息：${onePageProperitiesObj}`)
+            throw new Error(`查询${objname}属性第${num}次失败，错误信息：${onePageProperitiesObj}`)
         }
         // //console.log("onePageProperitiesObj", onePageProperitiesObj);
         propList.push(...onePageProperitiesObj.list)
@@ -224,21 +290,39 @@ export class CPropertyRequest extends CSupOSData {
         // });
         // const promiseall = await Promise.all(promise);
         // ?方式2：await
+
         for (let index = 2; index < pageSum + 1; index++) {
             page = index
+            num = 0
             // this.supos = GetPropertyInfosNetConfig(objname, netParam);
-            onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page)
+            while (num++ < 20) {
+                onePageProperitiesObj = await this.getPropertyInfos(
+                    objname,
+                    page,
+                    per_page,
+                    propName
+                )
+                if (onePageProperitiesObj.list) {
+                    break
+                }
+            }
+            if (!onePageProperitiesObj.list) {
+                throw new Error(
+                    `查询${objname}属性第${page}页第${num}次失败，错误信息：${onePageProperitiesObj}`
+                )
+            }
+            // onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page, propName)
             propList.push(...onePageProperitiesObj.list)
         }
         return propList
     }
-    async getPropertyList(): Promise<any> {
+    async getPropertyList(propName?: string): Promise<any> {
         let propList = []
         let objname = this.objname
         let page = 1
         let per_page = 3000
 
-        let onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page)
+        let onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page, propName)
         if (!onePageProperitiesObj.list) {
             throw new Error(`查询${objname}属性失败，错误信息：${onePageProperitiesObj}`)
         }
@@ -255,7 +339,7 @@ export class CPropertyRequest extends CSupOSData {
         for (let index = 2; index < pageSum + 1; index++) {
             page = index
             // this.supos = GetPropertyInfosNetConfig(objname, netParam);
-            onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page)
+            onePageProperitiesObj = await this.getPropertyInfos(objname, page, per_page, propName)
             propList.push(...onePageProperitiesObj.list)
         }
         let propListStr = JSON.stringify(propList)
