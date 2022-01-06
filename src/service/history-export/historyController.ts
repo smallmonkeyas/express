@@ -3,7 +3,7 @@
  * @Author       : Chengxin Sun
  * @Date         : 2021-12-20 01:49:15
  * @LastEditors  : Chengxin Sun
- * @LastEditTime : 2022-01-03 22:39:34
+ * @LastEditTime : 2022-01-06 12:20:18
  * @Description  : Do not edit
  * @FilePath     : /express/src/service/history-export/historyController.ts
  * @github-name  : scxmonkeyas
@@ -675,7 +675,7 @@ const main = async function () {
     //* 判断当前完成进度，还剩下哪些企业没有完成
     // !注意：hisResult.json文件至少要有一个空对象{}
     let hisResult: { [prop: string]: any } = JSON.parse(
-        fs.readFileSync(`${basicPath}/log/hisResult.json`)
+        fs.readFileSync(`${basicPath}/hisResult.json`)
     )
     let hisOriginResult: { [prop: string]: any } = hisResult
     // !注意：config.json文件至少要有一个空对象{}
@@ -786,7 +786,7 @@ const main = async function () {
             hisResult[`${startTimeOrigin}->>${endTimeOrigin}`]["hasExported"] = hasCurrentExported
         }
 
-        XLSX_JSON.saveJsonToFile(hisResult, logPath, "hisResult")
+        XLSX_JSON.saveJsonToFile(hisResult, basicPath, "hisResult")
     }
 
     return resPromise

@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime : 2021-12-23 00:33:59
+ * @LastEditTime : 2021-12-26 00:57:40
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/dao/table.ts
@@ -79,7 +79,7 @@ export class CTable extends CMongoDB implements ITable {
     async deleteAll(): Promise<any> {
         // let mongodbInstance = Container.get<IMongDB>('mongodb操作类');
         // return mongodbInstance.delete({ _id: 0 });
-        return await this.delete({ _id: 0 })
+        return await this.delete({})
         // return await this.mongodb.delete({ _id: 0 })
     }
     async deleteCollectionsContent(collections: Array<string>): Promise<any> {
