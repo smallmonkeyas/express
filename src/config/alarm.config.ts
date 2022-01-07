@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 22:28:47
- * @LastEditTime : 2021-12-05 21:43:51
+ * @LastEditTime : 2022-01-06 23:01:12
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/config/alarm.config.ts
@@ -120,17 +120,31 @@ export const AlarmTypeDescConfig = [
 
 export const AlarmTypeConfig = [1, 3, 4, 6, 7, 9, 10, 11, 12]
 export const AlarmTypeDeprecated = [3, 4, 6, 7, 9, 10]
+// export const AlarmObjnameConfig = [
+//     "DataMissAlarm",
+//     "",
+//     "AbnormalRelevance",
+//     "DataConstant",
+//     "",
+//     "DataAcquisitionOffline",
+//     "EquipmentAbnormal",
+//     "",
+//     "DataOutofRange",
+//     "AbnormalRemovalrate",
+//     "DayMeanAlarm",
+//     "EmissionAlarm"
+// ]
 export const AlarmObjnameConfig = [
-    "DataMissAlarm",
+    "ALARM_DataMiss",
     "",
-    "AbnormalRelevance",
-    "DataConstant",
+    "ALARM_AbnormalRelevance",
+    "ALARM_DataConstant",
     "",
-    "DataAcquisitionOffline",
-    "EquipmentAbnormal",
+    "ALARM_DataAcquisitionOffline",
+    "ALARM_EquipmentAbnormal",
     "",
-    "DataOutofRange",
-    "AbnormalRemovalrate",
-    "DayMeanAlarm",
-    "EmissionAlarm"
+    "ALARM_DataOutofRange",
+    "ALARM_AbnormalRemovalrate",
+    "ALARM_DayMeanAlarm",
+    "ALARM_EmissionAlarm"
 ]

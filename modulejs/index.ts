@@ -1,15 +1,17 @@
 /*
  * @Author: your name
  * @Date: 2021-08-31 11:23:25
- * @LastEditTime: 2021-10-02 04:00:19
- * @LastEditors: Please set LastEditors
+ * @LastEditTime : 2022-01-06 17:37:48
+ * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
- * @FilePath: \express\src\module\module.ts
+ * @FilePath     : /express/modulejs/index.ts
  */
 
 //* 引入本地库
 export const request = require("request")
 export const unirest = require("unirest")
+export const axios = require("axios")
+export const FormData = require("form-data")
 
 // var request = require("request");
 export const XLSX = require("xlsx")

@@ -2,13 +2,23 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:00:34
- * @LastEditTime : 2021-12-23 20:42:16
+ * @LastEditTime : 2022-01-06 22:57:39
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/module/supos.ts
  */
 
-import { request, unirest, system, ExcelTemplate, Excel, fs, stream } from "../../modulejs"
+import {
+    request,
+    unirest,
+    system,
+    ExcelTemplate,
+    Excel,
+    fs,
+    stream,
+    FormData,
+    axios
+} from "../../modulejs"
 import "reflect-metadata"
 import { Container, Service, Inject } from "typedi"
 import {
@@ -145,12 +155,12 @@ export class CSupOSData implements ISupOSData {
                 // if (error) {
                 //     throw new Error(error);
                 // }
-                console.log(
-                    "this.authorizationToken",
-                    authorization,
-                    "User.token:",
-                    Container.get("authorization-token")
-                )
+                // console.log(
+                //     "this.authorizationToken",
+                //     authorization,
+                //     "User.token:",
+                //     Container.get("authorization-token")
+                // )
                 if (error) {
                     resolve(error)
                 }
@@ -197,28 +207,53 @@ export class CSupOSData implements ISupOSData {
             Authorization: Container.get("authorization-token"),
             Cookie: "vertx-web.session=5102a8ff0d1c27d4224e4bf794e65123"
         }
+
         const { file, ...args } = supos.netData
+
+        var data = new FormData()
+        data.append("file", fs.createReadStream(file))
+        data.append("type", "object")
+        data.append("skipOnError", "false")
+        var config = {
+            method: "post",
+            url: url,
+            headers: {
+                ...header,
+                ...data.getHeaders()
+            },
+            data: data
+        }
         return new Promise(function (resolve, reject) {
-            var req = unirest("POST", url)
-                .headers(header)
-                .attach(
-                    {
-                        file: file
-                    }
-                    // "file",
-                    // "E:/files/program/docker/debian/express/src/respository/objname/报警对象实例.xlsx"
-                )
-                .field(args)
-                // .field("type", "object")
-                // .field("skipOnError", "false")
-                .end(function (res: any) {
-                    if (res.error) {
-                        resolve(res.error)
-                        throw new Error(res.error)
-                    }
-                    resolve(res.raw_body)
-                    console.log(res.raw_body)
+            axios(config)
+                .then(function (response: { data: any }) {
+                    return resolve(response.data)
                 })
+                .catch(function (error: any) {
+                    if (error) {
+                        console.log("错误")
+                        resolve(error)
+                    }
+                })
+            // var req = unirest("POST", url)
+            //     .headers(header)
+            //     .attach(
+            //         {
+            //             file: file
+            //         }
+            //         // "file",
+            //         // "E:/files/program/docker/debian/express/src/respository/objname/报警对象实例.xlsx"
+            //     )
+            //     .field(args)
+            //     // .field("type", "object")
+            //     // .field("skipOnError", "false")
+            //     .end(function (res: any) {
+            //         if (res.error) {
+            //             resolve(res.error)
+            //             throw new Error(res.error)
+            //         }
+            //         resolve(res.raw_body)
+            //         console.log(res.raw_body)
+            //     })
         })
     }
     postFile(): Promise<any> {
@@ -576,7 +611,7 @@ export class CPlatformObject {
         const workbook = new Excel.Workbook()
         //   let workbookOrigin = await workbook.xlsx.readFile(pathOutDir);
         await workbook.xlsx.load(exlBuf2)
-        await workbook.xlsx.writeFile(objInstanceOutFileDir)
+        return await workbook.xlsx.writeFile(objInstanceOutFileDir)
         // todo:按照系统提供的导入配置文件接口将配置文件导入系统，以此创建对象实例(原来系统没有的则创建，若有的则不更新)
         // 创建一个bufferstream
         // const streamValue = fs.createReadStream(
@@ -587,8 +622,11 @@ export class CPlatformObject {
         //     "E:/Download_Temp/Google/对象实例创建测试/ejsExcel/ejsExcel/test/对象实例生成2.xlsx",
         //     streamValue
         // )
-        this.plantInterface.supos = GetAlarmObjFileNetConfig(objInstanceOutFileDir)
-        return await this.plantInterface.postForm()
+        //* -------- 对象实例导入到supOS中
+        // this.plantInterface.supos = GetAlarmObjFileNetConfig(objInstanceOutFileDir)
+        // return await this.plantInterface.postForm()
+        //* ----------- 对象实例导入到supOS中
+
         // return await this.plantInterface.postFile()
         // return this.plantInterface.supos
     }

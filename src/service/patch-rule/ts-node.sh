@@ -2,7 +2,7 @@
  # @Author       : Chengxin Sun
  # @Date         : 2021-12-04 18:08:36
  # @LastEditors  : Chengxin Sun
- # @LastEditTime : 2021-12-05 23:15:29
+ # @LastEditTime : 2022-01-07 09:16:33
  # @Description  : Do not edit
  # @FilePath     : /express/src/service/patch-rule/ts-node.sh
  # @github-name  : scxmonkeyas

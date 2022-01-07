@@ -3,7 +3,7 @@
  * @Author       : Chengxin Sun
  * @Date         : 2021-12-20 02:45:08
  * @LastEditors  : Chengxin Sun
- * @LastEditTime : 2022-01-03 21:01:05
+ * @LastEditTime : 2022-01-06 16:02:19
  * @Description  : Do not edit
  * @FilePath     : /express/src/module/historytable.ts
  * @github-name  : scxmonkeyas
@@ -57,7 +57,7 @@ Container.import([CSupOSData, User])
 
 let basicPath = path.resolve(process.cwd(), "./")
 // let basicPath = path.resolve(__dirname, "./")
-console.log("basicPath", basicPath)
+// console.log("basicPath", basicPath)
 
 @Service("supOS历史数据库")
 export class CSuposHistoryTable extends CTable {

@@ -3,7 +3,7 @@
  * @Author       : Chengxin Sun
  * @Date         : 2021-12-04 23:24:04
  * @LastEditors  : Chengxin Sun
- * @LastEditTime : 2021-12-25 23:04:45
+ * @LastEditTime : 2022-01-06 15:23:22
  * @Description  : Do not edit
  * @FilePath     : /express/src/main/index_patch.ts
  * @github-name  : scxmonkeyas
@@ -94,7 +94,7 @@ class CTask extends AbsTask {
         await this.ruleTableHandler.add(ruleJson)
         // 考虑规则表不一定准确，可以利用数据库操作很方便的做必要的修改工作，这也是将规则表存到数据库的一个原因
         await this.ruleTableHandler.update({ ruleType: "恒值异常" }, { ruleType: "数据恒值" })
-        // 接收ts-node命令行传参，通过传过来的参数筛选规则库中id在一定范围的规则
+        //* 接收ts-node命令行传参，通过传过来的参数筛选规则库中id在一定范围的规则
         let argv: Array<number> = process.argv.slice(2).map(Number)
         let ruletable
         if (argv.length === 3) {
@@ -105,7 +105,9 @@ class CTask extends AbsTask {
             let patch_rule_number = Math.ceil(rulenumber / total_patch)
             let rule_index_L = (cur_patch - 1) * patch_rule_number
             let rule_index_U = cur_patch * patch_rule_number
-            console.log(rule_index_L, rule_index_U, patch_rule_number)
+            console.log(
+                `规则筛选：[${rule_index_L}, ${rule_index_U}), 规则数：${patch_rule_number}/${rulenumber}`
+            )
             ruletable = await this.ruleTableHandler.select(
                 { id: { $gte: rule_index_L, $lt: rule_index_U } },
                 null

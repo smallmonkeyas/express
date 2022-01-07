@@ -3,7 +3,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 15:07:09
- * @LastEditTime : 2021-12-20 12:19:38
+ * @LastEditTime : 2022-01-06 22:37:59
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/module/alarmtable.ts
@@ -79,7 +79,7 @@ export class AlarmTableRecordGenerateTask {
             alarmObjname = AlarmObjnameConfig[alarmType - 1],
             alarmObjDisplayName = `异常类型_${AlarmTypeDescConfig[alarmType - 1]}`,
             alarmObjDescription = AlarmTypeDescConfig[alarmType - 1],
-            alarmParamName = `${objnameInclude}__${includeParamName.join("__")}`,
+            alarmParamName = `${objnameInclude}_${includeParamName.join("_")}`,
             alarmParamDisplayName = `${factoryName}_涉及参数_${includeParamDescription.join("__")}`,
             alarmParamDescription = `企业:${factoryName};涉及参数:${includeParamDescription.join(
                 "_"

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-01 20:18:53
- * @LastEditTime : 2021-12-21 01:49:45
+ * @LastEditTime : 2022-01-06 16:25:41
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/config/file.config.ts
@@ -14,7 +14,7 @@ let respositoryDir = path.resolve(configDir, "../respository/")
 const ruletableFileConfig = {
     filePath: `${respositoryDir}/ruletable`,
     // filePath: `${respositoryDir}\\ruletable`,
-    fileName: "光大高新环保新能源（常州）有限公司规则库",
+    fileName: "50家规则库11.29",
     fileExtension: "xlsx"
 }
 const objnameTempleFileConfig = {

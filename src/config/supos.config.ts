@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 23:03:24
- * @LastEditTime : 2021-12-29 00:27:59
+ * @LastEditTime : 2022-01-06 17:39:36
  * @LastEditors  : Chengxin Sun
  * @Description: In User Settings Edit
  * @FilePath     : /express/src/config/supos.config.ts
@@ -207,14 +207,15 @@ export const GetAlarmObjFileNetConfig = function (configFileDir: string, streamV
             // name: JSON.stringify({
             file: configFileDir,
             // file: streamValue,
+            // file: fs.createReadStream(configFileDir),
             // file: {
             //     // value: streamValue,
-            //     value: streamValue,
+            //     value: fs.createReadStream(configFileDir)
             //     // value: fs.createReadStream(configFileDir),
-            //     options: {
-            //         filename: configFileDir,
-            //         contentType: null
-            //     }
+            //     // options: {
+            //     //     filename: configFileDir,
+            //     //     contentType: null
+            //     // }
             // },
             type: "object",
             skipOnError: "false"

@@ -2,7 +2,7 @@
  * @Author       : Chengxin Sun
  * @Date         : 2021-12-03 00:08:07
  * @LastEditors  : Chengxin Sun
- * @LastEditTime : 2021-12-03 00:08:07
+ * @LastEditTime : 2022-01-06 16:56:20
  * @Description  : Do not edit
  * @FilePath     : /express/src/main/index_addObj.ts
  * @github-name  : scxmonkeyas
@@ -39,7 +39,7 @@ import {
     CServerRequestTable
 } from "../module"
 import { system, XLSX_JSON } from "../../modulejs"
-// Container.import([User, CAlarmTableGenerateTask, AlarmTableRecordGenerateTask]);
+Container.import([User, CAlarmTableGenerateTask, CPlatformAlarmObject])
 @Service()
 class AbsTask {
     @Inject("规则库操作类")
@@ -76,7 +76,7 @@ class CTask extends AbsTask {
         // !该程序关键在于报警配置库与服务请求配置库的构建，我们报警对象的创建由报警配置库来完成，依据报警配置库又接着构建服务器接口请求配置库，用于管理所有位号的批量请求和报警对象的写值工作
         // TODO: 1、读取规则文件，该规则文件由一个个按照固定模板的表格组成，只需将所有规则文件放置到同一目录下即可
         // let ruleTableHandler = Container.get<CRuleTable>('规则库操作类');
-        this.ruleTableHandler.mongodb.conneConfig = ruletableConfig
+        this.ruleTableHandler.conneConfig = ruletableConfig
         // let ruleTableLocalHandler = Container.get<CRuleTableLocal>('规则数据表本地操作类');
 
         this.ruleTableLocalHandler.file = ruletableFileConfig
@@ -103,7 +103,7 @@ class CTask extends AbsTask {
         // return alarmConfigTableJson;
         // TODO: 4、保存到报警配置库
         // // let alarmTableHandler = Container.get<CAlarmTable>("报警配置库");
-        this.alarmTableHandler.mongodb.conneConfig = alarmtableConfig
+        this.alarmTableHandler.conneConfig = alarmtableConfig
         await this.alarmTableHandler.connect()
         await this.alarmTableHandler.deleteAll()
         await this.alarmTableHandler.add(alarmConfigTableJson)
